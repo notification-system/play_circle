@@ -9,6 +9,7 @@ addons:
       secure: $SONAR_TOKEN
 
 script:
+  # - ./scripts/verify_code_format.sh
   - ./mvnw clean install -B
   - ./mvnw clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar
 
