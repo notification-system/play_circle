@@ -137,7 +137,9 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <classifier>exec</classifier>
+
                 </configuration>
+
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -218,6 +220,38 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-pre-commit</id>
+                        <!-- Adding pre-commit hook -->
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+
+                        <configuration>
+
+                            <outputDirectory>${basedir}/.git/hooks/</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>scripts/hooks/</directory>
+                                    <includes>
+                                        <include>**/*-commit</include>
+                                        <target>
+                                            <chmod file="${basedir}/.git/hooks/pre-commit" perm="755"/>
+                                        </target>
+                                    </includes>
+                                </resource>
+                            </resources>
+
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
                 <version>1.3.6</version>
@@ -228,6 +262,7 @@
                     </buildArgs>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 
