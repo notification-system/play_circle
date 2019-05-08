@@ -219,14 +219,14 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>copy-pre-commit</id>
-                        <!-- Adding pre-commit hook -->
+                        &lt;!&ndash; Adding pre-commit hook &ndash;&gt;
                         <phase>validate</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -247,6 +247,27 @@
                                 </resource>
                             </resources>
 
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>-->
+            <plugin>
+                <artifactId>exec-maven-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <executions>
+                    <execution><!-- Run our version calculation script -->
+                        <id>Version Calculation</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>chmod</executable>
+                            <arguments>
+                                <argument>+x</argument>
+                                <argument>${basedir}/scripts/hooks/pre-commit.sh</argument>
+                            </arguments>
+                            <executable>${basedir}/scripts/hooks/pre-commit.sh</executable>
                         </configuration>
                     </execution>
                 </executions>
