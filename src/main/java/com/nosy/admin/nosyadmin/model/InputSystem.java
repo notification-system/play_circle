@@ -10,63 +10,57 @@ import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @DynamicInsert
-
 @Entity
 @Table(
-        name = "inputSystem",
-        uniqueConstraints =
-        @UniqueConstraint(columnNames = {"inputSystemName", "email"})
-)
+    name = "inputSystem",
+    uniqueConstraints = @UniqueConstraint(columnNames = {"inputSystemName", "email"}))
 public class InputSystem {
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Id
-    @NotNull
-    private String inputSystemId;
-    @NotNull
-    private String inputSystemName;
-    @ManyToOne
-    @JsonBackReference
-    @JoinColumn(name = "email")
-    private User user;
+  @GeneratedValue(generator = "uuid2")
+  @GenericGenerator(name = "uuid2", strategy = "uuid2")
+  @Id
+  @NotNull
+  private String inputSystemId;
 
+  @NotNull private String inputSystemName;
 
-    @JsonManagedReference
+  @ManyToOne
+  @JsonBackReference
+  @JoinColumn(name = "email")
+  private User user;
 
-    @OneToMany(mappedBy = "inputSystem", orphanRemoval = true, cascade = CascadeType.ALL)
-    private Set<EmailTemplate> emailTemplate;
+  @JsonManagedReference
+  @OneToMany(mappedBy = "inputSystem", orphanRemoval = true, cascade = CascadeType.ALL)
+  private Set<EmailTemplate> emailTemplate;
 
-    public String getInputSystemId() {
-        return inputSystemId;
-    }
+  public String getInputSystemId() {
+    return inputSystemId;
+  }
 
-    public void setInputSystemId(String inputSystemId) {
-        this.inputSystemId = inputSystemId;
-    }
+  public void setInputSystemId(String inputSystemId) {
+    this.inputSystemId = inputSystemId;
+  }
 
-    public User getUser() {
-        return user;
-    }
+  public User getUser() {
+    return user;
+  }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+  public void setUser(User user) {
+    this.user = user;
+  }
 
-    public String getInputSystemName() {
-        return inputSystemName;
-    }
+  public String getInputSystemName() {
+    return inputSystemName;
+  }
 
-    public void setInputSystemName(String inputSystemName) {
-        this.inputSystemName = inputSystemName;
-    }
+  public void setInputSystemName(String inputSystemName) {
+    this.inputSystemName = inputSystemName;
+  }
 
+  public Set<EmailTemplate> getEmailTemplate() {
+    return emailTemplate;
+  }
 
-    public Set<EmailTemplate> getEmailTemplate() {
-        return emailTemplate;
-    }
-
-    public void setEmailTemplate(Set<EmailTemplate> emailTemplate) {
-        this.emailTemplate = emailTemplate;
-    }
-
+  public void setEmailTemplate(Set<EmailTemplate> emailTemplate) {
+    this.emailTemplate = emailTemplate;
+  }
 }

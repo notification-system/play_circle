@@ -13,36 +13,29 @@ import org.springframework.stereotype.Component;
 @Component
 public class Conversion {
 
-    @Autowired
-    private ModelMapper modelMapper;
+  @Autowired private ModelMapper modelMapper;
 
+  public InputSystemDto convertToInputSystemDto(InputSystem inputSystem) {
+    return modelMapper.map(inputSystem, InputSystemDto.class);
+  }
 
-    public InputSystemDto convertToInputSystemDto(InputSystem inputSystem) {
-        return modelMapper.map(inputSystem, InputSystemDto.class);
-    }
+  public InputSystem convertToInputSystem(InputSystemDto inputSystemDto) {
+    return modelMapper.map(inputSystemDto, InputSystem.class);
+  }
 
-    public InputSystem convertToInputSystem(InputSystemDto inputSystemDto) {
-        return modelMapper.map(inputSystemDto, InputSystem.class);
-    }
+  public EmailTemplateDto convertToEmailTemplateDto(EmailTemplate emailTemplate) {
+    return modelMapper.map(emailTemplate, EmailTemplateDto.class);
+  }
 
+  public EmailTemplate convertToEmailTemplate(EmailTemplateDto emailTemplateDto) {
+    return modelMapper.map(emailTemplateDto, EmailTemplate.class);
+  }
 
-    public EmailTemplateDto convertToEmailTemplateDto(EmailTemplate emailTemplate) {
-        return modelMapper.map(emailTemplate, EmailTemplateDto.class);
+  public UserDto convertToUserDto(User user) {
+    return modelMapper.map(user, UserDto.class);
+  }
 
-    }
-
-    public EmailTemplate convertToEmailTemplate(EmailTemplateDto emailTemplateDto) {
-        return modelMapper.map(emailTemplateDto, EmailTemplate.class);
-
-    }
-
-    public UserDto convertToUserDto(User user) {
-        return modelMapper.map(user, UserDto.class);
-    }
-
-    public User convertToUser(UserDto userDto) {
-        return modelMapper.map(userDto, User.class);
-    }
-
-
+  public User convertToUser(UserDto userDto) {
+    return modelMapper.map(userDto, User.class);
+  }
 }

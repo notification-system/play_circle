@@ -13,34 +13,23 @@ import java.util.Set;
 @Getter
 @Setter
 public class EmailTemplateDto {
-    @NotNull
-    private String emailTemplateId;
+  @NotNull private String emailTemplateId;
 
-    @NotNull
-    private String emailTemplateName;
-    @NotNull
-    @Email
-    private String fromAddress;
+  @NotNull private String emailTemplateName;
+  @NotNull @Email private String fromAddress;
 
-    @NotNull
-    private EmailFromProvider emailFromProvider;
+  @NotNull private EmailFromProvider emailFromProvider;
 
-    @NotNull
-    private Set<@NotEmpty @Email String> emailTemplateTo;
+  @NotNull private Set<@NotEmpty @Email String> emailTemplateTo;
 
-    private Set<@NotEmpty @Email String> emailTemplateCc;
+  private Set<@NotEmpty @Email String> emailTemplateCc;
 
-    @NotNull
-    private String text;
+  @NotNull private String text;
 
-    @NotNull
-    private int retryTimes;
+  @NotNull private int retryTimes;
 
-    private int retryPeriod;
+  private int retryPeriod;
 
-    private int priority;
-    @NotNull
-    private InputSystem inputSystem;
-
-
+  private int priority;
+  @NotNull private InputSystem inputSystem;
 }

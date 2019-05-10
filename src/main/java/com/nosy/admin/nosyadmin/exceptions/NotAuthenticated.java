@@ -1,4 +1,3 @@
 package com.nosy.admin.nosyadmin.exceptions;
 
-public class NotAuthenticated extends RuntimeException {
-}
+public class NotAuthenticated extends RuntimeException {}

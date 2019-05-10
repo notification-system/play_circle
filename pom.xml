@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
 
     <name>nosy-admin</name>
-    <description></description>
+    <description>Notification System Admin</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -237,11 +237,7 @@
                             <resources>
                                 <resource>
                                     <directory>scripts/hooks/</directory>
-                                    <includes>
-                                        <include>**/*-commit</include>
-                                        <executable>chmod +x ${basedir}/.git/hooks/pre-commit</executable>
 
-                                    </includes>
                                 </resource>
                             </resources>
 
@@ -251,7 +247,7 @@
                     </execution>
                 </executions>
             </plugin>
-           
+
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>

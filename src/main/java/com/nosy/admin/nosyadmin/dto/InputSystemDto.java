@@ -10,20 +10,12 @@ import lombok.Setter;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
-
 @Getter
 @Setter
 public class InputSystemDto {
-    @NotNull
-    private String inputSystemId;
-    @NotNull
-    private String inputSystemName;
-    @JsonBackReference
-    private User user;
+  @NotNull private String inputSystemId;
+  @NotNull private String inputSystemName;
+  @JsonBackReference private User user;
 
-
-    @JsonManagedReference
-    private Set<EmailTemplate> emailTemplate;
-
-
+  @JsonManagedReference private Set<EmailTemplate> emailTemplate;
 }
