@@ -8,10 +8,8 @@ import javax.persistence.Embeddable;
 @Embeddable
 @Getter
 @Setter
-
 public class EmailTemplateCc {
-    private int status;
+  private int status;
 
-    private String address;
-
+  private String address;
 }

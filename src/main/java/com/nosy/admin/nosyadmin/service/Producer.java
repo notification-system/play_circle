@@ -10,15 +10,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class Producer {
 
-    private static final Logger logger = LoggerFactory.getLogger(Producer.class);
-    @Value("${kafka.nosy-admin.topic}")
-    private String topic;
+  private static final Logger logger = LoggerFactory.getLogger(Producer.class);
 
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+  @Value("${kafka.nosy-admin.topic}")
+  private String topic;
 
-    public void sendMessage(String message) {
-        logger.info("Message produced: {}", message);
-        this.kafkaTemplate.send(topic, message);
-    }
+  @Autowired private KafkaTemplate<String, String> kafkaTemplate;
+
+  public void sendMessage(String message) {
+    logger.info("Message produced: {}", message);
+    this.kafkaTemplate.send(topic, message);
+  }
 }

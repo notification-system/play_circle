@@ -1,6 +1,5 @@
 package com.nosy.admin.nosyadmin.model;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,15 +10,11 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 @Setter
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Entity
 public class Pusher {
-    @Id
-    private String username;
-    @NotNull
-    private String text;
-
+  @Id private String username;
+  @NotNull private String text;
 }

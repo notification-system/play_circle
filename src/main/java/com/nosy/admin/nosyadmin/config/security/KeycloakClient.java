@@ -1,6 +1,5 @@
 package com.nosy.admin.nosyadmin.config.security;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nosy.admin.nosyadmin.exceptions.GeneralException;
 import com.nosy.admin.nosyadmin.model.User;
@@ -41,232 +40,240 @@ import static java.util.Arrays.asList;
 @AllArgsConstructor
 public class KeycloakClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(KeycloakClient.class);
-    private static final String GRANT_TYPE_STRING = "grant_type";
-    private static final String CLIENT_ID_STRING = "client_id";
-    private static final String CLIENT_SECRET_STRING = "client_secret";
+  private static final Logger logger = LoggerFactory.getLogger(KeycloakClient.class);
+  private static final String GRANT_TYPE_STRING = "grant_type";
+  private static final String CLIENT_ID_STRING = "client_id";
+  private static final String CLIENT_SECRET_STRING = "client_secret";
 
-    @Value("${nosy.client.keycloak.url}")
-    private String keycloakUrl;
-    @Value("${nosy.client.clientSecret}")
-    private String clientSecret;
-    @Value("${keycloak.resource}")
-    private String clientId;
-    @Value("${keycloak.auth-server-url}")
-    private String keycloakAdminUrl;
+  @Value("${nosy.client.keycloak.url}")
+  private String keycloakUrl;
 
-    @Value("${nosy.keycloak.admin.user}")
-    private String keycloakAdminUser;
-    @Value("${nosy.keycloak.admin.password}")
-    private String keycloakAdminPassword;
-    @Value("${keycloak.realm}")
-    private String keycloakRealm;
-    @Value("${nosy.client.grantType}")
-    private String grantType;
-    @Autowired
-    private ClientToken clientToken;
-    @Autowired
-    private TokenCollection tokenCollection;
+  @Value("${nosy.client.clientSecret}")
+  private String clientSecret;
 
-    @Value("${nosy.client.refreshToken}")
-    private String refreshToken;
+  @Value("${keycloak.resource}")
+  private String clientId;
 
+  @Value("${keycloak.auth-server-url}")
+  private String keycloakAdminUrl;
 
-    public boolean isAuthenticated(String token) throws IOException {
+  @Value("${nosy.keycloak.admin.user}")
+  private String keycloakAdminUser;
 
-        HttpPost post = new HttpPost(keycloakUrl + "/introspect");
-        String tokenString = "token";
-        List<NameValuePair> params = asList(new BasicNameValuePair(GRANT_TYPE_STRING, grantType),
-                new BasicNameValuePair(CLIENT_ID_STRING, clientId),
-                new BasicNameValuePair(tokenString, token),
-                new BasicNameValuePair(CLIENT_SECRET_STRING, clientSecret)
+  @Value("${nosy.keycloak.admin.password}")
+  private String keycloakAdminPassword;
 
-        );
+  @Value("${keycloak.realm}")
+  private String keycloakRealm;
 
-        post.setEntity(new UrlEncodedFormEntity(params));
-        post.addHeader("Content-Type", "application/x-www-form-urlencoded");
-        return requestInterceptor(post);
+  @Value("${nosy.client.grantType}")
+  private String grantType;
 
-    }
+  @Autowired private ClientToken clientToken;
+  @Autowired private TokenCollection tokenCollection;
 
-    public void logoutUser(String username) {
+  @Value("${nosy.client.refreshToken}")
+  private String refreshToken;
 
-        UsersResource userRessource = getKeycloakUserResource().users();
+  public boolean isAuthenticated(String token) throws IOException {
 
-        userRessource.get(getUserGet(username).get()).logout();
+    HttpPost post = new HttpPost(keycloakUrl + "/introspect");
+    String tokenString = "token";
+    List<NameValuePair> params =
+        asList(
+            new BasicNameValuePair(GRANT_TYPE_STRING, grantType),
+            new BasicNameValuePair(CLIENT_ID_STRING, clientId),
+            new BasicNameValuePair(tokenString, token),
+            new BasicNameValuePair(CLIENT_SECRET_STRING, clientSecret));
 
-    }
+    post.setEntity(new UrlEncodedFormEntity(params));
+    post.addHeader("Content-Type", "application/x-www-form-urlencoded");
+    return requestInterceptor(post);
+  }
 
-    public void deleteUsername(String username) {
-        UsersResource userRessource = getKeycloakUserResource().users();
+  public void logoutUser(String username) {
 
-        userRessource.delete(getUserGet(username).get());
+    UsersResource userRessource = getKeycloakUserResource().users();
 
-    }
+    userRessource.get(getUserGet(username).get()).logout();
+  }
 
-    public User getUserInfo(String username) {
-        UsersResource userRessource = getKeycloakUserResource().users();
-        User user = new User();
-        userRessource.list().forEach(t -> {
-            if (username.equals(t.getUsername())) {
+  public void deleteUsername(String username) {
+    UsersResource userRessource = getKeycloakUserResource().users();
+
+    userRessource.delete(getUserGet(username).get());
+  }
+
+  public User getUserInfo(String username) {
+    UsersResource userRessource = getKeycloakUserResource().users();
+    User user = new User();
+    userRessource
+        .list()
+        .forEach(
+            t -> {
+              if (username.equals(t.getUsername())) {
                 user.setEmail(t.getEmail());
                 user.setFirstName(t.getFirstName());
                 user.setLastName(t.getLastName());
+              }
+            });
+    return user;
+  }
 
-            }
-
-        });
-        return user;
-    }
-
-    private AtomicReference<String> getUserGet(String username) {
-        UsersResource userRessource = getKeycloakUserResource().users();
-        AtomicReference<String> userId = new AtomicReference<>("");
-        userRessource.list().forEach(t -> {
-            if (username.equals(t.getUsername())) {
+  private AtomicReference<String> getUserGet(String username) {
+    UsersResource userRessource = getKeycloakUserResource().users();
+    AtomicReference<String> userId = new AtomicReference<>("");
+    userRessource
+        .list()
+        .forEach(
+            t -> {
+              if (username.equals(t.getUsername())) {
                 userId.set(t.getId());
+              }
+            });
+    return userId;
+  }
 
+  public boolean registerNewUser(User user) {
 
-            }
+    int statusId;
+    try {
+      RealmResource realmResource = getKeycloakUserResource();
+      UsersResource usersResource = realmResource.users();
 
-        });
-        return userId;
+      UserRepresentation newUser = new UserRepresentation();
+      newUser.setUsername(user.getEmail());
+      newUser.setEmail(user.getEmail());
+      newUser.setFirstName(user.getFirstName());
+      newUser.setLastName(user.getLastName());
+      newUser.setEnabled(true);
+      Response result = usersResource.create(newUser);
+
+      statusId = result.getStatus();
+
+      if (statusId == 201) {
+
+        String userId = result.getLocation().getPath().replaceAll(".*/([^/]+)$", "$1");
+
+        CredentialRepresentation passwordCred = new CredentialRepresentation();
+        passwordCred.setTemporary(false);
+        passwordCred.setType(CredentialRepresentation.PASSWORD);
+        passwordCred.setValue(user.getPassword());
+
+        usersResource.get(userId).resetPassword(passwordCred);
+
+        ClientRepresentation clientRep = realmResource.clients().findByClientId(clientId).get(0);
+        RoleRepresentation clientRoleRep =
+            realmResource
+                .clients()
+                .get(clientRep.getId())
+                .roles()
+                .get("nosy-role")
+                .toRepresentation();
+        realmResource
+            .users()
+            .get(userId)
+            .roles()
+            .clientLevel(clientRep.getId())
+            .add(Arrays.asList(clientRoleRep));
+
+      } else {
+        return false;
+      }
+
+    } catch (Exception e) {
+      logger.error(e.getMessage());
+      return false;
     }
 
-    public boolean registerNewUser(User user) {
+    return true;
+  }
 
-        int statusId;
-        try {
-            RealmResource realmResource = getKeycloakUserResource();
-            UsersResource usersResource = realmResource.users();
+  private RealmResource getKeycloakUserResource() {
 
-            UserRepresentation newUser = new UserRepresentation();
-            newUser.setUsername(user.getEmail());
-            newUser.setEmail(user.getEmail());
-            newUser.setFirstName(user.getFirstName());
-            newUser.setLastName(user.getLastName());
-            newUser.setEnabled(true);
-            Response result = usersResource.create(newUser);
+    Keycloak kc =
+        KeycloakBuilder.builder()
+            .serverUrl(keycloakAdminUrl)
+            .realm(keycloakRealm)
+            .username(keycloakAdminUser)
+            .password("uob_1918")
+            .clientId(clientId)
+            .clientSecret(clientSecret)
+            .resteasyClient(new ResteasyClientBuilder().connectionPoolSize(10).build())
+            .build();
 
-            statusId = result.getStatus();
+    return kc.realm(keycloakRealm);
+  }
 
-            if (statusId == 201) {
+  public boolean requestInterceptor(HttpPost post) throws IOException {
+    try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+      return httpclient.execute(
+          post,
+          response -> {
+            ObjectMapper mapper = new ObjectMapper();
 
-                String userId = result.getLocation().getPath().replaceAll(".*/([^/]+)$", "$1");
+            Map<String, Object> stringObjectMap =
+                mapper.readValue(response.getEntity().getContent(), Map.class);
 
+            return (boolean) stringObjectMap.get("active");
+          });
+    }
+  }
 
-                CredentialRepresentation passwordCred = new CredentialRepresentation();
-                passwordCred.setTemporary(false);
-                passwordCred.setType(CredentialRepresentation.PASSWORD);
-                passwordCred.setValue(user.getPassword());
+  public ClientToken getTokens(User user) throws IOException {
 
-                usersResource.get(userId).resetPassword(passwordCred);
+    HttpPost post = new HttpPost(keycloakUrl);
+    List<NameValuePair> params =
+        asList(
+            new BasicNameValuePair(GRANT_TYPE_STRING, grantType),
+            new BasicNameValuePair(CLIENT_ID_STRING, clientId),
+            new BasicNameValuePair("username", user.getEmail()),
+            new BasicNameValuePair("password", user.getPassword()),
+            new BasicNameValuePair(CLIENT_SECRET_STRING, clientSecret));
 
+    post.setEntity(new UrlEncodedFormEntity(params));
+    post.addHeader("Content-Type", "application/x-www-form-urlencoded");
+    ClientToken clientTokenCollection = getTokenCollection(post);
+    if (clientTokenCollection == null || clientTokenCollection.getAccessToken() == null) {
+      throw new GeneralException("Invalid Username or Password");
+    }
+    return getTokenCollection(post);
+  }
 
-                ClientRepresentation clientRep = realmResource.clients().findByClientId(clientId).get(0);
-                RoleRepresentation clientRoleRep = realmResource.clients().get(clientRep.getId()).roles().get("nosy-role").toRepresentation();
-                realmResource.users().get(userId).roles().clientLevel(clientRep.getId()).add(Arrays.asList(clientRoleRep));
+  private ClientToken getTokenCollection(HttpPost post) throws IOException {
+    try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+      return httpclient.execute(
+          post,
+          response -> {
+            ObjectMapper mapper = new ObjectMapper();
+            int status = response.getStatusLine().getStatusCode();
+
+            if (status >= 200 && status < 300) {
+              tokenCollection =
+                  mapper.readValue(response.getEntity().getContent(), TokenCollection.class);
+              clientToken.setAccessToken(tokenCollection.getAccessToken());
+              clientToken.setRefreshToken(tokenCollection.getRefreshToken());
+              clientToken.setExpiresIn(tokenCollection.getExpiresIn());
+              return clientToken;
 
             } else {
-                return false;
-
+              return null;
             }
-
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            return false;
-        }
-
-
-        return true;
+          });
     }
+  }
 
+  public ClientToken refreshTokens(String refreshToken) throws IOException {
 
-    private RealmResource getKeycloakUserResource() {
+    HttpPost post = new HttpPost(keycloakUrl);
+    String refreshTokenString = "refresh_token";
+    List<NameValuePair> params =
+        asList(
+            new BasicNameValuePair(GRANT_TYPE_STRING, refreshToken),
+            new BasicNameValuePair(refreshTokenString, refreshToken),
+            new BasicNameValuePair(CLIENT_ID_STRING, clientId));
 
-        Keycloak kc = KeycloakBuilder.builder().serverUrl(keycloakAdminUrl).realm(keycloakRealm)
-                .username(keycloakAdminUser).password("uob_1918")
-                .clientId(clientId).clientSecret(clientSecret).
-                        resteasyClient(new ResteasyClientBuilder().connectionPoolSize(10).build())
-                .build();
-
-
-        return kc.realm(keycloakRealm);
-    }
-
-    public boolean requestInterceptor(HttpPost post) throws IOException {
-        try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
-            return httpclient.execute(post, response -> {
-                ObjectMapper mapper = new ObjectMapper();
-
-                Map<String, Object> stringObjectMap = mapper.
-                        readValue(response.getEntity().getContent(), Map.class);
-
-                return (boolean) stringObjectMap.get("active");
-
-            });
-        }
-    }
-
-    public ClientToken getTokens(User user) throws IOException {
-
-
-        HttpPost post = new HttpPost(keycloakUrl);
-        List<NameValuePair> params = asList(new BasicNameValuePair(GRANT_TYPE_STRING, grantType),
-                new BasicNameValuePair(CLIENT_ID_STRING, clientId),
-                new BasicNameValuePair("username", user.getEmail()),
-                new BasicNameValuePair("password", user.getPassword()),
-                new BasicNameValuePair(CLIENT_SECRET_STRING, clientSecret)
-
-        );
-
-        post.setEntity(new UrlEncodedFormEntity(params));
-        post.addHeader("Content-Type", "application/x-www-form-urlencoded");
-        ClientToken clientTokenCollection = getTokenCollection(post);
-        if (clientTokenCollection == null || clientTokenCollection.getAccessToken() == null) {
-            throw new GeneralException("Invalid Username or Password");
-        }
-        return getTokenCollection(post);
-    }
-
-    private ClientToken getTokenCollection(HttpPost post) throws IOException {
-        try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
-            return httpclient.execute(post, response -> {
-                ObjectMapper mapper = new ObjectMapper();
-                int status = response.getStatusLine().getStatusCode();
-
-
-                if (status >= 200 && status < 300) {
-                    tokenCollection = mapper.readValue(response.getEntity().getContent(), TokenCollection.class);
-                    clientToken.setAccessToken(tokenCollection.getAccessToken());
-                    clientToken.setRefreshToken(tokenCollection.getRefreshToken());
-                    clientToken.setExpiresIn(tokenCollection.getExpiresIn());
-                    return clientToken;
-
-                } else {
-                    return null;
-                }
-            });
-        }
-    }
-
-
-    public ClientToken refreshTokens(String refreshToken) throws IOException {
-
-        HttpPost post = new HttpPost(keycloakUrl);
-        String refreshTokenString = "refresh_token";
-        List<NameValuePair> params = asList(new BasicNameValuePair(GRANT_TYPE_STRING, refreshToken),
-                new BasicNameValuePair(refreshTokenString, refreshToken),
-                new BasicNameValuePair(CLIENT_ID_STRING, clientId)
-        );
-
-        post.setEntity(new UrlEncodedFormEntity(params));
-        return getTokenCollection(post);
-    }
-
-
+    post.setEntity(new UrlEncodedFormEntity(params));
+    return getTokenCollection(post);
+  }
 }
-
-
-
-

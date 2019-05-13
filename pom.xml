@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
 
     <name>nosy-admin</name>
-    <description></description>
+    <description>Notification System Admin</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -219,14 +219,13 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--<plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>copy-pre-commit</id>
-                        &lt;!&ndash; Adding pre-commit hook &ndash;&gt;
                         <phase>validate</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -238,36 +237,32 @@
                             <resources>
                                 <resource>
                                     <directory>scripts/hooks/</directory>
-                                    <includes>
-                                        <include>**/*-commit</include>
-                                        <target>
-                                            <chmod file="${basedir}/.git/hooks/pre-commit" perm="755"/>
-                                        </target>
-                                    </includes>
+
                                 </resource>
                             </resources>
 
+
                         </configuration>
+
                     </execution>
                 </executions>
-            </plugin>-->
+            </plugin>
             <plugin>
-                <artifactId>exec-maven-plugin</artifactId>
                 <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
                 <executions>
-                    <execution><!-- Run our version calculation script -->
-                        <id>Version Calculation</id>
-                        <phase>generate-sources</phase>
+                    <execution>
+                        <id>script-chmod</id>
+                        <phase>package</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                         <configuration>
                             <executable>chmod</executable>
                             <arguments>
-                                <argument>+x</argument>
-                                <argument>${basedir}/scripts/hooks/pre-commit.sh</argument>
+                                <argument>755</argument>
+                                <argument>${basedir}/.git/hooks/pre-commit</argument>
                             </arguments>
-                            <executable>${basedir}/scripts/hooks/pre-commit.sh</executable>
                         </configuration>
                     </execution>
                 </executions>
