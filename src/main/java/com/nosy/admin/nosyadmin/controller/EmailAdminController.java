@@ -152,39 +152,5 @@ public class EmailAdminController {
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
-  @GetMapping(path = "/auth/logout")
-  public ResponseEntity<String> logout(HttpServletRequest request) {
-    userService.logoutUser(request);
-    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-  }
 
-  @PostMapping(path = "/auth/status")
-  public ResponseEntity<Boolean> isAuthenticated(@RequestBody String token) throws IOException {
-    return new ResponseEntity<>(keycloakClient.isAuthenticated(token), HttpStatus.OK);
-  }
-
-  @PostMapping(value = "/auth/token")
-  public ResponseEntity<ClientToken> getToken(@RequestBody @Valid UserDto userdto)
-      throws IOException {
-    return new ResponseEntity<>(
-        keycloakClient.getTokens(conversion.convertToUser(userdto)), HttpStatus.OK);
-  }
-
-  @PostMapping(value = "/users")
-  public ResponseEntity<User> newUser(@RequestBody @Valid UserDto userdto) {
-    return new ResponseEntity<>(
-        userService.addUser(conversion.convertToUser(userdto)), HttpStatus.OK);
-  }
-
-  @DeleteMapping(value = "/users/profile")
-  public ResponseEntity<String> deleteUsername(HttpServletRequest request) {
-    userService.deleteUser(request);
-    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-  }
-
-  @GetMapping(value = "/users/profile")
-  public ResponseEntity<User> getUserProfile(HttpServletRequest request) {
-
-    return new ResponseEntity<>(userService.getUserInfo(request), HttpStatus.OK);
-  }
 }
