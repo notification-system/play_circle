@@ -56,6 +56,7 @@ public class EmailTemplateServiceTest {
         emailTemplate.setEmailTemplateCc(emailsCc);
         Set<String> emailsTo=new HashSet<>();
         emailsTo.add("testTo@nosy.tech");
+        emailTemplate.setEmailTemplateId(emailTemplateId);
         emailTemplate.setEmailTemplateTo(emailsTo);
         emailTemplate.setText("Test Message");
         emailTemplate.setSubject("Test Subject");
@@ -87,11 +88,9 @@ public class EmailTemplateServiceTest {
 
     }
     @Test(expected= GeneralException.class)
-    public void getEmailTemplateById() {
+    public void getEmailTemplateByIdGeneralException() {
         doReturn(emailTemplate).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId(inputSystemId, emailTemplateId);
-//
-//        when(emailTemplateRepositoryMock.findEmailTemplatesByInputSystemIdAndEmailTemplateId(inputSystemId, emailTemplateId))
-//                .thenReturn(emailTemplate);
+
 
         when(userRepository.findById(email)).thenReturn(Optional.of(user));
         doReturn(null).when(inputSystemRepository).findByIdAndEmail(email, inputSystemId);
@@ -99,7 +98,18 @@ public class EmailTemplateServiceTest {
                 emailTemplateId);
 
     }
+    @Test
+    public void getEmailTemplateById() {
+        doReturn(emailTemplate).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId
+                (anyString(), anyString());
 
+
+        when(userRepository.findById(email)).thenReturn(Optional.of(user));
+        doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
+        assertEquals(emailTemplateId, emailTemplateServiceMock.getEmailTemplateById(inputSystemId, emailTemplateId, email).getEmailTemplateId()
+                );
+
+    }
 
     @Test
     public void newEmailTemplate() {
