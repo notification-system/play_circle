@@ -18,11 +18,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import org.springframework.data.jpa.repository.Query;
 
-import javax.persistence.EntityManager;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
