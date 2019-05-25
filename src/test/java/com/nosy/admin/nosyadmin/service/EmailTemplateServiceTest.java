@@ -15,10 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -107,8 +104,7 @@ public class EmailTemplateServiceTest {
 
     @Test
     public void newEmailTemplate() {
-        doReturn(emailTemplate).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId
-                (anyString(), anyString());
+
         when(userRepository.findById(email)).thenReturn(Optional.of(user));
         doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
         doReturn(emailTemplate).when(emailTemplateRepositoryMock).save(any());
@@ -139,7 +135,38 @@ public class EmailTemplateServiceTest {
 
     @Test
     public void getListOfEmailTemplates() {
+        doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
+        List<EmailTemplate> listOfEmailTemplates=new ArrayList<>();
+        listOfEmailTemplates.add(emailTemplate);
+
+        when(emailTemplateRepositoryMock.findEmailTemplatesByInputSystemId(inputSystemId)).thenReturn(listOfEmailTemplates);
+        assertEquals(listOfEmailTemplates,emailTemplateServiceMock.getListOfEmailTemplates(inputSystemId, email));
+
+
+
     }
+
+    @Test
+    public void getListEmailTemplatesListNull() {
+        doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
+        when(emailTemplateRepositoryMock.findEmailTemplatesByInputSystemId(inputSystemId)).thenReturn(null);
+        assertEquals(null,emailTemplateServiceMock.getListOfEmailTemplates(inputSystemId, email));
+
+
+
+    }
+    @Test
+    public void getListEmailTemplatesListEmpty() {
+        doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
+        List<EmailTemplate> listOfEmailTemplates=new ArrayList<>();
+        when(emailTemplateRepositoryMock.findEmailTemplatesByInputSystemId(inputSystemId)).thenReturn(listOfEmailTemplates);
+        assertEquals(listOfEmailTemplates,emailTemplateServiceMock.getListOfEmailTemplates(inputSystemId, email));
+
+
+
+    }
+
+
 
     @Test
     public void postEmailTemplate() {
