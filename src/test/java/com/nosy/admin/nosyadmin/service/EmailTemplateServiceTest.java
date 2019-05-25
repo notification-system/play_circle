@@ -86,12 +86,8 @@ public class EmailTemplateServiceTest {
     }
     @Test(expected= GeneralException.class)
     public void getEmailTemplateByIdGeneralException() {
-        doReturn(emailTemplate).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId(inputSystemId, emailTemplateId);
-
-
         when(userRepository.findById(email)).thenReturn(Optional.of(user));
-        doReturn(null).when(inputSystemRepository).findByIdAndEmail(email, inputSystemId);
-    assertEquals(emailTemplateServiceMock.getEmailTemplateById(inputSystemId, emailTemplateId, email).getEmailTemplateId(),
+        assertEquals(emailTemplateServiceMock.getEmailTemplateById(inputSystemId, emailTemplateId, email).getEmailTemplateId(),
                 emailTemplateId);
 
     }
