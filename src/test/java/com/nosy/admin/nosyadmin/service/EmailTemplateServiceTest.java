@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -106,14 +107,34 @@ public class EmailTemplateServiceTest {
 
     @Test
     public void newEmailTemplate() {
+        doReturn(emailTemplate).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId
+                (anyString(), anyString());
+        when(userRepository.findById(email)).thenReturn(Optional.of(user));
+        doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
+        doReturn(emailTemplate).when(emailTemplateRepositoryMock).save(any());
+        assertEquals(emailTemplateId, emailTemplateServiceMock.newEmailTemplate(emailTemplate, inputSystemId, email).getEmailTemplateId());
+
     }
 
     @Test
     public void getAllEmailProviders() {
+        ArrayList<String> providers=new ArrayList<>();
+        providers.add("DEFAULT");
+        providers.add("YANDEX");
+        providers.add("GMAIL");
+
+        assertEquals(providers, emailTemplateServiceMock.getAllEmailProviders());
     }
 
     @Test
     public void deleteEmailTemplate() {
+        doReturn(emailTemplate).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId
+                (anyString(), anyString());
+
+
+        when(userRepository.findById(email)).thenReturn(Optional.of(user));
+        doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
+        emailTemplateServiceMock.deleteEmailTemplate(inputSystemId, emailTemplateId, email);
     }
 
     @Test
