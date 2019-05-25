@@ -31,19 +31,15 @@ import java.util.Set;
 public class EmailAdminController {
   private EmailTemplateService emailTemplateService;
   private InputSystemService inputSystemService;
-  private UserService userService;
   private Conversion conversion;
-  @Autowired private KeycloakClient keycloakClient;
 
   @Autowired
   public EmailAdminController(
       Conversion conversion,
       EmailTemplateService emailTemplateService,
-      InputSystemService inputSystemService,
-      UserService userService) {
+      InputSystemService inputSystemService) {
     this.emailTemplateService = emailTemplateService;
     this.inputSystemService = inputSystemService;
-    this.userService = userService;
     this.conversion = conversion;
   }
 
