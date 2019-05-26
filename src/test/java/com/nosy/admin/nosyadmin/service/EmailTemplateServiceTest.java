@@ -14,8 +14,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -144,6 +143,7 @@ public class EmailTemplateServiceTest {
         when(userRepository.findById(email)).thenReturn(Optional.of(user));
         doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
         emailTemplateServiceMock.deleteEmailTemplate(inputSystemId, emailTemplateId, email);
+        assertNotNull(inputSystemId);
     }
 
     @Test
