@@ -30,7 +30,6 @@ public class EmailTemplateServiceTest {
     private UserRepository userRepository;
     @Mock
     private Producer producer;
-
     @Mock
     private InputSystemRepository inputSystemRepository;
     @Mock
@@ -184,7 +183,6 @@ public class EmailTemplateServiceTest {
 
         doReturn(emailTemplate).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId
                 (anyString(), anyString());
-        doNothing().when(producer).sendMessage(readyEmail.toString());
 
         assertEquals(emailTemplateId, emailTemplateServiceMock.postEmailTemplate(inputSystemId, emailTemplateId, emailProviderProperties, email).getEmailTemplateId());
     }
