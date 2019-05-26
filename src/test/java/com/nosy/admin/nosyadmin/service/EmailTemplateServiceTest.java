@@ -189,7 +189,12 @@ public class EmailTemplateServiceTest {
 
     @Test
     public void updateEmailTemplate() {
+        doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
+        when(userRepository.findById(email)).thenReturn(Optional.of(user));
 
+        doReturn(emailTemplate).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId
+                (anyString(), anyString());
+        assertEquals(emailTemplate,emailTemplateServiceMock.updateEmailTemplate(emailTemplate, inputSystemId, emailTemplateId, email));
 
     }
 }
