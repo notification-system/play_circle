@@ -20,5 +20,14 @@ public class EmailTemplateTest {
         emailTemplate.setEmailTemplateName("");
         emailTemplate.onCreate();
     }
+    @Test(expected = Test.None.class)
+    public void onCreateSuccess() {
+        EmailTemplate emailTemplate=new EmailTemplate();
+        emailTemplate.setEmailTemplateName("dasdas");
+        emailTemplate.onCreate();
+    }
+
+
+
 
 }
