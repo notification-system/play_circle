@@ -61,7 +61,6 @@ public class EmailTemplateServiceTest {
         emailTemplate.setPriority(1);
         emailTemplate.setFromAddress("testFromAddress@nosy.tech");
         inputSystem=new InputSystem();
-        emailTemplate.setInputSystem(inputSystem);
         user=new User();
         user.setEmail(email);
         user.setFirstName("Test");
@@ -71,6 +70,8 @@ public class EmailTemplateServiceTest {
         inputSystem.setInputSystemName("testInputSystem");
         inputSystem.setInputSystemId(inputSystemId);
         inputSystem.setUser(user);
+        emailTemplate.setInputSystem(inputSystem);
+
         readyEmail=new ReadyEmail();
         readyEmail.setEmailTemplate(emailTemplate);
         emailProviderProperties=new EmailProviderProperties();
@@ -152,7 +153,7 @@ public class EmailTemplateServiceTest {
 
         when(emailTemplateRepositoryMock.findEmailTemplatesByInputSystemId(inputSystemId)).thenReturn(listOfEmailTemplates);
         assertEquals(listOfEmailTemplates,emailTemplateServiceMock.getListOfEmailTemplates(inputSystemId, email));
-
+        assertEquals("testInputSystem", emailTemplate.getInputSystem().getInputSystemName());
 
 
     }
@@ -195,4 +196,6 @@ public class EmailTemplateServiceTest {
         assertEquals(emailTemplate,emailTemplateServiceMock.updateEmailTemplate(emailTemplate, inputSystemId, emailTemplateId, email));
 
     }
+
+
 }
