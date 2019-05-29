@@ -192,8 +192,6 @@ public class EmailTemplate {
         + retryPeriod
         + ", priority="
         + priority
-        + ", inputSystem="
-        + inputSystem
         + ", subject='"
         + subject
         + '\''
