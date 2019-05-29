@@ -64,6 +64,7 @@ public class EmailTemplateServiceTest {
         emailTemplate.setPriority(1);
         emailTemplate.setFromAddress("testFromAddress@nosy.tech");
         inputSystem=new InputSystem();
+        emailTemplate.setInputSystem(inputSystem);
         user=new User();
         user.setEmail(email);
         user.setFirstName("Test");
