@@ -43,6 +43,7 @@ public class EmailTemplateServiceTest {
 
     private void setVariables(){
         emailTemplateId="emailTemplateId";
+
         inputSystemId="inputSystemId" ;
         email="test@nosy.tech";
         emailTemplate=new EmailTemplate();
@@ -137,8 +138,6 @@ public class EmailTemplateServiceTest {
     public void deleteEmailTemplate() {
         doReturn(emailTemplate).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId
                 (anyString(), anyString());
-
-
         when(userRepository.findById(email)).thenReturn(Optional.of(user));
         doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
         emailTemplateServiceMock.deleteEmailTemplate(inputSystemId, emailTemplateId, email);
@@ -150,12 +149,9 @@ public class EmailTemplateServiceTest {
         doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
         List<EmailTemplate> listOfEmailTemplates=new ArrayList<>();
         listOfEmailTemplates.add(emailTemplate);
-
         when(emailTemplateRepositoryMock.findEmailTemplatesByInputSystemId(inputSystemId)).thenReturn(listOfEmailTemplates);
         assertEquals(listOfEmailTemplates,emailTemplateServiceMock.getListOfEmailTemplates(inputSystemId, email));
         assertEquals("testInputSystem", emailTemplate.getInputSystem().getInputSystemName());
-
-
     }
 
     @Test
@@ -163,9 +159,6 @@ public class EmailTemplateServiceTest {
         doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
         when(emailTemplateRepositoryMock.findEmailTemplatesByInputSystemId(inputSystemId)).thenReturn(null);
         assertNull(emailTemplateServiceMock.getListOfEmailTemplates(inputSystemId, email));
-
-
-
     }
     @Test
     public void getListEmailTemplatesListEmpty() {
@@ -179,10 +172,8 @@ public class EmailTemplateServiceTest {
     public void postEmailTemplate() {
         doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
         when(userRepository.findById(email)).thenReturn(Optional.of(user));
-
         doReturn(emailTemplate).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId
                 (anyString(), anyString());
-
         assertEquals(emailTemplateId, emailTemplateServiceMock.postEmailTemplate(inputSystemId, emailTemplateId, emailProviderProperties, email).getEmailTemplateId());
     }
 
@@ -190,11 +181,9 @@ public class EmailTemplateServiceTest {
     public void updateEmailTemplate() {
         doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
         when(userRepository.findById(email)).thenReturn(Optional.of(user));
-
         doReturn(emailTemplate).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId
                 (anyString(), anyString());
         assertEquals(emailTemplate,emailTemplateServiceMock.updateEmailTemplate(emailTemplate, inputSystemId, emailTemplateId, email));
-
     }
 
 
