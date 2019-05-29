@@ -40,9 +40,6 @@ public class EmailTemplateServiceTest {
     private EmailTemplate emailTemplate;
     private User user;
     private InputSystem inputSystem;
-/*
-    private ReadyEmail readyEmail;
-*/
 
     private void setVariables(){
         emailTemplateId="emailTemplateId";
