@@ -137,9 +137,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <classifier>exec</classifier>
-
                 </configuration>
-
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -184,11 +182,9 @@
                         </goals>
                         <configuration>
                             <rules>
-                                <!-- implementation is needed only for Maven 2 -->
                                 <rule implementation="org.jacoco.maven.RuleConfiguration">
                                     <element>BUNDLE</element>
                                     <limits>
-                                        <!-- implementation is needed only for Maven 2 -->
                                         <limit implementation="org.jacoco.report.check.Limit">
                                             <counter>COMPLEXITY</counter>
                                             <value>COVEREDRATIO</value>
@@ -230,20 +226,14 @@
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
-
                         <configuration>
-
                             <outputDirectory>${basedir}/.git/hooks/</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>scripts/hooks/</directory>
-
                                 </resource>
                             </resources>
-
-
                         </configuration>
-
                     </execution>
                 </executions>
             </plugin>
@@ -278,8 +268,6 @@
                     </buildArgs>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
-
 </project>
