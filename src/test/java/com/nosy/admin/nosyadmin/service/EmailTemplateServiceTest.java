@@ -153,6 +153,7 @@ public class EmailTemplateServiceTest {
         assertEquals(listOfEmailTemplates,emailTemplateServiceMock.getListOfEmailTemplates(inputSystemId, email));
         assertEquals("testInputSystem", emailTemplate.getInputSystem().getInputSystemName());
         assertEquals("Test", emailProviderProperties.getUsername());
+
     }
 
     @Test

@@ -2,8 +2,6 @@ package com.nosy.admin.nosyadmin.service;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class InputSystemServiceTest {
 
     @Test
