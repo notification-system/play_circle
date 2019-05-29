@@ -182,6 +182,8 @@ public class EmailTemplateServiceTest {
                 (anyString(), anyString());
         assertEquals(emailTemplateId, emailTemplateServiceMock.postEmailTemplate(inputSystemId, emailTemplateId, emailProviderProperties, email).getEmailTemplateId());
         assertEquals("Test", readyEmail.getEmailProviderProperties().getUsername());
+        assertEquals("Test Email Template Name", readyEmail.getEmailTemplate().getEmailTemplateName());
+
     }
 
     @Test
