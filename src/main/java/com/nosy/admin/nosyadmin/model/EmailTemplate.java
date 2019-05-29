@@ -20,8 +20,6 @@ import java.util.Set;
 @DynamicInsert
 @ToString
 @NoArgsConstructor
-@Builder
-@AllArgsConstructor
 @Table(
     name = "emailTemplate",
     uniqueConstraints = @UniqueConstraint(columnNames = {"emailTemplateName", "input_system_id"}))
