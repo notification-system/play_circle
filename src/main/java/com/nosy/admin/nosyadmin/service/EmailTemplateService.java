@@ -121,7 +121,7 @@ public class EmailTemplateService {
 
     String text = emailTemplate.getText();
     if(emailProviderProperties.getPlaceholders()!=null) {
-      for (PlaceHolders placeholder : emailProviderProperties.getPlaceholders()) {
+      for (PlaceHolder placeholder : emailProviderProperties.getPlaceholders()) {
         text = text.replace("#{" + placeholder.getName() + "}#", placeholder.getValue());
       }
 
@@ -143,10 +143,10 @@ public class EmailTemplateService {
     EmailTemplate currentEmailTemplate =
         getEmailTemplateById(emailTemplateId, inputSystemId, email);
 
-    if (!currentEmailTemplate.getEmailTemplateName().equals(emailTemplate.getEmailTemplateName())
+    if (emailTemplate==null || (!currentEmailTemplate.getEmailTemplateName().equals(emailTemplate.getEmailTemplateName())
         && emailTemplateRepository.findEmailTemplateByEmailTemplateNameAndInputSystemId(
                 emailTemplate.getEmailTemplateName(), inputSystemId)
-            != null) {
+            != null)) {
 
       throw new GeneralException(MessageError.NO_EMAIL_TEMPLATE_FOUND.getMessageText());
     }

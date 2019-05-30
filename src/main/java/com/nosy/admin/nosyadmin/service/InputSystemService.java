@@ -39,7 +39,7 @@ public class InputSystemService {
     if (checkInputSystem == null) {
       throw new GeneralException(MessageError.NO_INPUT_SYSTEM_FOUND.getMessageText());
     }
-    if (!checkInputSystem.getEmailTemplate().isEmpty()) {
+    if (checkInputSystem.getEmailTemplate()!=null && !checkInputSystem.getEmailTemplate().isEmpty()) {
       throw new GeneralException(MessageError.INPUT_SYSTEM_HAS_CHILDREN.getMessageText());
     }
     inputSystemRepository.deleteById(inputSystemId);

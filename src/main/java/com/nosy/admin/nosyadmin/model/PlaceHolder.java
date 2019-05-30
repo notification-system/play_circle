@@ -3,7 +3,7 @@ package com.nosy.admin.nosyadmin.model;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PlaceHolders {
+public class PlaceHolder {
 
   private String name;
   private String value;
