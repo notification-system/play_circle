@@ -78,7 +78,7 @@ public class UserServiceTest {
 
     }
 
-    @Test
+    @Test(expected = Test.None.class)
     public void logoutUser() {
         HttpServletRequest httpServletRequest=mock(HttpServletRequest.class);
         Principal principal=mock(Principal.class);
