@@ -1,6 +1,7 @@
 package com.nosy.admin.nosyadmin.service;
 
 import com.nosy.admin.nosyadmin.exceptions.GeneralException;
+import com.nosy.admin.nosyadmin.exceptions.MessageError;
 import com.nosy.admin.nosyadmin.model.EmailTemplate;
 import com.nosy.admin.nosyadmin.model.InputSystem;
 import com.nosy.admin.nosyadmin.model.User;
@@ -46,9 +47,14 @@ public class InputSystemServiceTest {
         inputSystem=new InputSystem();
         inputSystem.setInputSystemId("inputSystemId");
         inputSystem.setInputSystemName("inputSystemName");
-
+        inputSystem.setUser(user);
         inputSystemList.add(inputSystem);
         user.setInputSystem(inputSystemList);
+    }
+
+    @Test
+    public void getUser(){
+        assertEquals(email, inputSystem.getUser().getEmail());
     }
 
     @Test
@@ -193,7 +199,84 @@ public class InputSystemServiceTest {
         assertEquals(inputSystem.getInputSystemName(),inputSystemServiceMock.saveInputSystem(inputSystem, email).getInputSystemName());
     }
 
-    @Test
-    public void updateInputSystemStatus() {
+    @Test(expected = GeneralException.class)
+    public void updateInputSystemStatusInputSystemDoesntExist() {
+    /*    public InputSystem updateInputSystemStatus(
+                String inputSystemId, InputSystem inputSystem, String email) {
+
+            InputSystem checkInputSystem = inputSystemRepository.findByIdAndEmail(email, inputSystemId);
+
+            if (checkInputSystem == null) {
+                throw new GeneralException(MessageError.NO_INPUT_SYSTEM_FOUND.getMessageText());
+            }
+            InputSystem checkDuplicate =
+                    inputSystemRepository.findByInputSystemNameAndEmail(
+                            email, inputSystem.getInputSystemName());
+            if (checkDuplicate != null) {
+                throw new GeneralException(MessageError.INPUT_SYSTEM_EXIST.getMessageText());
+            }
+            checkInputSystem.setInputSystemName(inputSystem.getInputSystemName());
+
+            return inputSystemRepository.save(checkInputSystem);
+        }*/
+
+        when(inputSystemRepository.findByIdAndEmail(email, inputSystem.getInputSystemId())).thenReturn(null);
+
+        inputSystemServiceMock.updateInputSystemStatus(inputSystem.getInputSystemId(), inputSystem, email);
     }
+    @Test(expected = GeneralException.class)
+    public void updateInputSystemStatusDuplicateExists() {
+    /*    public InputSystem updateInputSystemStatus(
+                String inputSystemId, InputSystem inputSystem, String email) {
+
+            InputSystem checkInputSystem = inputSystemRepository.findByIdAndEmail(email, inputSystemId);
+
+            if (checkInputSystem == null) {
+                throw new GeneralException(MessageError.NO_INPUT_SYSTEM_FOUND.getMessageText());
+            }
+            InputSystem checkDuplicate =
+                    inputSystemRepository.findByInputSystemNameAndEmail(
+                            email, inputSystem.getInputSystemName());
+            if (checkDuplicate != null) {
+                throw new GeneralException(MessageError.INPUT_SYSTEM_EXIST.getMessageText());
+            }
+            checkInputSystem.setInputSystemName(inputSystem.getInputSystemName());
+
+            return inputSystemRepository.save(checkInputSystem);
+        }*/
+
+        when(inputSystemRepository.findByIdAndEmail(email, inputSystem.getInputSystemId())).thenReturn(inputSystem);
+        when(inputSystemRepository.findByInputSystemNameAndEmail(email, inputSystem.getInputSystemName())).thenReturn(inputSystem);
+
+        inputSystemServiceMock.updateInputSystemStatus(inputSystem.getInputSystemId(), inputSystem, email);
+    }
+
+    @Test
+    public void updateInputSystemStatusDuplicateDoesntExist() {
+    /*    public InputSystem updateInputSystemStatus(
+                String inputSystemId, InputSystem inputSystem, String email) {
+
+            InputSystem checkInputSystem = inputSystemRepository.findByIdAndEmail(email, inputSystemId);
+
+            if (checkInputSystem == null) {
+                throw new GeneralException(MessageError.NO_INPUT_SYSTEM_FOUND.getMessageText());
+            }
+            InputSystem checkDuplicate =
+                    inputSystemRepository.findByInputSystemNameAndEmail(
+                            email, inputSystem.getInputSystemName());
+            if (checkDuplicate != null) {
+                throw new GeneralException(MessageError.INPUT_SYSTEM_EXIST.getMessageText());
+            }
+            checkInputSystem.setInputSystemName(inputSystem.getInputSystemName());
+
+            return inputSystemRepository.save(checkInputSystem);
+        }*/
+
+        when(inputSystemRepository.findByIdAndEmail(email, inputSystem.getInputSystemId())).thenReturn(inputSystem);
+        when(inputSystemRepository.findByInputSystemNameAndEmail(email, inputSystem.getInputSystemName())).thenReturn(null);
+
+        inputSystemServiceMock.updateInputSystemStatus(inputSystem.getInputSystemId(), inputSystem, email);
+    }
+
+
 }
