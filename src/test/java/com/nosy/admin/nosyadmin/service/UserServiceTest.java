@@ -53,6 +53,8 @@ public class UserServiceTest {
         assertEquals("Nosy", user.getLastName());
         assertEquals("Test", user.getFirstName());
         assertEquals("TestNosy", user.getInfo());
+        String userString="User{email='test@nosy.tech', inputSystem=null', firstName='Test', lastName='Nosy', info='TestNosy'}";
+        assertEquals(userString, user.toString());
     }
 
     @Test
