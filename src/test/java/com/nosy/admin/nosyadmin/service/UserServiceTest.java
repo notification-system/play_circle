@@ -88,4 +88,20 @@ public class UserServiceTest {
         when(keycloakClient.registerNewUser(user)).thenReturn(false);
         assertEquals(user.getEmail(),userService.addUser(user).getEmail());
     }
+
+    @Test(expected = GeneralException.class)
+    public void addUserWithInvalidPassword() {
+        User userWithInvalidPassword=new User();
+        user.setEmail("test@nosy.tech");
+        user.setPassword("");
+        when(keycloakClient.registerNewUser(userWithInvalidPassword)).thenReturn(true);
+        assertEquals(user.getEmail(),userService.addUser(userWithInvalidPassword).getEmail());
+    }
+    @Test(expected = GeneralException.class)
+    public void addUserWithInvalidNullPassword() {
+        User userWithInvalidPassword=new User();
+        user.setEmail("test@nosy.tech");
+        when(keycloakClient.registerNewUser(userWithInvalidPassword)).thenReturn(true);
+        assertEquals(user.getEmail(),userService.addUser(userWithInvalidPassword).getEmail());
+    }
 }
