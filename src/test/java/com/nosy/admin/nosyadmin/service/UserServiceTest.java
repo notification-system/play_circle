@@ -86,7 +86,6 @@ public class UserServiceTest {
     @Test(expected = GeneralException.class)
     public void addUserWithFalse() {
         when(keycloakClient.registerNewUser(user)).thenReturn(false);
-        when(userRepository.saveAndFlush(user)).thenReturn(user);
         assertEquals(user.getEmail(),userService.addUser(user).getEmail());
     }
 }
