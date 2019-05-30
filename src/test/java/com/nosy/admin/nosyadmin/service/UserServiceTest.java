@@ -46,6 +46,15 @@ public class UserServiceTest {
         user.setInfo("TestNosy");
         user.setPassword("dajsndjasn");
     }
+
+
+    @Test
+    public void testUser(){
+        assertEquals("Nosy", user.getLastName());
+        assertEquals("Test", user.getFirstName());
+        assertEquals("TestNosy", user.getInfo());
+    }
+
     @Test
     public void getUserInfo() {
 
