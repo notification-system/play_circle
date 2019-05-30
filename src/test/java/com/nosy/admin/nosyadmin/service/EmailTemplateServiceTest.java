@@ -77,7 +77,7 @@ public class EmailTemplateServiceTest {
         readyEmail.setEmailTemplate(emailTemplate);
         emailProviderProperties=new EmailProviderProperties();
         emailProviderProperties.setPassword("TestPassword");
-        List<PlaceHolders> placeHolders=new ArrayList<>();
+        List<PlaceHolder> placeHolders=new ArrayList<>();
         emailProviderProperties.setPlaceholders(placeHolders);
         emailProviderProperties.setUsername("Test");
 
@@ -340,6 +340,68 @@ public class EmailTemplateServiceTest {
         doReturn(emailTemplateForYandex).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId
                 (anyString(), anyString());
         emailTemplateServiceMock.postEmailTemplate(inputSystemId, emailTemplateId, emailProviderPropertiesTest, email);
+        assertEquals("Test", readyEmail.getEmailProviderProperties().getUsername());
+        assertEquals("Test Email Template Name", readyEmail.getEmailTemplate().getEmailTemplateName());
+    }
+
+
+    @Test
+    public void postEmailTemplateNonDefaultWithParameterProvider() {
+        EmailTemplate emailTemplateForYandex=new EmailTemplate();
+        emailTemplateForYandex.setEmailTemplateName("Test");
+        emailTemplateForYandex.setEmailFromProvider(EmailFromProvider.YANDEX);
+        EmailProviderProperties emailProviderPropertiesTest=new EmailProviderProperties();
+        emailProviderPropertiesTest.setPassword("dafsaf");
+        emailProviderPropertiesTest.setUsername("fasdfad");
+        PlaceHolder placeHolder=new PlaceHolder();
+
+        emailTemplateForYandex.setText("Hi #{name}#, #{body}#");
+        placeHolder.setName("name");
+        placeHolder.setValue("Testoktay");
+        PlaceHolder placeHolder1=new PlaceHolder();
+        placeHolder1.setName("body");
+        placeHolder1.setValue("Hi");
+        List<PlaceHolder> placeholdersList=new ArrayList<>();
+        placeholdersList.add(placeHolder);
+        placeholdersList.add(placeHolder1);
+        emailProviderPropertiesTest.setPlaceholders(placeholdersList);
+        doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
+        when(userRepository.findById(email)).thenReturn(Optional.of(user));
+        doReturn(emailTemplateForYandex).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId
+                (anyString(), anyString());
+
+        assertEquals("Hi Testoktay, Hi", emailTemplateServiceMock.postEmailTemplate(inputSystemId, emailTemplateId, emailProviderPropertiesTest, email).getText());
+
+        assertEquals("Test", readyEmail.getEmailProviderProperties().getUsername());
+        assertEquals("Test Email Template Name", readyEmail.getEmailTemplate().getEmailTemplateName());
+    }
+
+    @Test(expected = GeneralException.class)
+    public void postEmailTemplateNonDefaultWithParameterProviderButNotEnoughReplacements() {
+        EmailTemplate emailTemplateForYandex=new EmailTemplate();
+        emailTemplateForYandex.setEmailTemplateName("Test");
+        emailTemplateForYandex.setEmailFromProvider(EmailFromProvider.YANDEX);
+        EmailProviderProperties emailProviderPropertiesTest=new EmailProviderProperties();
+        emailProviderPropertiesTest.setPassword("dafsaf");
+        emailProviderPropertiesTest.setUsername("fasdfad");
+        PlaceHolder placeHolder=new PlaceHolder();
+
+        emailTemplateForYandex.setText("Hi #{name}# #{test}#, #{body}#");
+        placeHolder.setName("name");
+        placeHolder.setValue("Testoktay");
+        PlaceHolder placeHolder1=new PlaceHolder();
+        placeHolder1.setName("body");
+        placeHolder1.setValue("Hi");
+        List<PlaceHolder> placeholdersList=new ArrayList<>();
+        placeholdersList.add(placeHolder);
+        placeholdersList.add(placeHolder1);
+        emailProviderPropertiesTest.setPlaceholders(placeholdersList);
+        doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
+        when(userRepository.findById(email)).thenReturn(Optional.of(user));
+        doReturn(emailTemplateForYandex).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId
+                (anyString(), anyString());
+        emailTemplateServiceMock.postEmailTemplate(inputSystemId, emailTemplateId, emailProviderPropertiesTest, email);
+
         assertEquals("Test", readyEmail.getEmailProviderProperties().getUsername());
         assertEquals("Test Email Template Name", readyEmail.getEmailTemplate().getEmailTemplateName());
     }

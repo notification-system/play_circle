@@ -121,7 +121,7 @@ public class EmailTemplateService {
 
     String text = emailTemplate.getText();
     if(emailProviderProperties.getPlaceholders()!=null) {
-      for (PlaceHolders placeholder : emailProviderProperties.getPlaceholders()) {
+      for (PlaceHolder placeholder : emailProviderProperties.getPlaceholders()) {
         text = text.replace("#{" + placeholder.getName() + "}#", placeholder.getValue());
       }
 
