@@ -1,6 +1,7 @@
 package com.nosy.admin.nosyadmin.service;
 
 import com.nosy.admin.nosyadmin.exceptions.GeneralException;
+import com.nosy.admin.nosyadmin.model.EmailTemplate;
 import com.nosy.admin.nosyadmin.model.InputSystem;
 import com.nosy.admin.nosyadmin.model.User;
 import com.nosy.admin.nosyadmin.repository.InputSystemRepository;
@@ -76,16 +77,6 @@ public class InputSystemServiceTest {
     @Test(expected = Test.None.class)
     public void deleteInputSystem() {
 
-    /*
-    InputSystem checkInputSystem = inputSystemRepository.findByIdAndEmail(email, inputSystemId);
-    if (checkInputSystem == null) {
-      throw new GeneralException(MessageError.NO_INPUT_SYSTEM_FOUND.getMessageText());
-    }
-    if (!checkInputSystem.getEmailTemplate().isEmpty()) {
-      throw new GeneralException(MessageError.INPUT_SYSTEM_HAS_CHILDREN.getMessageText());
-    }
-    inputSystemRepository.deleteById(inputSystemId);
-     */
         String email="test@nosy.tech";
         InputSystem inputSystem=new InputSystem();
         inputSystem.setInputSystemId("inputSystemId");
@@ -99,6 +90,20 @@ public class InputSystemServiceTest {
 
     }
 
+    @Test(expected = Test.None.class)
+    public void deleteInputSystemEmailTemplateIsEmptyIsNotNull() {
+        String email="test@nosy.tech";
+        InputSystem inputSystem=new InputSystem();
+        inputSystem.setInputSystemId("inputSystemId");
+        inputSystem.setInputSystemName("inputSystemName");
+        Set<EmailTemplate> emailTemplates=new HashSet<>();
+
+        inputSystem.setEmailTemplate(emailTemplates);
+        when(inputSystemRepository.findByIdAndEmail(email,inputSystem.getInputSystemId())).
+                thenReturn(inputSystem);
+        inputSystemServiceMock.deleteInputSystem(inputSystem.getInputSystemId(), email);
+
+    }
 
     @Test(expected = GeneralException.class)
     public void deleteInputSystemNotFound() {
@@ -111,6 +116,23 @@ public class InputSystemServiceTest {
         inputSystemServiceMock.deleteInputSystem(inputSystem.getInputSystemId(), email);
 
     }
+
+    @Test(expected = GeneralException.class)
+    public void deleteInputSystemEmailTemplateIsNotEmptyIsNotNull() {
+        String email="test@nosy.tech";
+        InputSystem inputSystem=new InputSystem();
+        inputSystem.setInputSystemId("inputSystemId");
+        inputSystem.setInputSystemName("inputSystemName");
+        Set<EmailTemplate> emailTemplates=new HashSet<>();
+        EmailTemplate emailTemplate=new EmailTemplate();
+        emailTemplates.add(emailTemplate);
+        inputSystem.setEmailTemplate(emailTemplates);
+        when(inputSystemRepository.findByIdAndEmail(email,inputSystem.getInputSystemId())).
+                thenReturn(inputSystem);
+        inputSystemServiceMock.deleteInputSystem(inputSystem.getInputSystemId(), email);
+
+    }
+
 
     @Test
     public void saveInputSystem() {
