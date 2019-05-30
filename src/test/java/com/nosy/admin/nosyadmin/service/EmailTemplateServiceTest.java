@@ -117,6 +117,20 @@ public class EmailTemplateServiceTest {
         assertEquals(emailTemplateString, emailTemplate.toString());
 
     }
+    @Test(expected=GeneralException.class)
+    public void getEmailTemplateByIdError() {
+        doReturn(null).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId
+                (anyString(), anyString());
+
+
+        when(userRepository.findById(email)).thenReturn(Optional.of(user));
+        doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
+        assertEquals(emailTemplateId, emailTemplateServiceMock.getEmailTemplateById(inputSystemId, emailTemplateId, email).getEmailTemplateId()
+        );
+        String emailTemplateString="EmailTemplate{emailTemplateId='emailTemplateId', emailTemplateName='Test Email Template Name', fromAddress='testFromAddress@nosy.tech', emailTemplateTo=[testTo@nosy.tech], emailTemplateCc=[testCc@nosy.tech], text='Test Message', retryTimes=0, retryPeriod=1, priority=1, subject='Test Subject'}";
+        assertEquals(emailTemplateString, emailTemplate.toString());
+
+    }
 
     @Test
     public void newEmailTemplate() {
@@ -127,7 +141,22 @@ public class EmailTemplateServiceTest {
         assertEquals(emailTemplateId, emailTemplateServiceMock.newEmailTemplate(emailTemplate, inputSystemId, email).getEmailTemplateId());
 
     }
+    @Test(expected = GeneralException.class)
+    public void newEmailCheckUserReturnsNull() {
+        when(userRepository.findById(email)).thenReturn(Optional.empty());
+        assertEquals(emailTemplateId, emailTemplateServiceMock.newEmailTemplate(emailTemplate, inputSystemId, email).getEmailTemplateId());
 
+    }
+
+    @Test(expected = GeneralException.class)
+    public void newEmailTemplateEmailTemplateExists() {
+
+        when(userRepository.findById(email)).thenReturn(Optional.of(user));
+        doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
+        doReturn(emailTemplate).when(emailTemplateRepositoryMock).findEmailTemplateByEmailTemplateNameAndInputSystemId(anyString(), anyString());
+        assertEquals(emailTemplateId, emailTemplateServiceMock.newEmailTemplate(emailTemplate, inputSystemId, email).getEmailTemplateId());
+
+    }
     @Test
     public void getAllEmailProviders() {
         ArrayList<String> providers=new ArrayList<>();
