@@ -60,7 +60,6 @@ public class UserServiceTest {
         Principal principal=mock(Principal.class);
         when(httpServletRequest.getUserPrincipal()).thenReturn(principal);
         when(principal.getName()).thenReturn(email);
-        when(keycloakClient.getUserInfo(email)).thenReturn(user);
         userService.deleteUser(httpServletRequest);
 
     }
