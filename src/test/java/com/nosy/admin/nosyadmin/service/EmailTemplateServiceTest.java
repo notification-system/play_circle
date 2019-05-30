@@ -223,6 +223,48 @@ public class EmailTemplateServiceTest {
 
     @Test(expected = GeneralException.class)
     public void postEmailTemplateNonDefaultWithoutPassword() {
+
+        EmailTemplate emailTemplateForYandex=new EmailTemplate();
+        emailTemplateForYandex.setEmailTemplateName("Test");
+        emailTemplateForYandex.setEmailFromProvider(EmailFromProvider.YANDEX);
+
+        EmailProviderProperties emailProviderPropertiesTest=new EmailProviderProperties();
+        emailProviderPropertiesTest.setUsername("tett");
+        doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
+        when(userRepository.findById(email)).thenReturn(Optional.of(user));
+        doReturn(emailTemplateForYandex).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId
+                (anyString(), anyString());
+
+
+      emailTemplateServiceMock.postEmailTemplate(inputSystemId, emailTemplateId, emailProviderPropertiesTest, email);
+        assertEquals("Test", readyEmail.getEmailProviderProperties().getUsername());
+        assertEquals("Test Email Template Name", readyEmail.getEmailTemplate().getEmailTemplateName());
+
+    }
+    @Test(expected = GeneralException.class)
+    public void postEmailTemplateNonDefaultWithoutUsername() {
+
+        EmailTemplate emailTemplateForYandex=new EmailTemplate();
+        emailTemplateForYandex.setEmailTemplateName("Test");
+        emailTemplateForYandex.setEmailFromProvider(EmailFromProvider.YANDEX);
+
+        EmailProviderProperties emailProviderPropertiesTest=new EmailProviderProperties();
+        emailProviderPropertiesTest.setPassword("dasdadsadad");
+        doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
+        when(userRepository.findById(email)).thenReturn(Optional.of(user));
+        doReturn(emailTemplateForYandex).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId
+                (anyString(), anyString());
+
+
+        emailTemplateServiceMock.postEmailTemplate(inputSystemId, emailTemplateId, emailProviderPropertiesTest, email);
+        assertEquals("Test", readyEmail.getEmailProviderProperties().getUsername());
+        assertEquals("Test Email Template Name", readyEmail.getEmailTemplate().getEmailTemplateName());
+
+    }
+
+    @Test(expected = GeneralException.class)
+    public void postEmailTemplateNonDefaultWithoutPasswordWithoutUsername() {
+
         EmailTemplate emailTemplateForYandex=new EmailTemplate();
         emailTemplateForYandex.setEmailTemplateName("Test");
         emailTemplateForYandex.setEmailFromProvider(EmailFromProvider.YANDEX);
@@ -231,12 +273,13 @@ public class EmailTemplateServiceTest {
         when(userRepository.findById(email)).thenReturn(Optional.of(user));
         doReturn(emailTemplateForYandex).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId
                 (anyString(), anyString());
-      emailTemplateServiceMock.postEmailTemplate(inputSystemId, emailTemplateId, emailProviderPropertiesTest, email);
+
+
+        emailTemplateServiceMock.postEmailTemplate(inputSystemId, emailTemplateId, emailProviderPropertiesTest, email);
         assertEquals("Test", readyEmail.getEmailProviderProperties().getUsername());
         assertEquals("Test Email Template Name", readyEmail.getEmailTemplate().getEmailTemplateName());
 
     }
-
     @Test
     public void updateEmailTemplate() {
         doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
