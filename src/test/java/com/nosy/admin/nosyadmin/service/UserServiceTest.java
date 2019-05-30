@@ -1,6 +1,7 @@
 package com.nosy.admin.nosyadmin.service;
 
 import com.nosy.admin.nosyadmin.config.security.KeycloakClient;
+import com.nosy.admin.nosyadmin.exceptions.GeneralException;
 import com.nosy.admin.nosyadmin.model.User;
 import com.nosy.admin.nosyadmin.repository.UserRepository;
 import org.junit.Before;
@@ -11,9 +12,11 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import sun.java2d.loops.DrawGlyphListAA;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.security.GeneralSecurityException;
 import java.security.Principal;
 
 import static org.junit.Assert.*;
@@ -75,5 +78,15 @@ public class UserServiceTest {
 
     @Test
     public void addUser() {
+        when(keycloakClient.registerNewUser(user)).thenReturn(true);
+        when(userRepository.saveAndFlush(user)).thenReturn(user);
+        assertEquals(user.getEmail(),userService.addUser(user).getEmail());
+    }
+
+    @Test(expected = GeneralException.class)
+    public void addUserWithFalse() {
+        when(keycloakClient.registerNewUser(user)).thenReturn(true);
+        when(userRepository.saveAndFlush(user)).thenReturn(user);
+        assertEquals(user.getEmail(),userService.addUser(user).getEmail());
     }
 }
