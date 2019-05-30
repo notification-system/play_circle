@@ -120,14 +120,15 @@ public class EmailTemplateService {
     }
 
     String text = emailTemplate.getText();
+    if(emailProviderProperties.getPlaceholders()!=null) {
+      for (PlaceHolders placeholder : emailProviderProperties.getPlaceholders()) {
+        text = text.replace("#{" + placeholder.getName() + "}#", placeholder.getValue());
+      }
 
-    for (PlaceHolders placeholder : emailProviderProperties.getPlaceholders()) {
-      text = text.replace("#{" + placeholder.getName() + "}#", placeholder.getValue());
-    }
-
-    if (text.contains("#{") || text.contains("}#")) {
-      throw new GeneralException(
-          MessageError.NOT_ENOUGH_PARAMETERS_FOR_PLACEHOLDERS.getMessageText());
+      if (text.contains("#{") || text.contains("}#")) {
+        throw new GeneralException(
+                MessageError.NOT_ENOUGH_PARAMETERS_FOR_PLACEHOLDERS.getMessageText());
+      }
     }
     emailTemplate.setText(text);
     readyEmail.setEmailTemplate(emailTemplate);
