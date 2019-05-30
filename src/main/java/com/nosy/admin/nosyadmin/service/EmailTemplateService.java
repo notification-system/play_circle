@@ -143,10 +143,10 @@ public class EmailTemplateService {
     EmailTemplate currentEmailTemplate =
         getEmailTemplateById(emailTemplateId, inputSystemId, email);
 
-    if (!currentEmailTemplate.getEmailTemplateName().equals(emailTemplate.getEmailTemplateName())
+    if (emailTemplate==null || (!currentEmailTemplate.getEmailTemplateName().equals(emailTemplate.getEmailTemplateName())
         && emailTemplateRepository.findEmailTemplateByEmailTemplateNameAndInputSystemId(
                 emailTemplate.getEmailTemplateName(), inputSystemId)
-            != null) {
+            != null)) {
 
       throw new GeneralException(MessageError.NO_EMAIL_TEMPLATE_FOUND.getMessageText());
     }
