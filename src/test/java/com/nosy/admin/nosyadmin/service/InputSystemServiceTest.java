@@ -6,6 +6,7 @@ import com.nosy.admin.nosyadmin.model.InputSystem;
 import com.nosy.admin.nosyadmin.model.User;
 import com.nosy.admin.nosyadmin.repository.InputSystemRepository;
 import com.nosy.admin.nosyadmin.repository.UserRepository;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -29,25 +30,30 @@ public class InputSystemServiceTest {
     private InputSystemRepository inputSystemRepository;
 
 
-    User user;
-
-
-
-    @Test
-    public void getListOfInputSystems() {
-        String email="test@nosy.tech";
+    private User user;
+    private String email;
+    private InputSystem inputSystem;
+    private Set<InputSystem> inputSystemList=new HashSet<>();
+    @Before
+    public void setUp(){
+        email="test@nosy.tech";
         user=new User();
         user.setEmail(email);
         user.setFirstName("Test");
         user.setLastName("Nosy");
         user.setInfo("TestNosy");
         user.setPassword("dajsndjasn");
-        InputSystem inputSystem=new InputSystem();
+        inputSystem=new InputSystem();
         inputSystem.setInputSystemId("inputSystemId");
         inputSystem.setInputSystemName("inputSystemName");
-        Set<InputSystem> inputSystemList=new HashSet<>();
+
         inputSystemList.add(inputSystem);
         user.setInputSystem(inputSystemList);
+    }
+
+    @Test
+    public void getListOfInputSystems() {
+
 
         when(userRepositoryMock.findById(email)).thenReturn(Optional.of(user));
         assertEquals(inputSystemList, inputSystemServiceMock.getListOfInputSystems(email));
@@ -134,8 +140,57 @@ public class InputSystemServiceTest {
     }
 
 
+    @Test(expected = GeneralException.class)
+    public void saveInputSystemWithNullEmailTemplate() {
+        InputSystem inputSystem=new InputSystem();
+        String email="test@nosy.tech";
+        inputSystemServiceMock.saveInputSystem(inputSystem, email);
+    }
+
+    @Test(expected = GeneralException.class)
+    public void saveInputSystemEmptyEmailTemplate() {
+        InputSystem inputSystem=new InputSystem();
+        inputSystem.setInputSystemName(" ");
+
+        String email="test@nosy.tech";
+        inputSystemServiceMock.saveInputSystem(inputSystem, email);
+    }
+
+    @Test(expected = GeneralException.class)
+    public void saveInputSystemWithValidInputSystemNameAlreadyExists() {
+        String email="test@nosy.tech";
+        InputSystem inputSystem=new InputSystem();
+        inputSystem.setInputSystemName("inputSystemName");
+
+        when(inputSystemRepository.findByInputSystemNameAndEmail(email,inputSystem.getInputSystemName())).
+                thenReturn(inputSystem);
+        inputSystemServiceMock.saveInputSystem(inputSystem, email);
+    }
+
+
+    @Test(expected = GeneralException.class)
+    public void saveInputSystemWithValidInputSystemNameButUserDoesnotExist() {
+        String email="test@nosy.tech";
+        InputSystem inputSystem=new InputSystem();
+        inputSystem.setInputSystemName("inputSystemName");
+
+        when(inputSystemRepository.findByInputSystemNameAndEmail(email,inputSystem.getInputSystemName())).
+                thenReturn(null);
+        when(userRepositoryMock.findById(email)).thenReturn(Optional.empty());
+        inputSystemServiceMock.saveInputSystem(inputSystem, email);
+    }
+
     @Test
-    public void saveInputSystem() {
+    public void saveInputSystemWithValidInputSystemNameButUserExists() {
+        String email="test@nosy.tech";
+        InputSystem inputSystem=new InputSystem();
+        inputSystem.setInputSystemName("inputSystemName");
+
+        when(inputSystemRepository.findByInputSystemNameAndEmail(email,inputSystem.getInputSystemName())).
+                thenReturn(null);
+        when(userRepositoryMock.findById(email)).thenReturn(Optional.of(user));
+        when(inputSystemRepository.save(inputSystem)).thenReturn(inputSystem);
+        assertEquals(inputSystem.getInputSystemName(),inputSystemServiceMock.saveInputSystem(inputSystem, email).getInputSystemName());
     }
 
     @Test
