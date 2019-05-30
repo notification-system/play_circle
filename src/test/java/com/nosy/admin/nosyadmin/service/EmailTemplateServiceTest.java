@@ -189,6 +189,12 @@ public class EmailTemplateServiceTest {
 
     }
 
+    @Test(expected = GeneralException.class)
+    public void getListOfEmailTemplatesInputSystemNotFound() {
+        doReturn(null).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
+        emailTemplateServiceMock.getListOfEmailTemplates(inputSystemId, email);
+    }
+
     @Test
     public void getListEmailTemplatesListNull() {
         doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
@@ -210,6 +216,22 @@ public class EmailTemplateServiceTest {
         doReturn(emailTemplate).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId
                 (anyString(), anyString());
         assertEquals(emailTemplateId, emailTemplateServiceMock.postEmailTemplate(inputSystemId, emailTemplateId, emailProviderProperties, email).getEmailTemplateId());
+        assertEquals("Test", readyEmail.getEmailProviderProperties().getUsername());
+        assertEquals("Test Email Template Name", readyEmail.getEmailTemplate().getEmailTemplateName());
+
+    }
+
+    @Test(expected = GeneralException.class)
+    public void postEmailTemplateNonDefaultWithoutPassword() {
+        EmailTemplate emailTemplateForYandex=new EmailTemplate();
+        emailTemplateForYandex.setEmailTemplateName("Test");
+        emailTemplateForYandex.setEmailFromProvider(EmailFromProvider.YANDEX);
+        EmailProviderProperties emailProviderPropertiesTest=new EmailProviderProperties();
+        doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
+        when(userRepository.findById(email)).thenReturn(Optional.of(user));
+        doReturn(emailTemplateForYandex).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId
+                (anyString(), anyString());
+      emailTemplateServiceMock.postEmailTemplate(inputSystemId, emailTemplateId, emailProviderPropertiesTest, email);
         assertEquals("Test", readyEmail.getEmailProviderProperties().getUsername());
         assertEquals("Test Email Template Name", readyEmail.getEmailTemplate().getEmailTemplateName());
 
