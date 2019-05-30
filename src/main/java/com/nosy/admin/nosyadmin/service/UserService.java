@@ -6,9 +6,6 @@ import com.nosy.admin.nosyadmin.model.User;
 import com.nosy.admin.nosyadmin.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
 import javax.servlet.http.HttpServletRequest;
 
 @Service
@@ -23,24 +20,21 @@ public class UserService {
   }
 
   public User getUserInfo(HttpServletRequest request) {
-    HttpServletRequest requestService =
-        ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-    return keycloakClient.getUserInfo(requestService.getUserPrincipal().getName());
+
+    return keycloakClient.getUserInfo(request.getUserPrincipal().getName());
   }
 
   public void deleteUser(HttpServletRequest request) {
-    HttpServletRequest requestService =
-        ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 
-    String obtainedUser = requestService.getUserPrincipal().getName();
+
+    String obtainedUser = request.getUserPrincipal().getName();
 
     keycloakClient.deleteUsername(obtainedUser);
     userRepository.deleteById(obtainedUser);
   }
 
   public void logoutUser(HttpServletRequest request) {
-    HttpServletRequest requestService =
-        ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+
     keycloakClient.logoutUser(request.getUserPrincipal().getName());
   }
 

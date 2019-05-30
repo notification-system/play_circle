@@ -1,7 +1,6 @@
 package com.nosy.admin.nosyadmin.service;
 
 import com.nosy.admin.nosyadmin.exceptions.GeneralException;
-import com.nosy.admin.nosyadmin.exceptions.MessageError;
 import com.nosy.admin.nosyadmin.model.EmailTemplate;
 import com.nosy.admin.nosyadmin.model.InputSystem;
 import com.nosy.admin.nosyadmin.model.User;
@@ -31,10 +30,11 @@ public class InputSystemServiceTest {
     private InputSystemRepository inputSystemRepository;
 
 
-    private User user;
     private String email;
     private InputSystem inputSystem;
     private Set<InputSystem> inputSystemList=new HashSet<>();
+    private User user;
+
     @Before
     public void setUp(){
         email="test@nosy.tech";
@@ -157,7 +157,6 @@ public class InputSystemServiceTest {
     public void saveInputSystemEmptyEmailTemplate() {
         InputSystem inputSystem=new InputSystem();
         inputSystem.setInputSystemName(" ");
-
         String email="test@nosy.tech";
         inputSystemServiceMock.saveInputSystem(inputSystem, email);
     }
@@ -167,7 +166,6 @@ public class InputSystemServiceTest {
         String email="test@nosy.tech";
         InputSystem inputSystem=new InputSystem();
         inputSystem.setInputSystemName("inputSystemName");
-
         when(inputSystemRepository.findByInputSystemNameAndEmail(email,inputSystem.getInputSystemName())).
                 thenReturn(inputSystem);
         inputSystemServiceMock.saveInputSystem(inputSystem, email);
@@ -191,7 +189,6 @@ public class InputSystemServiceTest {
         String email="test@nosy.tech";
         InputSystem inputSystem=new InputSystem();
         inputSystem.setInputSystemName("inputSystemName");
-
         when(inputSystemRepository.findByInputSystemNameAndEmail(email,inputSystem.getInputSystemName())).
                 thenReturn(null);
         when(userRepositoryMock.findById(email)).thenReturn(Optional.of(user));
@@ -201,82 +198,20 @@ public class InputSystemServiceTest {
 
     @Test(expected = GeneralException.class)
     public void updateInputSystemStatusInputSystemDoesntExist() {
-    /*    public InputSystem updateInputSystemStatus(
-                String inputSystemId, InputSystem inputSystem, String email) {
-
-            InputSystem checkInputSystem = inputSystemRepository.findByIdAndEmail(email, inputSystemId);
-
-            if (checkInputSystem == null) {
-                throw new GeneralException(MessageError.NO_INPUT_SYSTEM_FOUND.getMessageText());
-            }
-            InputSystem checkDuplicate =
-                    inputSystemRepository.findByInputSystemNameAndEmail(
-                            email, inputSystem.getInputSystemName());
-            if (checkDuplicate != null) {
-                throw new GeneralException(MessageError.INPUT_SYSTEM_EXIST.getMessageText());
-            }
-            checkInputSystem.setInputSystemName(inputSystem.getInputSystemName());
-
-            return inputSystemRepository.save(checkInputSystem);
-        }*/
-
         when(inputSystemRepository.findByIdAndEmail(email, inputSystem.getInputSystemId())).thenReturn(null);
-
         inputSystemServiceMock.updateInputSystemStatus(inputSystem.getInputSystemId(), inputSystem, email);
     }
     @Test(expected = GeneralException.class)
     public void updateInputSystemStatusDuplicateExists() {
-    /*    public InputSystem updateInputSystemStatus(
-                String inputSystemId, InputSystem inputSystem, String email) {
-
-            InputSystem checkInputSystem = inputSystemRepository.findByIdAndEmail(email, inputSystemId);
-
-            if (checkInputSystem == null) {
-                throw new GeneralException(MessageError.NO_INPUT_SYSTEM_FOUND.getMessageText());
-            }
-            InputSystem checkDuplicate =
-                    inputSystemRepository.findByInputSystemNameAndEmail(
-                            email, inputSystem.getInputSystemName());
-            if (checkDuplicate != null) {
-                throw new GeneralException(MessageError.INPUT_SYSTEM_EXIST.getMessageText());
-            }
-            checkInputSystem.setInputSystemName(inputSystem.getInputSystemName());
-
-            return inputSystemRepository.save(checkInputSystem);
-        }*/
-
         when(inputSystemRepository.findByIdAndEmail(email, inputSystem.getInputSystemId())).thenReturn(inputSystem);
         when(inputSystemRepository.findByInputSystemNameAndEmail(email, inputSystem.getInputSystemName())).thenReturn(inputSystem);
-
         inputSystemServiceMock.updateInputSystemStatus(inputSystem.getInputSystemId(), inputSystem, email);
     }
 
     @Test
     public void updateInputSystemStatusDuplicateDoesntExist() {
-    /*    public InputSystem updateInputSystemStatus(
-                String inputSystemId, InputSystem inputSystem, String email) {
-
-            InputSystem checkInputSystem = inputSystemRepository.findByIdAndEmail(email, inputSystemId);
-
-            if (checkInputSystem == null) {
-                throw new GeneralException(MessageError.NO_INPUT_SYSTEM_FOUND.getMessageText());
-            }
-            InputSystem checkDuplicate =
-                    inputSystemRepository.findByInputSystemNameAndEmail(
-                            email, inputSystem.getInputSystemName());
-            if (checkDuplicate != null) {
-                throw new GeneralException(MessageError.INPUT_SYSTEM_EXIST.getMessageText());
-            }
-            checkInputSystem.setInputSystemName(inputSystem.getInputSystemName());
-
-            return inputSystemRepository.save(checkInputSystem);
-        }*/
-
         when(inputSystemRepository.findByIdAndEmail(email, inputSystem.getInputSystemId())).thenReturn(inputSystem);
         when(inputSystemRepository.findByInputSystemNameAndEmail(email, inputSystem.getInputSystemName())).thenReturn(null);
-
         inputSystemServiceMock.updateInputSystemStatus(inputSystem.getInputSystemId(), inputSystem, email);
     }
-
-
 }
