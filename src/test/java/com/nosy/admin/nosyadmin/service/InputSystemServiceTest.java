@@ -46,9 +46,14 @@ public class InputSystemServiceTest {
         inputSystem=new InputSystem();
         inputSystem.setInputSystemId("inputSystemId");
         inputSystem.setInputSystemName("inputSystemName");
-
+        inputSystem.setUser(user);
         inputSystemList.add(inputSystem);
         user.setInputSystem(inputSystemList);
+    }
+
+    @Test
+    public void getUser(){
+        assertEquals(email, inputSystem.getUser().getEmail());
     }
 
     @Test
