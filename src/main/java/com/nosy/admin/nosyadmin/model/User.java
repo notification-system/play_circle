@@ -78,8 +78,6 @@ public class User {
         + '\''
         + ", inputSystem="
         + inputSystem
-        + ", password='"
-        + password
         + '\''
         + ", firstName='"
         + firstName

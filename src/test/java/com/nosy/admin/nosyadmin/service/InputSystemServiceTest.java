@@ -212,6 +212,8 @@ public class InputSystemServiceTest {
     public void updateInputSystemStatusDuplicateDoesntExist() {
         when(inputSystemRepository.findByIdAndEmail(email, inputSystem.getInputSystemId())).thenReturn(inputSystem);
         when(inputSystemRepository.findByInputSystemNameAndEmail(email, inputSystem.getInputSystemName())).thenReturn(null);
-        inputSystemServiceMock.updateInputSystemStatus(inputSystem.getInputSystemId(), inputSystem, email);
+        when(inputSystemRepository.save(inputSystem)).thenReturn(inputSystem);
+        assertEquals(inputSystem.getInputSystemName(),inputSystemServiceMock.updateInputSystemStatus(inputSystem.getInputSystemId(), inputSystem, email).getInputSystemName());
+        ;
     }
 }

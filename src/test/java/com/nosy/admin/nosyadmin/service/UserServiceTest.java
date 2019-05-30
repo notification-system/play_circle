@@ -46,6 +46,17 @@ public class UserServiceTest {
         user.setInfo("TestNosy");
         user.setPassword("dajsndjasn");
     }
+
+
+    @Test
+    public void testUser(){
+        assertEquals("Nosy", user.getLastName());
+        assertEquals("Test", user.getFirstName());
+        assertEquals("TestNosy", user.getInfo());
+        String userString="User{email='test@nosy.tech', inputSystem=null', firstName='Test', lastName='Nosy', info='TestNosy'}";
+        assertEquals(userString, user.toString());
+    }
+
     @Test
     public void getUserInfo() {
 
@@ -67,7 +78,7 @@ public class UserServiceTest {
 
     }
 
-    @Test
+    @Test(expected = Test.None.class)
     public void logoutUser() {
         HttpServletRequest httpServletRequest=mock(HttpServletRequest.class);
         Principal principal=mock(Principal.class);
