@@ -41,8 +41,6 @@ public class EmailAdminControllerTest {
     public void emailTemplatePost() {
         EmailTemplate emailTemplate=mock(EmailTemplate.class);
         Principal principal=mock(Principal.class);
-        when(emailTemplateService.postEmailTemplate(anyString(), anyString(),any(), anyString()))
-        .thenReturn(emailTemplate);
         assertEquals(HttpStatus.OK, emailAdminController.
                 emailTemplatePost("dasda", "dasdas", null,
                         principal).getStatusCode());
@@ -54,8 +52,6 @@ public class EmailAdminControllerTest {
         inputSystemDto.setInputSystemName("inputSystemDtoName");
         inputSystemDto.setInputSystemId("inpiutSystemDtoId");
         Principal principal=mock(Principal.class);
-        InputSystem inputSystem=InputSystemMapper.INSTANCE.toInputSystem(inputSystemDto);
-        when(inputSystemService.saveInputSystem(any(), anyString())).thenReturn(inputSystem);
         assertEquals(HttpStatus.CREATED, emailAdminController.newType(inputSystemDto,principal).getStatusCode());
 
     }
@@ -63,17 +59,20 @@ public class EmailAdminControllerTest {
     @Test
     public void getInputSystems() {
         Principal principal=mock(Principal.class);
-        when(inputSystemService.getListOfInputSystems(anyString())).thenReturn(null);
         assertEquals(HttpStatus.OK, emailAdminController.getInputSystems(principal).getStatusCode());
-
     }
 
     @Test
     public void getEmailAllProviders() {
+        Principal principal=mock(Principal.class);
+        when(emailTemplateService.getAllEmailProviders()).thenReturn(null);
+        assertEquals(HttpStatus.OK, emailAdminController.getEmailAllProviders(principal).getStatusCode());
     }
 
     @Test
     public void updateInputSystemName() {
+        Principal principal=mock(Principal.class);
+        assertEquals(HttpStatus.OK, emailAdminController.updateInputSystemName("inputSystemId", null, principal).getStatusCode());
     }
 
     @Test
