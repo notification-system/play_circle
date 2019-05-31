@@ -14,6 +14,7 @@ public class EmailTemplateDto {
 
   @NotNull private String emailTemplateName;
   @NotNull @Email private String fromAddress;
+  @NotNull private String subject;
 
   @NotNull private EmailFromProvider emailFromProvider;
 
@@ -32,6 +33,14 @@ public class EmailTemplateDto {
 
   public String getEmailTemplateId() {
     return emailTemplateId;
+  }
+
+  public String getSubject() {
+    return subject;
+  }
+
+  public void setSubject(String subject) {
+    this.subject = subject;
   }
 
   public void setEmailTemplateId(String emailTemplateId) {
