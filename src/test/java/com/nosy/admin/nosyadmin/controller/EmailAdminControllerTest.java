@@ -60,7 +60,6 @@ public class EmailAdminControllerTest {
     public void getInputSystems() {
         Principal principal=mock(Principal.class);
         assertEquals(HttpStatus.OK, emailAdminController.getInputSystems(principal).getStatusCode());
-
     }
 
     @Test
@@ -72,6 +71,8 @@ public class EmailAdminControllerTest {
 
     @Test
     public void updateInputSystemName() {
+        Principal principal=mock(Principal.class);
+        assertEquals(HttpStatus.OK, emailAdminController.updateInputSystemName("inputSystemId", null, principal).getStatusCode());
     }
 
     @Test
