@@ -1,18 +1,16 @@
 package com.nosy.admin.nosyadmin.utils;
 
 import com.nosy.admin.nosyadmin.dto.InputSystemDto;
-import com.nosy.admin.nosyadmin.dto.UserDto;
 import com.nosy.admin.nosyadmin.model.EmailTemplate;
 import com.nosy.admin.nosyadmin.model.InputSystem;
 import com.nosy.admin.nosyadmin.model.User;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class InputSystemMapperTest {
 //    InputSystemMapper INSTANCE = Mappers.getMapper( InputSystemMapper.class );
@@ -35,19 +33,15 @@ public class InputSystemMapperTest {
         emailTemplate.setEmailTemplateName("dadasd");
         Set<EmailTemplate> emailTemplateSet=new HashSet<>();
         emailTemplateSet.add(emailTemplate);
-
-
         inputSystem.setInputSystemId("dadasdsa");
         inputSystem.setEmailTemplate(emailTemplateSet);
 
+        InputSystemDto inputSystemDto=new InputSystemDto();
+        inputSystemDto.setInputSystemId("inputSystemDtoId");
+        inputSystemDto.setInputSystemName("inputSystemDtoName");
+        inputSystemDto.setUser(user);
+        inputSystemDto.setEmailTemplate(emailTemplateSet);
 
-        Set<InputSystem> inputSystemSet=new HashSet<>();
-        user.setEmail("TestUser");
-        user.setPassword("TestUserPassword");
-        user.setLastName("TestUserLastName");
-        user.setFirstName("TestUserFirstName");
-        user.setInfo("TestUserInfo");
-        user.setInputSystem(inputSystemSet);
 
 
     }
@@ -59,6 +53,15 @@ public class InputSystemMapperTest {
         assertEquals(inputSystem.getInputSystemName(),InputSystemMapper.INSTANCE.toInputSystemDto(inputSystem).getInputSystemName());
         assertEquals(inputSystem.getEmailTemplate(),InputSystemMapper.INSTANCE.toInputSystemDto(inputSystem).getEmailTemplate());
         assertEquals(inputSystem.getUser(),InputSystemMapper.INSTANCE.toInputSystemDto(inputSystem).getUser());
+
+    }
+
+    @Test
+    public void toInputSystem(){
+        assertEquals(inputSystemDto.getInputSystemId(),InputSystemMapper.INSTANCE.toInputSystem(inputSystemDto).getInputSystemId());
+        assertEquals(inputSystemDto.getInputSystemName(),InputSystemMapper.INSTANCE.toInputSystem(inputSystemDto).getInputSystemName());
+        assertEquals(inputSystemDto.getEmailTemplate(),InputSystemMapper.INSTANCE.toInputSystem(inputSystemDto).getEmailTemplate());
+        assertEquals(inputSystemDto.getUser(),InputSystemMapper.INSTANCE.toInputSystem(inputSystemDto).getUser());
 
     }
 }
