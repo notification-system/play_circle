@@ -51,7 +51,7 @@ public class AuthController {
   @PostMapping(value = "/users")
   public ResponseEntity<User> newUser(@RequestBody @Valid UserDto userdto) {
     return new ResponseEntity<>(
-        userService.addUser(UserMapper.INSTANCE.toUser(userdto)), HttpStatus.OK);
+        userService.addUser(UserMapper.INSTANCE.toUser(userdto)), HttpStatus.CREATED);
   }
 
   @DeleteMapping(value = "/users")

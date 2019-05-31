@@ -6,9 +6,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface EmailTemplateMapper {
-    EmailTemplateMapper INSTANCE = Mappers.getMapper( EmailTemplateMapper.class );
+public abstract class EmailTemplateMapper {
+    public static final EmailTemplateMapper INSTANCE = Mappers.getMapper( EmailTemplateMapper.class );
 
-    EmailTemplateDto toEmailTemplateDto(EmailTemplate emailTemplate);
-    EmailTemplate toEmailTemplate(EmailTemplateDto emailTemplateDto);
+    public abstract EmailTemplateDto toEmailTemplateDto(EmailTemplate emailTemplate);
+    public abstract EmailTemplate toEmailTemplate(EmailTemplateDto emailTemplateDto);
 }
