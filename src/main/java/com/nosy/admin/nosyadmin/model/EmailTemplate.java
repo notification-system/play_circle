@@ -3,7 +3,6 @@ package com.nosy.admin.nosyadmin.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nosy.admin.nosyadmin.exceptions.GeneralException;
-
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.GenericGenerator;
 
