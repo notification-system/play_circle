@@ -47,9 +47,9 @@ public class EmailAdminController {
   }
 
   @PostMapping(value = "/inputsystems", consumes = "application/json")
-  public InputSystem newType(@RequestBody InputSystemDto inputSystemDto, Principal principal) {
-    return inputSystemService.saveInputSystem(
-        InputSystemMapper.INSTANCE.toInputSystem(inputSystemDto), principal.getName());
+  public ResponseEntity<InputSystem> newType(@RequestBody InputSystemDto inputSystemDto, Principal principal) {
+    return new ResponseEntity<>(inputSystemService.saveInputSystem(
+        InputSystemMapper.INSTANCE.toInputSystem(inputSystemDto), principal.getName()), HttpStatus.CREATED);
   }
 
   @GetMapping(value = "/inputsystems")
