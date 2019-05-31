@@ -77,25 +77,51 @@ public class EmailAdminControllerTest {
 
     @Test
     public void newEmailTemplate() {
+        Principal principal=mock(Principal.class);
+        assertEquals(HttpStatus.CREATED, emailAdminController.
+                newEmailTemplate("inputSystemId",null,principal).getStatusCode());
     }
 
     @Test
     public void getEmailTemplateByInputSystemAndEmailTemplateId() {
+        Principal principal=mock(Principal.class);
+        assertEquals(HttpStatus.OK, emailAdminController.
+                getEmailTemplateByInputSystemAndEmailTemplateId("emailTemplateId","inputSystemId",principal).getStatusCode());
     }
 
     @Test
     public void updateEmailTemplate() {
+        Principal principal=mock(Principal.class);
+
+        assertEquals(HttpStatus.OK, emailAdminController.
+                updateEmailTemplate( "inputSystemId","emailTemplateId", null, principal)
+                .getStatusCode());
     }
+
 
     @Test
     public void getEmailTemplates() {
+        Principal principal=mock(Principal.class);
+
+        assertEquals(HttpStatus.OK, emailAdminController.
+                getEmailTemplates("inputSystemId", principal).getStatusCode());
     }
 
     @Test
     public void deleteEmailTemplate() {
+        Principal principal=mock(Principal.class);
+
+        assertEquals(HttpStatus.NO_CONTENT, emailAdminController.
+                deleteEmailTemplate("inputSystemId", "emailTemplateId",principal).getStatusCode());
     }
 
     @Test
     public void deleteInputSystem() {
+        Principal principal=mock(Principal.class);
+
+        assertEquals(HttpStatus.NO_CONTENT, emailAdminController.
+                deleteInputSystem("inputSystemId", principal).getStatusCode());
     }
 }
+
+
