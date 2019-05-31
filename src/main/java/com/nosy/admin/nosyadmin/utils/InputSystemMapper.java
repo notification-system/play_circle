@@ -6,10 +6,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface InputSystemMapper {
+public abstract class InputSystemMapper {
 
-    InputSystemMapper INSTANCE = Mappers.getMapper( InputSystemMapper.class );
+    public static final InputSystemMapper INSTANCE = Mappers.getMapper( InputSystemMapper.class );
 
-    InputSystemDto toInputSystemDto(InputSystem inputSystem);
-    InputSystem toInputSystem(InputSystemDto emailTemplateDto);
+    public abstract InputSystemDto toInputSystemDto(InputSystem inputSystem);
+    public abstract InputSystem toInputSystem(InputSystemDto emailTemplateDto);
 }

@@ -35,14 +35,6 @@ public class EmailTemplateDto {
     return emailTemplateId;
   }
 
-  public String getSubject() {
-    return subject;
-  }
-
-  public void setSubject(String subject) {
-    this.subject = subject;
-  }
-
   public void setEmailTemplateId(String emailTemplateId) {
     this.emailTemplateId = emailTemplateId;
   }
@@ -61,6 +53,14 @@ public class EmailTemplateDto {
 
   public void setFromAddress(String fromAddress) {
     this.fromAddress = fromAddress;
+  }
+
+  public String getSubject() {
+    return subject;
+  }
+
+  public void setSubject(String subject) {
+    this.subject = subject;
   }
 
   public EmailFromProvider getEmailFromProvider() {
