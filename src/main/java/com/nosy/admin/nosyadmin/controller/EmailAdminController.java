@@ -7,7 +7,8 @@ import com.nosy.admin.nosyadmin.model.EmailTemplate;
 import com.nosy.admin.nosyadmin.model.InputSystem;
 import com.nosy.admin.nosyadmin.service.EmailTemplateService;
 import com.nosy.admin.nosyadmin.service.InputSystemService;
-import com.nosy.admin.nosyadmin.utils.Conversion;
+import com.nosy.admin.nosyadmin.utils.EmailTemplateMapper;
+import com.nosy.admin.nosyadmin.utils.InputSystemMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,16 +24,13 @@ import java.util.Set;
 public class EmailAdminController {
   private EmailTemplateService emailTemplateService;
   private InputSystemService inputSystemService;
-  private Conversion conversion;
 
   @Autowired
   public EmailAdminController(
-      Conversion conversion,
       EmailTemplateService emailTemplateService,
       InputSystemService inputSystemService) {
     this.emailTemplateService = emailTemplateService;
     this.inputSystemService = inputSystemService;
-    this.conversion = conversion;
   }
 
   @PostMapping(value = "/inputsystems/{inputSystemId}/emailtemplates/{emailTemplateId}/post")
@@ -51,7 +49,7 @@ public class EmailAdminController {
   @PostMapping(value = "/inputsystems", consumes = "application/json")
   public InputSystem newType(@RequestBody InputSystemDto inputSystemDto, Principal principal) {
     return inputSystemService.saveInputSystem(
-        conversion.convertToInputSystem(inputSystemDto), principal.getName());
+        InputSystemMapper.INSTANCE.toInputSystem(inputSystemDto), principal.getName());
   }
 
   @GetMapping(value = "/inputsystems")
@@ -73,7 +71,7 @@ public class EmailAdminController {
 
     return new ResponseEntity<>(
         inputSystemService.updateInputSystemStatus(
-            inputSystemId, conversion.convertToInputSystem(inputSystemDto), principal.getName()),
+            inputSystemId, InputSystemMapper.INSTANCE.toInputSystem(inputSystemDto), principal.getName()),
         HttpStatus.OK);
   }
 
@@ -84,7 +82,7 @@ public class EmailAdminController {
       Principal principal) {
     return new ResponseEntity<>(
         emailTemplateService.newEmailTemplate(
-            conversion.convertToEmailTemplate(emailTemplateDto),
+                EmailTemplateMapper.INSTANCE.toEmailTemplate(emailTemplateDto),
             inputSystemId,
             principal.getName()),
         HttpStatus.CREATED);
@@ -109,7 +107,7 @@ public class EmailAdminController {
       Principal principal) {
     return new ResponseEntity<>(
         emailTemplateService.updateEmailTemplate(
-            conversion.convertToEmailTemplate(emailTemplateDto),
+                EmailTemplateMapper.INSTANCE.toEmailTemplate(emailTemplateDto),
             inputSystemId,
             emailTemplateId,
             principal.getName()),

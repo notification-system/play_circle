@@ -2,8 +2,6 @@ package com.nosy.admin.nosyadmin.dto;
 
 import com.nosy.admin.nosyadmin.model.EmailFromProvider;
 import com.nosy.admin.nosyadmin.model.InputSystem;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
