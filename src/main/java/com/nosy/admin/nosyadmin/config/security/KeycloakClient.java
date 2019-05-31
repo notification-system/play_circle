@@ -3,8 +3,6 @@ package com.nosy.admin.nosyadmin.config.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nosy.admin.nosyadmin.exceptions.GeneralException;
 import com.nosy.admin.nosyadmin.model.User;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -36,8 +34,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import static java.util.Arrays.asList;
 
 @Component
-@NoArgsConstructor
-@AllArgsConstructor
 public class KeycloakClient {
 
   private static final Logger logger = LoggerFactory.getLogger(KeycloakClient.class);

@@ -3,8 +3,7 @@ package com.nosy.admin.nosyadmin.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nosy.admin.nosyadmin.exceptions.GeneralException;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -16,8 +15,6 @@ import java.util.Set;
 
 @Entity
 @DynamicInsert
-@ToString
-@NoArgsConstructor
 @Table(
     name = "emailTemplate",
     uniqueConstraints = @UniqueConstraint(columnNames = {"emailTemplateName", "input_system_id"}))
