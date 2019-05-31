@@ -1,6 +1,5 @@
 package com.nosy.admin.nosyadmin.controller;
 
-import com.nosy.admin.nosyadmin.config.security.ClientToken;
 import com.nosy.admin.nosyadmin.config.security.KeycloakClient;
 import com.nosy.admin.nosyadmin.dto.UserDto;
 import com.nosy.admin.nosyadmin.model.User;
@@ -14,15 +13,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.io.IOException;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-import static reactor.core.publisher.Mono.when;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 @RunWith(MockitoJUnitRunner.class)
 
 public class AuthControllerTest {
