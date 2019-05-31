@@ -5,7 +5,7 @@ import com.nosy.admin.nosyadmin.config.security.KeycloakClient;
 import com.nosy.admin.nosyadmin.dto.UserDto;
 import com.nosy.admin.nosyadmin.model.User;
 import com.nosy.admin.nosyadmin.service.UserService;
-import com.nosy.admin.nosyadmin.utils.Conversion;
+import com.nosy.admin.nosyadmin.utils.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,14 +22,12 @@ public class AuthController {
 
   private UserService userService;
   private KeycloakClient keycloakClient;
-  private Conversion conversion;
 
   @Autowired
   public AuthController(
-      UserService userService, KeycloakClient keycloakClient, Conversion conversion) {
+      UserService userService, KeycloakClient keycloakClient) {
     this.userService = userService;
     this.keycloakClient = keycloakClient;
-    this.conversion = conversion;
   }
 
   @GetMapping(path = "/auth/logout")
@@ -47,13 +45,13 @@ public class AuthController {
   public ResponseEntity<ClientToken> getToken(@RequestBody @Valid UserDto userdto)
       throws IOException {
     return new ResponseEntity<>(
-        keycloakClient.getTokens(conversion.convertToUser(userdto)), HttpStatus.OK);
+        keycloakClient.getTokens(UserMapper.INSTANCE.toUser(userdto)), HttpStatus.OK);
   }
 
   @PostMapping(value = "/users")
   public ResponseEntity<User> newUser(@RequestBody @Valid UserDto userdto) {
     return new ResponseEntity<>(
-        userService.addUser(conversion.convertToUser(userdto)), HttpStatus.OK);
+        userService.addUser(UserMapper.INSTANCE.toUser(userdto)), HttpStatus.OK);
   }
 
   @DeleteMapping(value = "/users")
