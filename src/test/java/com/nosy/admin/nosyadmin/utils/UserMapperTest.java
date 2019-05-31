@@ -16,7 +16,6 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserMapperTest {
-    @InjectMocks
     private UserDto userDto=new UserDto();
     private User user=new User();
     @Before
