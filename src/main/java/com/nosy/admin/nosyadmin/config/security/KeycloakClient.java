@@ -87,24 +87,24 @@ public class KeycloakClient {
 
   public void logoutUser(String username) {
 
-    UsersResource userRessource = keycloakConfigBean.getKeycloakUserResource().users();
+    UsersResource usersResource = keycloakConfigBean.getKeycloakUserResource().users();
 
-    if(userRessource.get(getUserGet(username).get())!=null){
-      userRessource.get(getUserGet(username).get()).logout();
+    if(usersResource.get(getUserGet(username).get())!=null){
+      usersResource.get(getUserGet(username).get()).logout();
     }
 
   }
 
   public void deleteUsername(String username) {
-    UsersResource userRessource = keycloakConfigBean.getKeycloakUserResource().users();
+    UsersResource usersResource = keycloakConfigBean.getKeycloakUserResource().users();
 
-    userRessource.delete(getUserGet(username).get());
+    usersResource.delete(getUserGet(username).get());
   }
 
   public User getUserInfo(String username) {
-    UsersResource userRessource = keycloakConfigBean.getKeycloakUserResource().users();
+    UsersResource userResource = keycloakConfigBean.getKeycloakUserResource().users();
     User user = new User();
-    userRessource
+    userResource
         .list()
         .forEach(
             t -> {
@@ -118,9 +118,9 @@ public class KeycloakClient {
   }
 
   private AtomicReference<String> getUserGet(String username) {
-    UsersResource userRessource = keycloakConfigBean.getKeycloakUserResource().users();
+    UsersResource usersResource = keycloakConfigBean.getKeycloakUserResource().users();
     AtomicReference<String> userId = new AtomicReference<>("");
-    userRessource
+    usersResource
         .list()
         .forEach(
             t -> {

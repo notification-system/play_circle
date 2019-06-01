@@ -14,8 +14,7 @@ import sun.security.krb5.Realm;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -60,28 +59,42 @@ public class KeycloakClientTest {
         keycloakClient.logoutUser(username);
 
     }
-//
-//    public void logoutUser(String username) {
-//
-//        UsersResource userRessource = keycloakConfigBean.getKeycloakUserResource().users();
-//
-//        userRessource.get(getUserGet(username).get()).logout();
-//    }
-//
-//    public void deleteUsername(String username) {
-//        UsersResource userRessource = keycloakConfigBean.getKeycloakUserResource().users();
-//
-//        userRessource.delete(getUserGet(username).get());
-//    }
-
-
-    @Test
+    @Test(expected = Test.None.class)
     public void deleteUsername() {
+        String username="dadas";
+        RealmResource realmResource=mock(RealmResource.class);
+        UsersResource usersResource=mock(UsersResource.class);
+        when(keycloakConfigBean.getKeycloakUserResource()).thenReturn(realmResource);
+        when(realmResource.users()).thenReturn(usersResource);
+        keycloakClient.deleteUsername(username);
+
     }
 
     @Test
     public void getUserInfo() {
+        String username="dadas";
+        UsersResource usersResource=mock(UsersResource.class);
+        RealmResource realmResource=mock(RealmResource.class);
+        when(keycloakConfigBean.getKeycloakUserResource()).thenReturn(realmResource);
+        when(realmResource.users()).thenReturn(usersResource);
+        assertNotNull(keycloakClient.getUserInfo(username));
     }
+//    public User getUserInfo(String username) {
+//        UsersResource userRessource = keycloakConfigBean.getKeycloakUserResource().users();
+//        User user = new User();
+//        userRessource
+//                .list()
+//                .forEach(
+//                        t -> {
+//                            if (username.equals(t.getUsername())) {
+//                                user.setEmail(t.getEmail());
+//                                user.setFirstName(t.getFirstName());
+//                                user.setLastName(t.getLastName());
+//                            }
+//                        });
+//        return user;
+//    }
+
 
     @Test
     public void registerNewUser() {
