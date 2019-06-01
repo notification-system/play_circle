@@ -1,8 +1,8 @@
 package com.nosy.admin.nosyadmin.controller;
 
-import com.nosy.admin.nosyadmin.config.security.KeycloakClient;
 import com.nosy.admin.nosyadmin.dto.UserDto;
 import com.nosy.admin.nosyadmin.model.User;
+import com.nosy.admin.nosyadmin.service.KeycloakService;
 import com.nosy.admin.nosyadmin.service.UserService;
 import com.nosy.admin.nosyadmin.utils.UserMapper;
 import org.junit.Before;
@@ -30,7 +30,7 @@ public class AuthControllerTest {
     private UserService userService;
 
     @Mock
-    KeycloakClient keycloakClient;
+    KeycloakService keycloakService;
 
     UserDto userDto=new UserDto();
 
@@ -53,7 +53,7 @@ public class AuthControllerTest {
     @Test
     public void isAuthenticated() throws IOException {
         String token="testToken";
-        doReturn(true).when(keycloakClient).isAuthenticated(token);
+        doReturn(true).when(keycloakService).isAuthenticated(token);
         assertEquals(HttpStatus.OK, authController.isAuthenticated(token).getStatusCode());
 
 

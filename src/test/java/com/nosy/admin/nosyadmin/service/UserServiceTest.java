@@ -1,6 +1,5 @@
 package com.nosy.admin.nosyadmin.service;
 
-import com.nosy.admin.nosyadmin.config.security.KeycloakClient;
 import com.nosy.admin.nosyadmin.exceptions.GeneralException;
 import com.nosy.admin.nosyadmin.model.User;
 import com.nosy.admin.nosyadmin.repository.UserRepository;
@@ -27,7 +26,7 @@ public class UserServiceTest {
     @Mock
     private UserRepository userRepository;
     @Mock
-    private KeycloakClient keycloakClient;
+    private KeycloakService keycloakService;
 
     private User user;
     String email="test@nosy.tech";
@@ -59,7 +58,7 @@ public class UserServiceTest {
         Principal principal=mock(Principal.class);
         when(httpServletRequest.getUserPrincipal()).thenReturn(principal);
         when(principal.getName()).thenReturn(email);
-        when(keycloakClient.getUserInfo(email)).thenReturn(user);
+        when(keycloakService.getUserInfo(email)).thenReturn(user);
         assertEquals(email,userService.getUserInfo(httpServletRequest).getEmail());
     }
 
@@ -84,14 +83,14 @@ public class UserServiceTest {
 
     @Test
     public void addUser() {
-        when(keycloakClient.registerNewUser(user)).thenReturn(true);
+        when(keycloakService.registerNewUser(user)).thenReturn(true);
         when(userRepository.saveAndFlush(user)).thenReturn(user);
         assertEquals(user.getEmail(),userService.addUser(user).getEmail());
     }
 
     @Test(expected = GeneralException.class)
     public void addUserWithFalse() {
-        when(keycloakClient.registerNewUser(user)).thenReturn(false);
+        when(keycloakService.registerNewUser(user)).thenReturn(false);
         assertEquals(user.getEmail(),userService.addUser(user).getEmail());
     }
 

@@ -1,21 +1,38 @@
 package com.nosy.admin.nosyadmin.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nosy.admin.nosyadmin.config.security.ClientToken;
+import com.nosy.admin.nosyadmin.config.security.TokenCollection;
+import com.nosy.admin.nosyadmin.exceptions.GeneralException;
+import com.nosy.admin.nosyadmin.model.User;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.RealmResource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.Map;
+
+import static java.util.Arrays.asList;
 
 @Component
 public class KeycloakConfigBean {
+    private static final String GRANT_TYPE_STRING = "grant_type";
+    private static final String CLIENT_ID_STRING = "client_id";
+    private static final String CLIENT_SECRET_STRING = "client_secret";
+    @Value("${nosy.client.grantType}")
+    private String grantType;
     @Value("${nosy.client.keycloak.url}")
     private String keycloakUrl;
 
@@ -36,6 +53,13 @@ public class KeycloakConfigBean {
 
     @Value("${keycloak.realm}")
     private String keycloakRealm;
+    private ClientToken clientToken;
+    private TokenCollection tokenCollection;
+    @Autowired
+    public KeycloakConfigBean(ClientToken clientToken, TokenCollection tokenCollection){
+        this.clientToken=clientToken;
+        this.tokenCollection=tokenCollection;
+    }
 
     public RealmResource getKeycloakUserResource() {
 
@@ -53,7 +77,7 @@ public class KeycloakConfigBean {
         return kc.realm(keycloakRealm);
     }
 
-    public boolean requestInterceptor(HttpPost post) throws IOException {
+    public boolean requestInterceptor(HttpPost post) {
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
             return httpclient.execute(
                     post,
@@ -65,6 +89,79 @@ public class KeycloakConfigBean {
 
                         return (boolean) stringObjectMap.get("active");
                     });
+        } catch (IOException e) {
+            return false;
         }
     }
+    public ClientToken getTokens(User user) throws IOException {
+        HttpPost post=getPost(user);
+        ClientToken clientTokenCollection = getTokenCollection(post);
+        if (clientTokenCollection == null || clientTokenCollection.getAccessToken() == null) {
+            throw new GeneralException("Invalid Username or Password");
+        }
+        return getTokenCollection(post);
+    }
+    public ClientToken getTokenCollection(HttpPost post) throws IOException {
+        try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+            return httpclient.execute(
+                    post,
+                    response -> {
+                        ObjectMapper mapper = new ObjectMapper();
+                        int status = response.getStatusLine().getStatusCode();
+
+                        if (status >= 200 && status < 300) {
+                            tokenCollection =
+                                    mapper.readValue(response.getEntity().getContent(), TokenCollection.class);
+                            clientToken.setAccessToken(tokenCollection.getAccessToken());
+                            clientToken.setRefreshToken(tokenCollection.getRefreshToken());
+                            clientToken.setExpiresIn(tokenCollection.getExpiresIn());
+                            return clientToken;
+
+                        } else {
+                            return null;
+                        }
+                    });
+        }
+    }
+
+    private HttpPost getPost(User user) throws UnsupportedEncodingException {
+        HttpPost post = new HttpPost(keycloakUrl);
+        List<NameValuePair> params =
+                asList(
+                        new BasicNameValuePair(GRANT_TYPE_STRING, grantType),
+                        new BasicNameValuePair(CLIENT_ID_STRING, clientId),
+                        new BasicNameValuePair("username", user.getEmail()),
+                        new BasicNameValuePair("password", user.getPassword()),
+                        new BasicNameValuePair(CLIENT_SECRET_STRING, clientSecret));
+
+        post.setEntity(new UrlEncodedFormEntity(params));
+        post.addHeader("Content-Type", "application/x-www-form-urlencoded");
+        return post;
+    }
+
+
+    public boolean getPostForAuthentication(String token)  {
+        HttpPost post = new HttpPost(keycloakUrl + "/introspect");
+        String tokenString = "token";
+        List<NameValuePair> params =
+                asList(
+                        new BasicNameValuePair(GRANT_TYPE_STRING, grantType),
+                        new BasicNameValuePair(CLIENT_ID_STRING, clientId),
+                        new BasicNameValuePair(tokenString, token),
+                        new BasicNameValuePair(CLIENT_SECRET_STRING, clientSecret));
+
+        try {
+            post.setEntity(new UrlEncodedFormEntity(params));
+        } catch (UnsupportedEncodingException e) {
+            return false;
+        }
+        post.addHeader("Content-Type", "application/x-www-form-urlencoded");
+        return requestInterceptor(post);
+    }
+
+    public String getClientId(){
+        return clientId;
+    }
+
+
 }

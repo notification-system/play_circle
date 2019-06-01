@@ -1,9 +1,9 @@
 package com.nosy.admin.nosyadmin.controller;
 
 import com.nosy.admin.nosyadmin.config.security.ClientToken;
-import com.nosy.admin.nosyadmin.config.security.KeycloakClient;
 import com.nosy.admin.nosyadmin.dto.UserDto;
 import com.nosy.admin.nosyadmin.model.User;
+import com.nosy.admin.nosyadmin.service.KeycloakService;
 import com.nosy.admin.nosyadmin.service.UserService;
 import com.nosy.admin.nosyadmin.utils.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +21,13 @@ import java.io.IOException;
 public class AuthController {
 
   private UserService userService;
-  private KeycloakClient keycloakClient;
+  private KeycloakService keycloakService;
 
   @Autowired
   public AuthController(
-      UserService userService, KeycloakClient keycloakClient) {
+      UserService userService,  KeycloakService keycloakService) {
     this.userService = userService;
-    this.keycloakClient = keycloakClient;
+    this.keycloakService = keycloakService;
   }
 
   @GetMapping(path = "/auth/logout")
@@ -38,14 +38,14 @@ public class AuthController {
 
   @PostMapping(path = "/auth/status")
   public ResponseEntity<Boolean> isAuthenticated(@RequestBody String token) throws IOException {
-    return new ResponseEntity<>(keycloakClient.isAuthenticated(token), HttpStatus.OK);
+    return new ResponseEntity<>(keycloakService.isAuthenticated(token), HttpStatus.OK);
   }
 
   @PostMapping(value = "/auth/token")
   public ResponseEntity<ClientToken> getToken(@RequestBody @Valid UserDto userdto)
       throws IOException {
     return new ResponseEntity<>(
-        keycloakClient.getTokens(UserMapper.INSTANCE.toUser(userdto)), HttpStatus.OK);
+            keycloakService.getTokens(UserMapper.INSTANCE.toUser(userdto)), HttpStatus.OK);
   }
 
   @PostMapping(value = "/users")
