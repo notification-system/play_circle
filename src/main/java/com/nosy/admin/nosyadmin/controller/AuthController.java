@@ -2,7 +2,6 @@ package com.nosy.admin.nosyadmin.controller;
 
 import com.nosy.admin.nosyadmin.config.security.ClientToken;
 import com.nosy.admin.nosyadmin.dto.UserDto;
-import com.nosy.admin.nosyadmin.model.User;
 import com.nosy.admin.nosyadmin.service.KeycloakService;
 import com.nosy.admin.nosyadmin.service.UserService;
 import com.nosy.admin.nosyadmin.utils.UserMapper;
@@ -49,9 +48,9 @@ public class AuthController {
   }
 
   @PostMapping(value = "/users")
-  public ResponseEntity<User> newUser(@RequestBody @Valid UserDto userdto) {
+  public ResponseEntity<UserDto> newUser(@RequestBody @Valid UserDto userdto) {
     return new ResponseEntity<>(
-        userService.addUser(UserMapper.INSTANCE.toUser(userdto)), HttpStatus.CREATED);
+        UserMapper.INSTANCE.toUserDto(userService.addUser(UserMapper.INSTANCE.toUser(userdto))), HttpStatus.CREATED);
   }
 
   @DeleteMapping(value = "/users")
@@ -61,8 +60,8 @@ public class AuthController {
   }
 
   @GetMapping(value = "/users")
-  public ResponseEntity<User> getUserProfile(HttpServletRequest request) {
+  public ResponseEntity<UserDto> getUserProfile(HttpServletRequest request) {
 
-    return new ResponseEntity<>(userService.getUserInfo(request), HttpStatus.OK);
+    return new ResponseEntity<>(UserMapper.INSTANCE.toUserDto(userService.getUserInfo(request)), HttpStatus.OK);
   }
 }

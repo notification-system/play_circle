@@ -10,17 +10,17 @@ import java.util.Set;
 
 
 public class EmailTemplateDto {
-  @NotNull private String emailTemplateId;
+  @NotNull private String id;
 
-  @NotNull private String emailTemplateName;
+  @NotNull private String name;
   @NotNull @Email private String fromAddress;
   @NotNull private String subject;
 
-  @NotNull private EmailFromProvider emailFromProvider;
+  @NotNull private EmailFromProvider fromProvider;
 
-  @NotNull private Set<@NotEmpty @Email String> emailTemplateTo;
+  @NotNull private Set<@NotEmpty @Email String> to;
 
-  private Set<@NotEmpty @Email String> emailTemplateCc;
+  private Set<@NotEmpty @Email String> cc;
 
   @NotNull private String text;
 
@@ -31,20 +31,20 @@ public class EmailTemplateDto {
   private int priority;
   @NotNull private InputSystem inputSystem;
 
-  public String getEmailTemplateId() {
-    return emailTemplateId;
+  public String getId() {
+    return id;
   }
 
-  public void setEmailTemplateId(String emailTemplateId) {
-    this.emailTemplateId = emailTemplateId;
+  public void setId(String id) {
+    this.id = id;
   }
 
-  public String getEmailTemplateName() {
-    return emailTemplateName;
+  public String getName() {
+    return name;
   }
 
-  public void setEmailTemplateName(String emailTemplateName) {
-    this.emailTemplateName = emailTemplateName;
+  public void setName(String name) {
+    this.name = name;
   }
 
   public String getFromAddress() {
@@ -63,28 +63,28 @@ public class EmailTemplateDto {
     this.subject = subject;
   }
 
-  public EmailFromProvider getEmailFromProvider() {
-    return emailFromProvider;
+  public EmailFromProvider getFromProvider() {
+    return fromProvider;
   }
 
-  public void setEmailFromProvider(EmailFromProvider emailFromProvider) {
-    this.emailFromProvider = emailFromProvider;
+  public void setFromProvider(EmailFromProvider fromProvider) {
+    this.fromProvider = fromProvider;
   }
 
-  public Set<String> getEmailTemplateTo() {
-    return emailTemplateTo;
+  public Set<String> getTo() {
+    return to;
   }
 
-  public void setEmailTemplateTo(Set<String> emailTemplateTo) {
-    this.emailTemplateTo = emailTemplateTo;
+  public void setTo(Set<String> to) {
+    this.to = to;
   }
 
-  public Set<String> getEmailTemplateCc() {
-    return emailTemplateCc;
+  public Set<String> getCc() {
+    return cc;
   }
 
-  public void setEmailTemplateCc(Set<String> emailTemplateCc) {
-    this.emailTemplateCc = emailTemplateCc;
+  public void setCc(Set<String> cc) {
+    this.cc = cc;
   }
 
   public String getText() {

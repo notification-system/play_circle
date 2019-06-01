@@ -47,7 +47,7 @@ public class EmailTemplateServiceTest {
         inputSystemId="inputSystemId" ;
         email="test@nosy.tech";
         emailTemplate=new EmailTemplate();
-        emailTemplate.setEmailFromProvider(EmailFromProvider.DEFAULT);
+        emailTemplate.setEmailTemplateFromProvider(EmailFromProvider.DEFAULT);
         Set<String> emailsCc=new HashSet<>();
         emailsCc.add("testCc@nosy.tech");
         emailTemplate.setEmailTemplateCc(emailsCc);
@@ -55,12 +55,12 @@ public class EmailTemplateServiceTest {
         emailsTo.add("testTo@nosy.tech");
         emailTemplate.setEmailTemplateId(emailTemplateId);
         emailTemplate.setEmailTemplateTo(emailsTo);
-        emailTemplate.setText("Test Message");
-        emailTemplate.setSubject("Test Subject");
+        emailTemplate.setEmailTemplateText("Test Message");
+        emailTemplate.setEmailTemplateSubject("Test Subject");
         emailTemplate.setEmailTemplateName("Test Email Template Name");
-        emailTemplate.setRetryPeriod(1);
-        emailTemplate.setPriority(1);
-        emailTemplate.setFromAddress("testFromAddress@nosy.tech");
+        emailTemplate.setEmailTemplateRetryPeriod(1);
+        emailTemplate.setEmailTemplatePriority(1);
+        emailTemplate.setEmailTemplateFromAddress("testFromAddress@nosy.tech");
         inputSystem=new InputSystem();
         user=new User();
         user.setEmail(email);
@@ -113,7 +113,7 @@ public class EmailTemplateServiceTest {
         doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
         assertEquals(emailTemplateId, emailTemplateServiceMock.getEmailTemplateById(inputSystemId, emailTemplateId, email).getEmailTemplateId()
                 );
-        String emailTemplateString="EmailTemplate{emailTemplateId='emailTemplateId', emailTemplateName='Test Email Template Name', fromAddress='testFromAddress@nosy.tech', emailTemplateTo=[testTo@nosy.tech], emailTemplateCc=[testCc@nosy.tech], text='Test Message', retryTimes=0, retryPeriod=1, priority=1, subject='Test Subject'}";
+        String emailTemplateString="EmailTemplate{emailTemplateId='emailTemplateId', emailTemplateName='Test Email Template Name', emailTemplateFromAddress='testFromAddress@nosy.tech', emailTemplateFromProvider=DEFAULT, emailTemplateTo=[testTo@nosy.tech], emailTemplateCc=[testCc@nosy.tech], emailTemplateText='Test Message', emailTemplateRetryTimes=0, emailTemplateRetryPeriod=1, emailTemplatePriority=1, emailTemplateSubject='Test Subject'}";
         assertEquals(emailTemplateString, emailTemplate.toString());
 
     }
@@ -226,7 +226,7 @@ public class EmailTemplateServiceTest {
 
         EmailTemplate emailTemplateForYandex=new EmailTemplate();
         emailTemplateForYandex.setEmailTemplateName("Test");
-        emailTemplateForYandex.setEmailFromProvider(EmailFromProvider.YANDEX);
+        emailTemplateForYandex.setEmailTemplateFromProvider(EmailFromProvider.YANDEX);
 
         EmailProviderProperties emailProviderPropertiesTest=new EmailProviderProperties();
         emailProviderPropertiesTest.setUsername("tett");
@@ -246,7 +246,7 @@ public class EmailTemplateServiceTest {
 
         EmailTemplate emailTemplateForYandex=new EmailTemplate();
         emailTemplateForYandex.setEmailTemplateName("Test");
-        emailTemplateForYandex.setEmailFromProvider(EmailFromProvider.YANDEX);
+        emailTemplateForYandex.setEmailTemplateFromProvider(EmailFromProvider.YANDEX);
 
         EmailProviderProperties emailProviderPropertiesTest=new EmailProviderProperties();
         emailProviderPropertiesTest.setPassword("dasdadsadad");
@@ -267,7 +267,7 @@ public class EmailTemplateServiceTest {
 
         EmailTemplate emailTemplateForYandex=new EmailTemplate();
         emailTemplateForYandex.setEmailTemplateName("Test");
-        emailTemplateForYandex.setEmailFromProvider(EmailFromProvider.YANDEX);
+        emailTemplateForYandex.setEmailTemplateFromProvider(EmailFromProvider.YANDEX);
         EmailProviderProperties emailProviderPropertiesTest=new EmailProviderProperties();
         doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
         when(userRepository.findById(email)).thenReturn(Optional.of(user));
@@ -286,7 +286,7 @@ public class EmailTemplateServiceTest {
         EmailTemplate emailTemplateForYandex=new EmailTemplate();
         emailTemplateForYandex.setEmailTemplateName("Test");
 
-        emailTemplateForYandex.setEmailFromProvider(EmailFromProvider.YANDEX);
+        emailTemplateForYandex.setEmailTemplateFromProvider(EmailFromProvider.YANDEX);
         EmailProviderProperties emailProviderPropertiesTest=new EmailProviderProperties();
         emailProviderPropertiesTest.setPassword("");
         emailProviderPropertiesTest.setUsername("dafsaf");
@@ -309,7 +309,7 @@ public class EmailTemplateServiceTest {
         EmailTemplate emailTemplateForYandex=new EmailTemplate();
         emailTemplateForYandex.setEmailTemplateName("Test");
 
-        emailTemplateForYandex.setEmailFromProvider(EmailFromProvider.YANDEX);
+        emailTemplateForYandex.setEmailTemplateFromProvider(EmailFromProvider.YANDEX);
         EmailProviderProperties emailProviderPropertiesTest=new EmailProviderProperties();
         emailProviderPropertiesTest.setPassword("dafsaf");
         emailProviderPropertiesTest.setUsername("");
@@ -331,7 +331,7 @@ public class EmailTemplateServiceTest {
     public void postEmailTemplateNonDefaultWithUsernameAndPassword() {
         EmailTemplate emailTemplateForYandex=new EmailTemplate();
         emailTemplateForYandex.setEmailTemplateName("Test");
-        emailTemplateForYandex.setEmailFromProvider(EmailFromProvider.YANDEX);
+        emailTemplateForYandex.setEmailTemplateFromProvider(EmailFromProvider.YANDEX);
         EmailProviderProperties emailProviderPropertiesTest=new EmailProviderProperties();
         emailProviderPropertiesTest.setPassword("dafsaf");
         emailProviderPropertiesTest.setUsername("fasdfad");
@@ -349,13 +349,13 @@ public class EmailTemplateServiceTest {
     public void postEmailTemplateNonDefaultWithParameterProvider() {
         EmailTemplate emailTemplateForYandex=new EmailTemplate();
         emailTemplateForYandex.setEmailTemplateName("Test");
-        emailTemplateForYandex.setEmailFromProvider(EmailFromProvider.YANDEX);
+        emailTemplateForYandex.setEmailTemplateFromProvider(EmailFromProvider.YANDEX);
         EmailProviderProperties emailProviderPropertiesTest=new EmailProviderProperties();
         emailProviderPropertiesTest.setPassword("dafsaf");
         emailProviderPropertiesTest.setUsername("fasdfad");
         PlaceHolder placeHolder=new PlaceHolder();
 
-        emailTemplateForYandex.setText("Hi #{name}#, #{body}#");
+        emailTemplateForYandex.setEmailTemplateText("Hi #{name}#, #{body}#");
         placeHolder.setName("name");
         placeHolder.setValue("Testoktay");
         PlaceHolder placeHolder1=new PlaceHolder();
@@ -370,7 +370,7 @@ public class EmailTemplateServiceTest {
         doReturn(emailTemplateForYandex).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId
                 (anyString(), anyString());
 
-        assertEquals("Hi Testoktay, Hi", emailTemplateServiceMock.postEmailTemplate(inputSystemId, emailTemplateId, emailProviderPropertiesTest, email).getText());
+        assertEquals("Hi Testoktay, Hi", emailTemplateServiceMock.postEmailTemplate(inputSystemId, emailTemplateId, emailProviderPropertiesTest, email).getEmailTemplateText());
 
         assertEquals("Test", readyEmail.getEmailProviderProperties().getUsername());
         assertEquals("Test Email Template Name", readyEmail.getEmailTemplate().getEmailTemplateName());
@@ -380,13 +380,13 @@ public class EmailTemplateServiceTest {
     public void postEmailTemplateNonDefaultWithParameterProviderButNotEnoughReplacements() {
         EmailTemplate emailTemplateForYandex=new EmailTemplate();
         emailTemplateForYandex.setEmailTemplateName("Test");
-        emailTemplateForYandex.setEmailFromProvider(EmailFromProvider.YANDEX);
+        emailTemplateForYandex.setEmailTemplateFromProvider(EmailFromProvider.YANDEX);
         EmailProviderProperties emailProviderPropertiesTest=new EmailProviderProperties();
         emailProviderPropertiesTest.setPassword("dafsaf");
         emailProviderPropertiesTest.setUsername("fasdfad");
         PlaceHolder placeHolder=new PlaceHolder();
 
-        emailTemplateForYandex.setText("Hi #{name}# #{test}#, #{body}#");
+        emailTemplateForYandex.setEmailTemplateText("Hi #{name}# #{test}#, #{body}#");
         placeHolder.setName("name");
         placeHolder.setValue("Testoktay");
         PlaceHolder placeHolder1=new PlaceHolder();
@@ -412,7 +412,7 @@ public class EmailTemplateServiceTest {
         EmailTemplate emailTemplateForYandex=new EmailTemplate();
         emailTemplateForYandex.setEmailTemplateName("Test");
 
-        emailTemplateForYandex.setEmailFromProvider(EmailFromProvider.YANDEX);
+        emailTemplateForYandex.setEmailTemplateFromProvider(EmailFromProvider.YANDEX);
         EmailProviderProperties emailProviderPropertiesTest=new EmailProviderProperties();
         emailProviderPropertiesTest.setPassword("");
 
@@ -446,7 +446,7 @@ public class EmailTemplateServiceTest {
 
         String currentEmailTemplateId="dasd";
         EmailTemplate currentEmailTemplate=new EmailTemplate();
-        currentEmailTemplate.setEmailFromProvider(EmailFromProvider.DEFAULT);
+        currentEmailTemplate.setEmailTemplateFromProvider(EmailFromProvider.DEFAULT);
         Set<String> emailsCc=new HashSet<>();
         emailsCc.add("testCc@nosy.tech");
         currentEmailTemplate.setEmailTemplateCc(emailsCc);
@@ -454,12 +454,12 @@ public class EmailTemplateServiceTest {
         emailsTo.add("testTo@nosy.tech");
         currentEmailTemplate.setEmailTemplateId(currentEmailTemplateId);
         currentEmailTemplate.setEmailTemplateTo(emailsTo);
-        currentEmailTemplate.setText("Test Message");
-        currentEmailTemplate.setSubject("Test Subject");
+        currentEmailTemplate.setEmailTemplateText("Test Message");
+        currentEmailTemplate.setEmailTemplateSubject("Test Subject");
         currentEmailTemplate.setEmailTemplateName("TestName");
-        currentEmailTemplate.setRetryPeriod(1);
-        currentEmailTemplate.setPriority(1);
-        currentEmailTemplate.setFromAddress("testFromAddress@nosy.tech");
+        currentEmailTemplate.setEmailTemplateRetryPeriod(1);
+        currentEmailTemplate.setEmailTemplatePriority(1);
+        currentEmailTemplate.setEmailTemplateFromAddress("testFromAddress@nosy.tech");
         doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
         when(userRepository.findById(email)).thenReturn(Optional.of(user));
         doReturn(currentEmailTemplate).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId
