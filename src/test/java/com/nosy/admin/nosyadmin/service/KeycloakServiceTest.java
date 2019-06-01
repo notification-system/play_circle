@@ -9,13 +9,11 @@ import org.junit.runner.RunWith;
 import org.keycloak.admin.client.resource.*;
 import org.keycloak.representations.idm.ClientRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
-import org.keycloak.representations.idm.UserRepresentation;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.ws.rs.core.Response;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
