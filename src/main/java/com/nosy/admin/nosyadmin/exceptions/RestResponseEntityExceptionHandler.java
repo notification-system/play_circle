@@ -25,16 +25,16 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
   protected ResponseEntity<Object> constraintViolation(RollbackException ex, WebRequest request) {
     String bodyOfError;
     if (ex.getCause().getLocalizedMessage().contains("must be a well-formed")) {
-      bodyOfError = "Email fields(Email To, Email From and Email CC) should be well-formed";
+      bodyOfError = "Email fields(Email To, Email From and Email CC) should be well-formed.";
     } else if (ex.getCause().getLocalizedMessage().contains("must not be null")) {
       bodyOfError = "Please specify all Mandatory fields.";
     } else if (ex.getCause().getLocalizedMessage().contains("must not be empty")) {
       bodyOfError =
-          "Some fields cannot be empty: EmailTemplateName, EmailTo, EmailCc. However, EmailCc can be null but not empty ";
+          "Some fields cannot be empty: EmailTemplateName, EmailTo, EmailCc. However, EmailCc can be null but not empty.";
 
     } else {
       bodyOfError =
-          "some fields cannot be determined. Please use appropriate format for all fields";
+          "Some fields cannot be determined. Please use appropriate format for all fields.";
     }
 
     return handleExceptionInternal(

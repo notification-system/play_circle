@@ -90,4 +90,6 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     registrationBean.setEnabled(false);
     return registrationBean;
   }
+
+
 }
