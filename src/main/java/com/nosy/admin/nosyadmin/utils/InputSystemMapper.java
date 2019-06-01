@@ -6,6 +6,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.Set;
+
 @Mapper
 public abstract class InputSystemMapper {
 
@@ -19,4 +21,7 @@ public abstract class InputSystemMapper {
             @Mapping(source = "name", target = "inputSystemName")
 
     public abstract InputSystem toInputSystem(InputSystemDto emailTemplateDto);
+
+    public abstract Set<InputSystemDto> toInputSystemDtoSet(Set<InputSystem> inputSystemSet);
+
 }
