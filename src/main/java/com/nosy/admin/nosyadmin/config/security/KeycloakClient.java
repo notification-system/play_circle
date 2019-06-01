@@ -69,6 +69,7 @@ public class KeycloakClient {
   @Autowired private ClientToken clientToken;
   @Autowired private TokenCollection tokenCollection;
   @Autowired private KeycloakConfigBean keycloakConfigBean;
+
   @Value("${nosy.client.refreshToken}")
   private String refreshToken;
 
@@ -85,7 +86,7 @@ public class KeycloakClient {
 
     post.setEntity(new UrlEncodedFormEntity(params));
     post.addHeader("Content-Type", "application/x-www-form-urlencoded");
-    return requestInterceptor(post);
+    return keycloakConfigBean.requestInterceptor(post);
   }
 
   public void logoutUser(String username) {
@@ -188,20 +189,7 @@ public class KeycloakClient {
 
 
 
-  public boolean requestInterceptor(HttpPost post) throws IOException {
-    try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
-      return httpclient.execute(
-          post,
-          response -> {
-            ObjectMapper mapper = new ObjectMapper();
 
-            Map<String, Object> stringObjectMap =
-                mapper.readValue(response.getEntity().getContent(), Map.class);
-
-            return (boolean) stringObjectMap.get("active");
-          });
-    }
-  }
 
   public ClientToken getTokens(User user) throws IOException {
 

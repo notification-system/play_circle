@@ -1,11 +1,18 @@
 package com.nosy.admin.nosyadmin.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.util.Map;
 
 @Component
 public class KeycloakConfigBean {
@@ -44,5 +51,20 @@ public class KeycloakConfigBean {
                         .build();
 
         return kc.realm(keycloakRealm);
+    }
+
+    public boolean requestInterceptor(HttpPost post) throws IOException {
+        try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+            return httpclient.execute(
+                    post,
+                    response -> {
+                        ObjectMapper mapper = new ObjectMapper();
+
+                        Map<String, Object> stringObjectMap =
+                                mapper.readValue(response.getEntity().getContent(), Map.class);
+
+                        return (boolean) stringObjectMap.get("active");
+                    });
+        }
     }
 }
