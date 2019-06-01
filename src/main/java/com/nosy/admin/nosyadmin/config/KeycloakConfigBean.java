@@ -53,6 +53,10 @@ public class KeycloakConfigBean {
 
     @Value("${keycloak.realm}")
     private String keycloakRealm;
+    @Value("${nosy.client.role}")
+    private String nosyClientRole;
+
+
     private ClientToken clientToken;
     private TokenCollection tokenCollection;
     @Autowired
@@ -163,5 +167,7 @@ public class KeycloakConfigBean {
         return clientId;
     }
 
-
+    public String getNosyClientRole() {
+        return nosyClientRole;
+    }
 }
