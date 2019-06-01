@@ -4,7 +4,6 @@ import com.nosy.admin.nosyadmin.dto.EmailTemplateDto;
 import com.nosy.admin.nosyadmin.dto.InputSystemDto;
 import com.nosy.admin.nosyadmin.model.EmailProviderProperties;
 import com.nosy.admin.nosyadmin.model.EmailTemplate;
-import com.nosy.admin.nosyadmin.model.InputSystem;
 import com.nosy.admin.nosyadmin.service.EmailTemplateService;
 import com.nosy.admin.nosyadmin.service.InputSystemService;
 import com.nosy.admin.nosyadmin.utils.EmailTemplateMapper;
