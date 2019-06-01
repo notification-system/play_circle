@@ -93,7 +93,7 @@ public class KeycloakService {
                                 .clients()
                                 .get(clientRep.getId())
                                 .roles()
-                                .get("nosy-role")
+                                .get(keycloakConfigBean.getNosyClientRole())
                                 .toRepresentation();
                 realmResource
                         .users()
