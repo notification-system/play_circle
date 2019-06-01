@@ -6,6 +6,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+import java.util.Set;
+
 @Mapper
 public abstract class EmailTemplateMapper {
     public static final EmailTemplateMapper INSTANCE = Mappers.getMapper( EmailTemplateMapper.class );
@@ -34,4 +37,7 @@ public abstract class EmailTemplateMapper {
             @Mapping(source="retryTimes", target="emailTemplateRetryTimes")
             @Mapping(source="retryPeriod", target="emailTemplateRetryPeriod")
     public abstract EmailTemplate toEmailTemplate(EmailTemplateDto emailTemplateDto);
+
+    public abstract List<EmailTemplateDto> toEmailTemplateDtoList(List<EmailTemplate> emailTemplateList);
+
 }

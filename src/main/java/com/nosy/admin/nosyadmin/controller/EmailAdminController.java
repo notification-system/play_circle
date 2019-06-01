@@ -53,9 +53,9 @@ public class EmailAdminController {
   }
 
   @GetMapping(value = "/inputsystems")
-  public ResponseEntity<Set<InputSystem>> getInputSystems(Principal principal) {
+  public ResponseEntity<Set<InputSystemDto>> getInputSystems(Principal principal) {
     return new ResponseEntity<>(
-        inputSystemService.getListOfInputSystems(principal.getName()), HttpStatus.OK);
+            InputSystemMapper.INSTANCE.toInputSystemDtoSet(inputSystemService.getListOfInputSystems(principal.getName())), HttpStatus.OK);
   }
 
   @GetMapping(value = "/inputsystems/emailproviders")
@@ -115,10 +115,10 @@ public class EmailAdminController {
   }
 
   @GetMapping(value = "/inputsystems/{inputSystemId}/emailtemplates")
-  public ResponseEntity<List<EmailTemplate>> getEmailTemplates(
+  public ResponseEntity<List<EmailTemplateDto>> getEmailTemplates(
       @PathVariable String inputSystemId, Principal principal) {
-    return new ResponseEntity<>(
-        emailTemplateService.getListOfEmailTemplates(inputSystemId, principal.getName()),
+    return new ResponseEntity<>(EmailTemplateMapper.INSTANCE.toEmailTemplateDtoList(
+        emailTemplateService.getListOfEmailTemplates(inputSystemId, principal.getName())),
         HttpStatus.OK);
   }
 
