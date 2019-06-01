@@ -10,9 +10,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
-import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
-import org.keycloak.admin.client.Keycloak;
-import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.ClientRepresentation;
@@ -29,7 +26,6 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static java.util.Arrays.asList;
@@ -93,7 +89,10 @@ public class KeycloakClient {
 
     UsersResource userRessource = keycloakConfigBean.getKeycloakUserResource().users();
 
-    userRessource.get(getUserGet(username).get()).logout();
+    if(userRessource.get(getUserGet(username).get())!=null){
+      userRessource.get(getUserGet(username).get()).logout();
+    }
+
   }
 
   public void deleteUsername(String username) {
