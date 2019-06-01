@@ -1,6 +1,7 @@
 package com.nosy.admin.nosyadmin.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nosy.admin.nosyadmin.config.KeycloakConfigBean;
 import com.nosy.admin.nosyadmin.exceptions.GeneralException;
 import com.nosy.admin.nosyadmin.model.User;
 import org.apache.http.NameValuePair;
@@ -67,7 +68,7 @@ public class KeycloakClient {
 
   @Autowired private ClientToken clientToken;
   @Autowired private TokenCollection tokenCollection;
-
+  @Autowired private KeycloakConfigBean keycloakConfigBean;
   @Value("${nosy.client.refreshToken}")
   private String refreshToken;
 
@@ -89,19 +90,19 @@ public class KeycloakClient {
 
   public void logoutUser(String username) {
 
-    UsersResource userRessource = getKeycloakUserResource().users();
+    UsersResource userRessource = keycloakConfigBean.getKeycloakUserResource().users();
 
     userRessource.get(getUserGet(username).get()).logout();
   }
 
   public void deleteUsername(String username) {
-    UsersResource userRessource = getKeycloakUserResource().users();
+    UsersResource userRessource = keycloakConfigBean.getKeycloakUserResource().users();
 
     userRessource.delete(getUserGet(username).get());
   }
 
   public User getUserInfo(String username) {
-    UsersResource userRessource = getKeycloakUserResource().users();
+    UsersResource userRessource = keycloakConfigBean.getKeycloakUserResource().users();
     User user = new User();
     userRessource
         .list()
@@ -117,7 +118,7 @@ public class KeycloakClient {
   }
 
   private AtomicReference<String> getUserGet(String username) {
-    UsersResource userRessource = getKeycloakUserResource().users();
+    UsersResource userRessource = keycloakConfigBean.getKeycloakUserResource().users();
     AtomicReference<String> userId = new AtomicReference<>("");
     userRessource
         .list()
@@ -134,7 +135,7 @@ public class KeycloakClient {
 
     int statusId;
     try {
-      RealmResource realmResource = getKeycloakUserResource();
+      RealmResource realmResource = keycloakConfigBean.getKeycloakUserResource();
       UsersResource usersResource = realmResource.users();
 
       UserRepresentation newUser = new UserRepresentation();
@@ -185,21 +186,7 @@ public class KeycloakClient {
     return true;
   }
 
-  private RealmResource getKeycloakUserResource() {
 
-    Keycloak kc =
-        KeycloakBuilder.builder()
-            .serverUrl(keycloakAdminUrl)
-            .realm(keycloakRealm)
-            .username(keycloakAdminUser)
-            .password("uob_1918")
-            .clientId(clientId)
-            .clientSecret(clientSecret)
-            .resteasyClient(new ResteasyClientBuilder().connectionPoolSize(10).build())
-            .build();
-
-    return kc.realm(keycloakRealm);
-  }
 
   public boolean requestInterceptor(HttpPost post) throws IOException {
     try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
@@ -259,17 +246,5 @@ public class KeycloakClient {
     }
   }
 
-  public ClientToken refreshTokens(String refreshToken) throws IOException {
 
-    HttpPost post = new HttpPost(keycloakUrl);
-    String refreshTokenString = "refresh_token";
-    List<NameValuePair> params =
-        asList(
-            new BasicNameValuePair(GRANT_TYPE_STRING, refreshToken),
-            new BasicNameValuePair(refreshTokenString, refreshToken),
-            new BasicNameValuePair(CLIENT_ID_STRING, clientId));
-
-    post.setEntity(new UrlEncodedFormEntity(params));
-    return getTokenCollection(post);
-  }
 }
