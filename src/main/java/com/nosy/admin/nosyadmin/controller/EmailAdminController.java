@@ -34,22 +34,22 @@ public class EmailAdminController {
   }
 
   @PostMapping(value = "/inputsystems/{inputSystemId}/emailtemplates/{emailTemplateId}/post")
-  public ResponseEntity<EmailTemplate> emailTemplatePost(
+  public ResponseEntity<EmailTemplateDto> emailTemplatePost(
       @PathVariable String inputSystemId,
       @PathVariable String emailTemplateId,
       @RequestBody EmailProviderProperties emailProviderProperties,
       Principal principal) {
 
     return new ResponseEntity<>(
-        emailTemplateService.postEmailTemplate(
-            inputSystemId, emailTemplateId, emailProviderProperties, principal.getName()),
+        EmailTemplateMapper.INSTANCE.toEmailTemplateDto(emailTemplateService.postEmailTemplate(
+            inputSystemId, emailTemplateId, emailProviderProperties, principal.getName())),
         HttpStatus.OK);
   }
 
   @PostMapping(value = "/inputsystems", consumes = "application/json")
-  public ResponseEntity<InputSystem> newType(@RequestBody InputSystemDto inputSystemDto, Principal principal) {
-    return new ResponseEntity<>(inputSystemService.saveInputSystem(
-        InputSystemMapper.INSTANCE.toInputSystem(inputSystemDto), principal.getName()), HttpStatus.CREATED);
+  public ResponseEntity<InputSystemDto> newType(@RequestBody InputSystemDto inputSystemDto, Principal principal) {
+    return new ResponseEntity<>( InputSystemMapper.INSTANCE.toInputSystemDto(inputSystemService.saveInputSystem(
+        InputSystemMapper.INSTANCE.toInputSystem(inputSystemDto), principal.getName())), HttpStatus.CREATED);
   }
 
   @GetMapping(value = "/inputsystems")
@@ -64,27 +64,27 @@ public class EmailAdminController {
   }
 
   @PutMapping(value = "/inputsystems/{inputSystemId}")
-  public ResponseEntity<InputSystem> updateInputSystemName(
+  public ResponseEntity<InputSystemDto> updateInputSystemName(
       @PathVariable String inputSystemId,
       @RequestBody InputSystemDto inputSystemDto,
       Principal principal) {
 
     return new ResponseEntity<>(
-        inputSystemService.updateInputSystemStatus(
-            inputSystemId, InputSystemMapper.INSTANCE.toInputSystem(inputSystemDto), principal.getName()),
+            InputSystemMapper.INSTANCE.toInputSystemDto(inputSystemService.updateInputSystemStatus(
+            inputSystemId, InputSystemMapper.INSTANCE.toInputSystem(inputSystemDto), principal.getName())),
         HttpStatus.OK);
   }
 
   @PostMapping(value = "/inputsystems/{inputSystemId}/emailtemplates")
-  public ResponseEntity<EmailTemplate> newEmailTemplate(
+  public ResponseEntity<EmailTemplateDto> newEmailTemplate(
       @PathVariable String inputSystemId,
       @RequestBody EmailTemplateDto emailTemplateDto,
       Principal principal) {
-    return new ResponseEntity<>(
+    return new ResponseEntity<>( EmailTemplateMapper.INSTANCE.toEmailTemplateDto(
         emailTemplateService.newEmailTemplate(
                 EmailTemplateMapper.INSTANCE.toEmailTemplate(emailTemplateDto),
             inputSystemId,
-            principal.getName()),
+            principal.getName())),
         HttpStatus.CREATED);
   }
 
@@ -100,17 +100,17 @@ public class EmailAdminController {
   }
 
   @PutMapping(value = "/inputsystems/{inputSystemId}/emailtemplates/{emailTemplateId}")
-  public ResponseEntity<EmailTemplate> updateEmailTemplate(
+  public ResponseEntity<EmailTemplateDto> updateEmailTemplate(
       @PathVariable String inputSystemId,
       @PathVariable String emailTemplateId,
       @RequestBody EmailTemplateDto emailTemplateDto,
       Principal principal) {
-    return new ResponseEntity<>(
+    return new ResponseEntity<>(  EmailTemplateMapper.INSTANCE.toEmailTemplateDto(
         emailTemplateService.updateEmailTemplate(
                 EmailTemplateMapper.INSTANCE.toEmailTemplate(emailTemplateDto),
             inputSystemId,
             emailTemplateId,
-            principal.getName()),
+            principal.getName())),
         HttpStatus.OK);
   }
 

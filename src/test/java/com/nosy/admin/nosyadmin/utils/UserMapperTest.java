@@ -34,7 +34,6 @@ public class UserMapperTest {
         userDto.setLastName("TestUserDtoLastName");
         userDto.setFirstName("TestUserDtoFirstName");
         userDto.setInfo("TestUserDtoInfo");
-        userDto.setInputSystem(inputSystemSet);
     }
     @Test
     public void toUserDto(){
@@ -43,7 +42,6 @@ public class UserMapperTest {
         assertEquals(user.getFirstName(), UserMapper.INSTANCE.toUserDto(user).getFirstName());
         assertEquals(user.getLastName(), UserMapper.INSTANCE.toUserDto(user).getLastName());
         assertEquals(user.getInfo(), UserMapper.INSTANCE.toUserDto(user).getInfo());
-        assertEquals(user.getInputSystem(), UserMapper.INSTANCE.toUserDto(user).getInputSystem());
 
     }
 
@@ -55,7 +53,6 @@ public class UserMapperTest {
         assertEquals(userDto.getFirstName(), UserMapper.INSTANCE.toUser(userDto).getFirstName());
         assertEquals(userDto.getLastName(), UserMapper.INSTANCE.toUser(userDto).getLastName());
         assertEquals(userDto.getInfo(), UserMapper.INSTANCE.toUser(userDto).getInfo());
-        assertEquals(userDto.getInputSystem(), UserMapper.INSTANCE.toUser(userDto).getInputSystem());
 
     }
 

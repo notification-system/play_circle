@@ -26,12 +26,12 @@ public class EmailTemplate {
   private String emailTemplateId;
 
   @NotNull private String emailTemplateName;
-  @NotNull @Email private String fromAddress;
+  @NotNull @Email private String emailTemplateFromAddress;
 
   @Enumerated(EnumType.STRING)
   @Column(columnDefinition = "text default 'Default'")
   @NotNull
-  private EmailFromProvider emailFromProvider;
+  private EmailFromProvider emailTemplateFromProvider;
 
   @NotNull
   @ElementCollection
@@ -42,15 +42,15 @@ public class EmailTemplate {
   @JoinTable(name = "email_template_cc", joinColumns = @JoinColumn(name = "email_template_id"))
   private Set<@NotEmpty @Email String> emailTemplateCc;
 
-  @NotNull private String text;
+  @NotNull private String emailTemplateText;
 
   @NotNull
   @Column(columnDefinition = "int default 0")
-  private int retryTimes;
+  private int emailTemplateRetryTimes;
 
-  private int retryPeriod;
+  private int emailTemplateRetryPeriod;
 
-  private int priority;
+  private int emailTemplatePriority;
 
   @NotNull
   @ManyToOne
@@ -58,21 +58,13 @@ public class EmailTemplate {
   @JoinColumn(name = "input_system_id")
   private InputSystem inputSystem;
 
-  @NotNull private String subject;
+  @NotNull private String emailTemplateSubject;
 
   @PrePersist
   protected void onCreate() {
     if (emailTemplateName == null || emailTemplateName.isEmpty()) {
       throw new GeneralException("Email Template cannot be empty or null");
     }
-  }
-
-  public EmailFromProvider getEmailFromProvider() {
-    return emailFromProvider;
-  }
-
-  public void setEmailFromProvider(EmailFromProvider emailFromProvider) {
-    this.emailFromProvider = emailFromProvider;
   }
 
   public String getEmailTemplateId() {
@@ -91,12 +83,20 @@ public class EmailTemplate {
     this.emailTemplateName = emailTemplateName;
   }
 
-  public String getFromAddress() {
-    return fromAddress;
+  public String getEmailTemplateFromAddress() {
+    return emailTemplateFromAddress;
   }
 
-  public void setFromAddress(String fromAddress) {
-    this.fromAddress = fromAddress;
+  public void setEmailTemplateFromAddress(String emailTemplateFromAddress) {
+    this.emailTemplateFromAddress = emailTemplateFromAddress;
+  }
+
+  public EmailFromProvider getEmailTemplateFromProvider() {
+    return emailTemplateFromProvider;
+  }
+
+  public void setEmailTemplateFromProvider(EmailFromProvider emailTemplateFromProvider) {
+    this.emailTemplateFromProvider = emailTemplateFromProvider;
   }
 
   public Set<String> getEmailTemplateTo() {
@@ -115,36 +115,36 @@ public class EmailTemplate {
     this.emailTemplateCc = emailTemplateCc;
   }
 
-  public String getText() {
-    return text;
+  public String getEmailTemplateText() {
+    return emailTemplateText;
   }
 
-  public void setText(String text) {
-    this.text = text;
+  public void setEmailTemplateText(String emailTemplateText) {
+    this.emailTemplateText = emailTemplateText;
   }
 
-  public int getRetryTimes() {
-    return retryTimes;
+  public int getEmailTemplateRetryTimes() {
+    return emailTemplateRetryTimes;
   }
 
-  public void setRetryTimes(int retryTimes) {
-    this.retryTimes = retryTimes;
+  public void setEmailTemplateRetryTimes(int emailTemplateRetryTimes) {
+    this.emailTemplateRetryTimes = emailTemplateRetryTimes;
   }
 
-  public int getRetryPeriod() {
-    return retryPeriod;
+  public int getEmailTemplateRetryPeriod() {
+    return emailTemplateRetryPeriod;
   }
 
-  public void setRetryPeriod(int retryPeriod) {
-    this.retryPeriod = retryPeriod;
+  public void setEmailTemplateRetryPeriod(int emailTemplateRetryPeriod) {
+    this.emailTemplateRetryPeriod = emailTemplateRetryPeriod;
   }
 
-  public int getPriority() {
-    return priority;
+  public int getEmailTemplatePriority() {
+    return emailTemplatePriority;
   }
 
-  public void setPriority(int priority) {
-    this.priority = priority;
+  public void setEmailTemplatePriority(int emailTemplatePriority) {
+    this.emailTemplatePriority = emailTemplatePriority;
   }
 
   public InputSystem getInputSystem() {
@@ -155,42 +155,28 @@ public class EmailTemplate {
     this.inputSystem = inputSystem;
   }
 
-  public String getSubject() {
-    return subject;
+  public String getEmailTemplateSubject() {
+    return emailTemplateSubject;
   }
 
-  public void setSubject(String subject) {
-    this.subject = subject;
+  public void setEmailTemplateSubject(String emailTemplateSubject) {
+    this.emailTemplateSubject = emailTemplateSubject;
   }
 
   @Override
   public String toString() {
-    return "EmailTemplate{"
-        + "emailTemplateId='"
-        + emailTemplateId
-        + '\''
-        + ", emailTemplateName='"
-        + emailTemplateName
-        + '\''
-        + ", fromAddress='"
-        + fromAddress
-        + '\''
-        + ", emailTemplateTo="
-        + emailTemplateTo
-        + ", emailTemplateCc="
-        + emailTemplateCc
-        + ", text='"
-        + text
-        + '\''
-        + ", retryTimes="
-        + retryTimes
-        + ", retryPeriod="
-        + retryPeriod
-        + ", priority="
-        + priority
-        + ", subject='"
-        + subject
-        + '\''
-        + '}';
+    return "EmailTemplate{" +
+            "emailTemplateId='" + emailTemplateId + '\'' +
+            ", emailTemplateName='" + emailTemplateName + '\'' +
+            ", emailTemplateFromAddress='" + emailTemplateFromAddress + '\'' +
+            ", emailTemplateFromProvider=" + emailTemplateFromProvider +
+            ", emailTemplateTo=" + emailTemplateTo +
+            ", emailTemplateCc=" + emailTemplateCc +
+            ", emailTemplateText='" + emailTemplateText + '\'' +
+            ", emailTemplateRetryTimes=" + emailTemplateRetryTimes +
+            ", emailTemplateRetryPeriod=" + emailTemplateRetryPeriod +
+            ", emailTemplatePriority=" + emailTemplatePriority +
+            ", emailTemplateSubject='" + emailTemplateSubject + '\'' +
+            '}';
   }
 }

@@ -1,21 +1,20 @@
 package com.nosy.admin.nosyadmin.dto;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.nosy.admin.nosyadmin.model.InputSystem;
+
 
 import javax.persistence.Transient;
-import java.util.Set;
 
 
 public class UserDto {
   private String email;
-  @JsonManagedReference private Set<InputSystem> inputSystem;
 
   @Transient private String password;
 
   private String firstName;
   private String lastName;
   private String info;
+
+
   public String getEmail() {
     return email;
   }
@@ -30,14 +29,6 @@ public class UserDto {
 
   public void setEmail(String email) {
     this.email = email;
-  }
-
-  public Set<InputSystem> getInputSystem() {
-    return inputSystem;
-  }
-
-  public void setInputSystem(Set<InputSystem> inputSystem) {
-    this.inputSystem = inputSystem;
   }
 
   public String getPassword() {

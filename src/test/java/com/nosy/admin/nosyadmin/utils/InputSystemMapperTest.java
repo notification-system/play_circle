@@ -37,31 +37,20 @@ public class InputSystemMapperTest {
         inputSystem.setEmailTemplate(emailTemplateSet);
 
         InputSystemDto inputSystemDto=new InputSystemDto();
-        inputSystemDto.setInputSystemId("inputSystemDtoId");
-        inputSystemDto.setInputSystemName("inputSystemDtoName");
-        inputSystemDto.setUser(user);
-        inputSystemDto.setEmailTemplate(emailTemplateSet);
-
-
-
+        inputSystemDto.setId("inputSystemDtoId");
+        inputSystemDto.setName("inputSystemDtoName");
     }
 
 
     @Test
     public void toInputSystemDto(){
-        assertEquals(inputSystem.getInputSystemId(),InputSystemMapper.INSTANCE.toInputSystemDto(inputSystem).getInputSystemId());
-        assertEquals(inputSystem.getInputSystemName(),InputSystemMapper.INSTANCE.toInputSystemDto(inputSystem).getInputSystemName());
-        assertEquals(inputSystem.getEmailTemplate(),InputSystemMapper.INSTANCE.toInputSystemDto(inputSystem).getEmailTemplate());
-        assertEquals(inputSystem.getUser(),InputSystemMapper.INSTANCE.toInputSystemDto(inputSystem).getUser());
-
+        assertEquals(inputSystem.getInputSystemId(),InputSystemMapper.INSTANCE.toInputSystemDto(inputSystem).getId());
+        assertEquals(inputSystem.getInputSystemName(),InputSystemMapper.INSTANCE.toInputSystemDto(inputSystem).getName());
     }
 
     @Test
     public void toInputSystem(){
-        assertEquals(inputSystemDto.getInputSystemId(),InputSystemMapper.INSTANCE.toInputSystem(inputSystemDto).getInputSystemId());
-        assertEquals(inputSystemDto.getInputSystemName(),InputSystemMapper.INSTANCE.toInputSystem(inputSystemDto).getInputSystemName());
-        assertEquals(inputSystemDto.getEmailTemplate(),InputSystemMapper.INSTANCE.toInputSystem(inputSystemDto).getEmailTemplate());
-        assertEquals(inputSystemDto.getUser(),InputSystemMapper.INSTANCE.toInputSystem(inputSystemDto).getUser());
-
+        assertEquals(inputSystemDto.getId(),InputSystemMapper.INSTANCE.toInputSystem(inputSystemDto).getInputSystemId());
+        assertEquals(inputSystemDto.getName(),InputSystemMapper.INSTANCE.toInputSystem(inputSystemDto).getInputSystemName());
     }
 }

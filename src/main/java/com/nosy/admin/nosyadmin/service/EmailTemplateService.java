@@ -114,12 +114,12 @@ public class EmailTemplateService {
             || emailProviderProperties.getPassword() == null
             || emailProviderProperties.getPassword().equals(""));
 
-    if (!emailTemplate.getEmailFromProvider().equals(EmailFromProvider.DEFAULT) && auth) {
+    if (!emailTemplate.getEmailTemplateFromProvider().equals(EmailFromProvider.DEFAULT) && auth) {
       throw new GeneralException(
           MessageError.USERNAME_AND_PASSWORD_ARE_REQUIRED_FOR_NON_DEFAULT.getMessageText());
     }
 
-    String text = emailTemplate.getText();
+    String text = emailTemplate.getEmailTemplateText();
     if(emailProviderProperties.getPlaceholders()!=null) {
       for (PlaceHolder placeholder : emailProviderProperties.getPlaceholders()) {
         text = text.replace("#{" + placeholder.getName() + "}#", placeholder.getValue());
@@ -130,7 +130,7 @@ public class EmailTemplateService {
                 MessageError.NOT_ENOUGH_PARAMETERS_FOR_PLACEHOLDERS.getMessageText());
       }
     }
-    emailTemplate.setText(text);
+    emailTemplate.setEmailTemplateText(text);
     readyEmail.setEmailTemplate(emailTemplate);
     readyEmail.setEmailProviderProperties(emailProviderProperties);
     producer.sendMessage(readyEmail.toString());
@@ -155,22 +155,22 @@ public class EmailTemplateService {
       throw new GeneralException(MessageError.EMAIL_TEMPLATE_CANNOT_BE_NULL.getMessageText());
     }
 
-    if (emailTemplate.getFromAddress() == null && emailTemplate.getFromAddress().isEmpty()) {
+    if (emailTemplate.getEmailTemplateFromAddress() == null && emailTemplate.getEmailTemplateFromAddress().isEmpty()) {
 
-      currentEmailTemplate.setFromAddress(defaultNosyFromAddress);
+      currentEmailTemplate.setEmailTemplateFromAddress(defaultNosyFromAddress);
     }
 
     currentEmailTemplate.setEmailTemplateName(emailTemplate.getEmailTemplateName());
 
     currentEmailTemplate.setEmailTemplateTo(emailTemplate.getEmailTemplateTo());
-    currentEmailTemplate.setFromAddress(emailTemplate.getFromAddress());
-    currentEmailTemplate.setText(emailTemplate.getText());
-    currentEmailTemplate.setEmailFromProvider(emailTemplate.getEmailFromProvider());
+    currentEmailTemplate.setEmailTemplateFromAddress(emailTemplate.getEmailTemplateFromAddress());
+    currentEmailTemplate.setEmailTemplateText(emailTemplate.getEmailTemplateText());
+    currentEmailTemplate.setEmailTemplateFromProvider(emailTemplate.getEmailTemplateFromProvider());
     currentEmailTemplate.setEmailTemplateCc(emailTemplate.getEmailTemplateCc());
-    currentEmailTemplate.setPriority(emailTemplate.getPriority());
-    currentEmailTemplate.setRetryPeriod(emailTemplate.getRetryPeriod());
-    currentEmailTemplate.setRetryTimes(emailTemplate.getRetryTimes());
-    currentEmailTemplate.setSubject(emailTemplate.getSubject());
+    currentEmailTemplate.setEmailTemplatePriority(emailTemplate.getEmailTemplatePriority());
+    currentEmailTemplate.setEmailTemplateRetryPeriod(emailTemplate.getEmailTemplateRetryPeriod());
+    currentEmailTemplate.setEmailTemplateRetryTimes(emailTemplate.getEmailTemplateRetryTimes());
+    currentEmailTemplate.setEmailTemplateSubject(emailTemplate.getEmailTemplateSubject());
     emailTemplateRepository.save(currentEmailTemplate);
     return currentEmailTemplate;
   }
