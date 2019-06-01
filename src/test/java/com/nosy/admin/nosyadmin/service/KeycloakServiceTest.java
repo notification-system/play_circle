@@ -159,6 +159,7 @@ public class KeycloakServiceTest {
         when(userResource.roles()).thenReturn(roleMappingResource);
         when(roleMappingResource.clientLevel(any())).thenReturn(roleScopeResource);
         doNothing().when(roleScopeResource).add(any());
+        when(keycloakConfigBean.getNosyClientRole()).thenReturn("nosy-role");
         assertTrue(keycloakService.registerNewUser(user));
     }
 
