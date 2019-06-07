@@ -1,6 +1,6 @@
 package com.nosy.admin.nosyadmin.service;
 
-import com.nosy.admin.nosyadmin.exceptions.GeneralException;
+import com.nosy.admin.nosyadmin.exceptions.*;
 import com.nosy.admin.nosyadmin.model.EmailTemplate;
 import com.nosy.admin.nosyadmin.model.InputSystem;
 import com.nosy.admin.nosyadmin.model.User;
@@ -55,21 +55,18 @@ public class InputSystemServiceTest {
     }
 
     @Test
-    public void getUser(){
+    public void getUserTest(){
         assertEquals(email, inputSystem.getUser().getEmail());
     }
 
     @Test
-    public void getListOfInputSystems() {
-
-
+    public void getListOfInputSystemsTest() {
         when(userRepositoryMock.findById(email)).thenReturn(Optional.of(user));
         assertEquals(inputSystemList, inputSystemServiceMock.getListOfInputSystems(email));
-
     }
 
-    @Test(expected = GeneralException.class)
-    public void getListOfInputSystemsNotAuthneticated() {
+    @Test(expected = NotAuthenticatedException.class)
+    public void getListOfInputSystemsNotAuthenticatedTest() {
         String email="test@nosy.tech";
         user=new User();
         user.setEmail(email);
@@ -83,13 +80,12 @@ public class InputSystemServiceTest {
         Set<InputSystem> inputSystemList=new HashSet<>();
         inputSystemList.add(inputSystem);
         user.setInputSystem(inputSystemList);
-
         when(userRepositoryMock.findById(email)).thenReturn(Optional.empty());
         assertEquals(inputSystemList, inputSystemServiceMock.getListOfInputSystems(email));
-
     }
+
     @Test(expected = Test.None.class)
-    public void deleteInputSystem() {
+    public void deleteInputSystemTest() {
 
         String email="test@nosy.tech";
         InputSystem inputSystem=new InputSystem();
@@ -98,14 +94,10 @@ public class InputSystemServiceTest {
         when(inputSystemRepository.findByIdAndEmail(email,inputSystem.getInputSystemId())).
                 thenReturn(inputSystem);
         inputSystemServiceMock.deleteInputSystem(inputSystem.getInputSystemId(), email);
-
-
-
-
     }
 
     @Test(expected = Test.None.class)
-    public void deleteInputSystemEmailTemplateIsEmptyIsNotNull() {
+    public void deleteInputSystemEmailTemplateIsEmptyIsNotNullTest() {
         String email="test@nosy.tech";
         InputSystem inputSystem=new InputSystem();
         inputSystem.setInputSystemId("inputSystemId");
@@ -119,8 +111,8 @@ public class InputSystemServiceTest {
 
     }
 
-    @Test(expected = GeneralException.class)
-    public void deleteInputSystemNotFound() {
+    @Test(expected = InputSystemNotFoundException.class)
+    public void deleteInputSystemNotFoundTest() {
         String email="test@nosy.tech";
         InputSystem inputSystem=new InputSystem();
         inputSystem.setInputSystemId("inputSystemId");
@@ -131,8 +123,8 @@ public class InputSystemServiceTest {
 
     }
 
-    @Test(expected = GeneralException.class)
-    public void deleteInputSystemEmailTemplateIsNotEmptyIsNotNull() {
+    @Test(expected = InputSystemHasChildrenException.class)
+    public void deleteInputSystemEmailTemplateIsNotEmptyIsNotNullTest() {
         String email="test@nosy.tech";
         InputSystem inputSystem=new InputSystem();
         inputSystem.setInputSystemId("inputSystemId");
@@ -148,23 +140,23 @@ public class InputSystemServiceTest {
     }
 
 
-    @Test(expected = GeneralException.class)
-    public void saveInputSystemWithNullEmailTemplate() {
+    @Test(expected = InputSystemNameIsMandatoryException.class)
+    public void saveInputSystemWithNullEmailTemplateTest() {
         InputSystem inputSystem=new InputSystem();
         String email="test@nosy.tech";
         inputSystemServiceMock.saveInputSystem(inputSystem, email);
     }
 
-    @Test(expected = GeneralException.class)
-    public void saveInputSystemEmptyEmailTemplate() {
+    @Test(expected = InputSystemNameIsMandatoryException.class)
+    public void saveInputSystemEmptyEmailTemplateTest() {
         InputSystem inputSystem=new InputSystem();
         inputSystem.setInputSystemName(" ");
         String email="test@nosy.tech";
         inputSystemServiceMock.saveInputSystem(inputSystem, email);
     }
 
-    @Test(expected = GeneralException.class)
-    public void saveInputSystemWithValidInputSystemNameAlreadyExists() {
+    @Test(expected = InputSystemAlreadyExistsException.class)
+    public void saveInputSystemWithValidInputSystemNameAlreadyExistsTest() {
         String email="test@nosy.tech";
         InputSystem inputSystem=new InputSystem();
         inputSystem.setInputSystemName("inputSystemName");
@@ -174,8 +166,8 @@ public class InputSystemServiceTest {
     }
 
 
-    @Test(expected = GeneralException.class)
-    public void saveInputSystemWithValidInputSystemNameButUserDoesnotExist() {
+    @Test(expected = UserNotExistsException.class)
+    public void saveInputSystemWithValidInputSystemNameButUserDoesnotExistTest() {
         String email="test@nosy.tech";
         InputSystem inputSystem=new InputSystem();
         inputSystem.setInputSystemName("inputSystemName");
@@ -187,7 +179,7 @@ public class InputSystemServiceTest {
     }
 
     @Test
-    public void saveInputSystemWithValidInputSystemNameButUserExists() {
+    public void saveInputSystemWithValidInputSystemNameButUserExistsTest() {
         String email="test@nosy.tech";
         InputSystem inputSystem=new InputSystem();
         inputSystem.setInputSystemName("inputSystemName");
@@ -198,24 +190,24 @@ public class InputSystemServiceTest {
         assertEquals(inputSystem.getInputSystemName(),inputSystemServiceMock.saveInputSystem(inputSystem, email).getInputSystemName());
     }
 
-    @Test(expected = GeneralException.class)
-    public void updateInputSystemStatusInputSystemDoesntExist() {
+    @Test(expected = InputSystemNotFoundException.class)
+    public void updateInputSystemStatusInputSystemDoesntExistTest() {
         when(inputSystemRepository.findByIdAndEmail(email, inputSystem.getInputSystemId())).thenReturn(null);
         inputSystemServiceMock.updateInputSystemStatus(inputSystem.getInputSystemId(), inputSystem, email);
     }
-    @Test(expected = GeneralException.class)
-    public void updateInputSystemStatusDuplicateExists() {
+    @Test(expected = InputSystemAlreadyExistsException.class)
+    public void updateInputSystemStatusDuplicateExistsTest() {
         when(inputSystemRepository.findByIdAndEmail(email, inputSystem.getInputSystemId())).thenReturn(inputSystem);
         when(inputSystemRepository.findByInputSystemNameAndEmail(email, inputSystem.getInputSystemName())).thenReturn(inputSystem);
         inputSystemServiceMock.updateInputSystemStatus(inputSystem.getInputSystemId(), inputSystem, email);
     }
 
     @Test
-    public void updateInputSystemStatusDuplicateDoesntExist() {
+    public void updateInputSystemStatusDuplicateDoesntExistTest() {
         when(inputSystemRepository.findByIdAndEmail(email, inputSystem.getInputSystemId())).thenReturn(inputSystem);
         when(inputSystemRepository.findByInputSystemNameAndEmail(email, inputSystem.getInputSystemName())).thenReturn(null);
         when(inputSystemRepository.save(inputSystem)).thenReturn(inputSystem);
         assertEquals(inputSystem.getInputSystemName(),inputSystemServiceMock.updateInputSystemStatus(inputSystem.getInputSystemId(), inputSystem, email).getInputSystemName());
-        ;
+
     }
 }

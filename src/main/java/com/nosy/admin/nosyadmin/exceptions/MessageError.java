@@ -7,7 +7,7 @@ public enum MessageError {
   NO_EMAIL_TEMPLATE_FOUND(
       "No Template was found with specified request. Please correct your request"),
   EMAIL_TEMPLATE_EXIST("Email Template already exists. Please try another name"),
-  EMAIL_TEMPLATE_CANNOT_BE_NULL("Email Template Name cannot be null or empty"),
+  EMAIL_TEMPLATE_NAME_CANNOT_BE_NULL("Email Template Name cannot be null or empty"),
   USERNAME_AND_PASSWORD_ARE_REQUIRED_FOR_NON_DEFAULT(
       "Username and password are required for non-Default Email Provider"),
   NOT_ENOUGH_PARAMETERS_FOR_PLACEHOLDERS(
@@ -20,7 +20,8 @@ public enum MessageError {
   INPUT_SYSTEM_NAME_IS_MANDATORY("Input System Name is mandatory field"),
   PASSWORD_IS_NOT_VALID("Password is not valid"),
   ACCESS_FORBIDDEN_EXCEPTION("Authorization server is not responding, please try again later"),
-  USER_ALREADY_EXISTS_EXCEPTION("User already exists in database please try another email");
+  USER_ALREADY_EXISTS_EXCEPTION("User already exists in database please try another email"),
+  INVALID_USERNAME_OR_PASSWORD("Invalid username or password");
 
   private String messageText;
 

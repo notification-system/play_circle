@@ -24,19 +24,22 @@ public class RestResponseEntityExceptionHandlerTest {
     RollbackException rollbackException;
 
     @Test
-    public void notEnoughParameterExceptionTest() {
-        WebRequest request=mock(WebRequest.class);
-        assertEquals(HttpStatus.CONFLICT,restResponseEntityExceptionHandler.notEnoughParameterException(new RuntimeException(), request).getStatusCode());
-    }
-    @Test
     public void userAlreadyExistsException() {
         WebRequest request=mock(WebRequest.class);
         assertEquals(HttpStatus.CONFLICT,restResponseEntityExceptionHandler.userAlreadyExistsException(new RuntimeException(), request).getStatusCode());
     }
+    @Test
+    public void emailTemplateNameInvalidException() {
+        WebRequest request=mock(WebRequest.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST,restResponseEntityExceptionHandler.emailTemplateNameInvalidException(
+                new RuntimeException(), request).getStatusCode());
+    }
+
 
 
     @Test
-    public void constraintViolationMusrtBeWellFormedTest() {
+    public void constraintViolationMustBeWellFormed() {
         WebRequest request=mock(WebRequest.class);
         //RollbackException rollbackException=new RollbackException();
         Throwable throwable=mock(Throwable.class);
@@ -49,7 +52,7 @@ public class RestResponseEntityExceptionHandlerTest {
 
 
     @Test
-    public void constraintViolationMustNotBeNullTest() {
+    public void constraintViolationMustNotBeNull() {
         WebRequest request=mock(WebRequest.class);
         //RollbackException rollbackException=new RollbackException();
         Throwable throwable=mock(Throwable.class);
@@ -72,7 +75,7 @@ public class RestResponseEntityExceptionHandlerTest {
     }
 
     @Test
-    public void constraintViolationTest() {
+    public void constraintViolation() {
         WebRequest request=mock(WebRequest.class);
         //RollbackException rollbackException=new RollbackException();
         Throwable throwable=mock(Throwable.class);
@@ -85,15 +88,94 @@ public class RestResponseEntityExceptionHandlerTest {
 
 
     @Test
-    public void passwordIsNotValidExceptionTest() {
+    public void passwordIsNotValidException() {
         WebRequest request=mock(WebRequest.class);
         assertEquals(HttpStatus.BAD_REQUEST,restResponseEntityExceptionHandler.passwordIsNotValid(new RuntimeException(), request).getStatusCode());
     }
     @Test
-    public void authorizationServerCannotPerformTheOperationTest() {
+    public void authorizationServerCannotPerformTheOperation() {
         WebRequest request=mock(WebRequest.class);
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR,restResponseEntityExceptionHandler.authorizationServerCannotPerformTheOperation(new RuntimeException(), request).getStatusCode());
     }
+
+    @Test
+    public void inputSystemExistAlreadyExistsException() {
+        WebRequest request=mock(WebRequest.class);
+        assertEquals(HttpStatus.CONFLICT,restResponseEntityExceptionHandler.inputSystemExistAlreadyExistsException(new RuntimeException(), request).getStatusCode());
+
+    }
+
+
+    @Test
+    public void inputSystemNameIsMandatoryException() {
+        WebRequest request=mock(WebRequest.class);
+        assertEquals(HttpStatus.BAD_REQUEST,restResponseEntityExceptionHandler.inputSystemNameIsMandatoryException(new RuntimeException(), request).getStatusCode());
+
+    }
+
+    @Test
+    public void usernameAndPasswordAreNotProvidedForNonDefaultException() {
+        WebRequest request=mock(WebRequest.class);
+        assertEquals(HttpStatus.BAD_REQUEST,restResponseEntityExceptionHandler.usernameAndPasswordAreNotProvidedForNonDefaultException(new RuntimeException(), request).getStatusCode());
+
+    }
+
+    @Test
+    public void invalidUsernameAndPasswordException() {
+        WebRequest request=mock(WebRequest.class);
+        assertEquals(HttpStatus.BAD_REQUEST,restResponseEntityExceptionHandler.invalidUsernameAndPasswordException(new RuntimeException(), request).getStatusCode());
+
+    }
+
+    @Test
+    public void notAuthenticatedException() {
+        WebRequest request=mock(WebRequest.class);
+        assertEquals(HttpStatus.UNAUTHORIZED,restResponseEntityExceptionHandler.notAuthenticatedException(new RuntimeException(), request).getStatusCode());
+
+    }
+
+    @Test
+    public void emailTemplateNotFoundException() {
+        WebRequest request=mock(WebRequest.class);
+        assertEquals(HttpStatus.NOT_FOUND,restResponseEntityExceptionHandler.emailTemplateNotFoundException(new RuntimeException(), request).getStatusCode());
+
+    }
+
+    @Test
+    public void inputSystemNotFoundException() {
+        WebRequest request=mock(WebRequest.class);
+        assertEquals(HttpStatus.NOT_FOUND,restResponseEntityExceptionHandler.inputSystemNotFoundException(new RuntimeException(), request).getStatusCode());
+
+    }
+
+    @Test
+    public void emailTemplateExistException() {
+        WebRequest request=mock(WebRequest.class);
+        assertEquals(HttpStatus.CONFLICT,restResponseEntityExceptionHandler.emailTemplateExistException(new RuntimeException(), request).getStatusCode());
+
+    }
+
+    @Test
+    public void notEnoughParametersForPlaceholdersException() {
+        WebRequest request=mock(WebRequest.class);
+        assertEquals(HttpStatus.BAD_REQUEST,restResponseEntityExceptionHandler.notEnoughParametersForPlaceholdersException(new RuntimeException(), request).getStatusCode());
+
+    }
+
+    @Test
+    public void inputSystemHasChildrenException() {
+        WebRequest request=mock(WebRequest.class);
+        assertEquals(HttpStatus.BAD_REQUEST,restResponseEntityExceptionHandler.inputSystemHasChildrenException(new RuntimeException(), request).getStatusCode());
+
+    }
+
+    @Test(expected = InvalidUsernameAndPasswordException.class)
+    public void InvalidUsernameAndPasswordException(){
+        throw new InvalidUsernameAndPasswordException();
+    }
+
+
+
 }
 
 

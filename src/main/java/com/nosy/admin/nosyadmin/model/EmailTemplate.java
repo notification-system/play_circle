@@ -2,7 +2,7 @@ package com.nosy.admin.nosyadmin.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.nosy.admin.nosyadmin.exceptions.GeneralException;
+import com.nosy.admin.nosyadmin.exceptions.EmailTemplateNameInvalidException;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -63,7 +63,8 @@ public class EmailTemplate {
   @PrePersist
   protected void onCreate() {
     if (emailTemplateName == null || emailTemplateName.isEmpty()) {
-      throw new GeneralException("Email Template cannot be empty or null");
+      throw new EmailTemplateNameInvalidException();
+
     }
   }
 

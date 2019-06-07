@@ -1,6 +1,6 @@
 package com.nosy.admin.nosyadmin.model;
 
-import com.nosy.admin.nosyadmin.exceptions.GeneralException;
+import com.nosy.admin.nosyadmin.exceptions.EmailTemplateNameInvalidException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -9,12 +9,12 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class EmailTemplateTest {
 
-    @Test(expected = GeneralException.class)
+    @Test(expected = EmailTemplateNameInvalidException.class)
     public void onCreate() {
         EmailTemplate emailTemplate=new EmailTemplate();
         emailTemplate.onCreate();
     }
-    @Test(expected = GeneralException.class)
+    @Test(expected = EmailTemplateNameInvalidException.class)
     public void onCreateEmpty() {
         EmailTemplate emailTemplate=new EmailTemplate();
         emailTemplate.setEmailTemplateName("");

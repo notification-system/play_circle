@@ -1,7 +1,6 @@
 package com.nosy.admin.nosyadmin.service;
 
-import com.nosy.admin.nosyadmin.exceptions.GeneralException;
-import com.nosy.admin.nosyadmin.exceptions.MessageError;
+import com.nosy.admin.nosyadmin.exceptions.*;
 import com.nosy.admin.nosyadmin.model.*;
 import com.nosy.admin.nosyadmin.repository.EmailTemplateRepository;
 import com.nosy.admin.nosyadmin.repository.InputSystemRepository;
@@ -47,7 +46,7 @@ public class EmailTemplateService {
         emailTemplateRepository.findEmailTemplatesByInputSystemIdAndEmailTemplateId(
             inputSystemId, emailTemplateId);
     if (emailTemplate == null) {
-      throw new GeneralException(MessageError.NO_EMAIL_TEMPLATE_FOUND.getMessageText());
+      throw new EmailTemplateNotFoundException();
     }
 
     return emailTemplate;
@@ -55,11 +54,11 @@ public class EmailTemplateService {
 
   private InputSystem getInputSystemForTemplate(String inputSystemId, String email) {
     if (!checkUsername(email)) {
-      throw new GeneralException(MessageError.NOT_AUTHENTICATED.getMessageText());
+      throw new NotAuthenticatedException();
     }
     InputSystem inputSystem = inputSystemRepository.findByIdAndEmail(email, inputSystemId);
     if (inputSystem == null) {
-      throw new GeneralException(MessageError.NO_INPUT_SYSTEM_FOUND.getMessageText());
+      throw new InputSystemNotFoundException();
     }
     return inputSystem;
   }
@@ -70,7 +69,7 @@ public class EmailTemplateService {
     if (emailTemplateRepository.findEmailTemplateByEmailTemplateNameAndInputSystemId(
             emailTemplate.getEmailTemplateName(), inputSystemId)
         != null) {
-      throw new GeneralException(MessageError.EMAIL_TEMPLATE_EXIST.getMessageText());
+      throw new EmailTemplateExistException();
     }
 
     emailTemplate.setInputSystem(inputSystem);
@@ -94,7 +93,7 @@ public class EmailTemplateService {
 
     InputSystem inputSystem = inputSystemRepository.findByIdAndEmail(email, inputSystemId);
     if (inputSystem == null) {
-      throw new GeneralException(MessageError.NO_INPUT_SYSTEM_FOUND.getMessageText());
+      throw new InputSystemNotFoundException();
     }
 
     return emailTemplateRepository.findEmailTemplatesByInputSystemId(inputSystemId);
@@ -115,8 +114,7 @@ public class EmailTemplateService {
             || emailProviderProperties.getPassword().equals(""));
 
     if (!emailTemplate.getEmailTemplateFromProvider().equals(EmailFromProvider.DEFAULT) && auth) {
-      throw new GeneralException(
-          MessageError.USERNAME_AND_PASSWORD_ARE_REQUIRED_FOR_NON_DEFAULT.getMessageText());
+      throw new UsernameAndPasswordAreNotProvidedForNonDefaultException();
     }
 
     String text = emailTemplate.getEmailTemplateText();
@@ -126,8 +124,7 @@ public class EmailTemplateService {
       }
 
       if (text.contains("#{") || text.contains("}#")) {
-        throw new GeneralException(
-                MessageError.NOT_ENOUGH_PARAMETERS_FOR_PLACEHOLDERS.getMessageText());
+        throw new NotEnoughParametersForPlaceholdersException();
       }
     }
     emailTemplate.setEmailTemplateText(text);
@@ -148,11 +145,11 @@ public class EmailTemplateService {
                 emailTemplate.getEmailTemplateName(), inputSystemId)
             != null)) {
 
-      throw new GeneralException(MessageError.NO_EMAIL_TEMPLATE_FOUND.getMessageText());
+      throw new EmailTemplateNotFoundException();
     }
     if (emailTemplate.getEmailTemplateName() == null
         || emailTemplate.getEmailTemplateName().isEmpty()) {
-      throw new GeneralException(MessageError.EMAIL_TEMPLATE_CANNOT_BE_NULL.getMessageText());
+      throw new EmailTemplateNameInvalidException();
     }
 
     if (emailTemplate.getEmailTemplateFromAddress() == null && emailTemplate.getEmailTemplateFromAddress().isEmpty()) {
