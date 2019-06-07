@@ -140,19 +140,19 @@ public class EmailTemplateService {
     EmailTemplate currentEmailTemplate =
         getEmailTemplateById(emailTemplateId, inputSystemId, email);
 
-    if (emailTemplate==null || (!currentEmailTemplate.getEmailTemplateName().equals(emailTemplate.getEmailTemplateName())
-        && emailTemplateRepository.findEmailTemplateByEmailTemplateNameAndInputSystemId(
-                emailTemplate.getEmailTemplateName(), inputSystemId)
-            != null)) {
+    if (emailTemplate==null ) {
 
       throw new EmailTemplateNotFoundException();
     }
     if (emailTemplate.getEmailTemplateName() == null
-        || emailTemplate.getEmailTemplateName().isEmpty()) {
+        || emailTemplate.getEmailTemplateName().isEmpty() ||  (!currentEmailTemplate.getEmailTemplateName().equals(emailTemplate.getEmailTemplateName())
+            && emailTemplateRepository.findEmailTemplateByEmailTemplateNameAndInputSystemId(
+            emailTemplate.getEmailTemplateName(), inputSystemId)
+            != null)) {
       throw new EmailTemplateNameInvalidException();
     }
 
-    if (emailTemplate.getEmailTemplateFromAddress() == null && emailTemplate.getEmailTemplateFromAddress().isEmpty()) {
+    if (emailTemplate.getEmailTemplateFromAddress() == null || emailTemplate.getEmailTemplateFromAddress().isEmpty()) {
 
       currentEmailTemplate.setEmailTemplateFromAddress(defaultNosyFromAddress);
     }

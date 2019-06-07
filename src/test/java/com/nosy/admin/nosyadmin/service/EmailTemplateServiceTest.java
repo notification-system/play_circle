@@ -468,8 +468,51 @@ public class EmailTemplateServiceTest {
                 (anyString(), anyString());
         assertEquals(emailTemplate,emailTemplateServiceMock.updateEmailTemplate(emailTemplate, inputSystemId, emailTemplateId, email));
     }
+    @Test
+    public void updateEmailTemplateEmptyTemplateFromAddress() {
+        emailTemplate.setEmailTemplateFromAddress("");
+
+        doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
+        when(userRepository.findById(email)).thenReturn(Optional.of(user));
+        doReturn(emailTemplate).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId
+                (anyString(), anyString());
+        assertEquals(emailTemplate,emailTemplateServiceMock.updateEmailTemplate(emailTemplate, inputSystemId, emailTemplateId, email));
+    }
+    @Test
+    public void updateEmailTemplateNullTemplateFromAddress() {
+        emailTemplate.setEmailTemplateFromAddress(null);
+
+        doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
+        when(userRepository.findById(email)).thenReturn(Optional.of(user));
+        doReturn(emailTemplate).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId
+                (anyString(), anyString());
+        assertEquals(emailTemplate,emailTemplateServiceMock.updateEmailTemplate(emailTemplate, inputSystemId, emailTemplateId, email));
+    }
 
 
+    @Test(expected = EmailTemplateNameInvalidException.class)
+    public void updateEmailTemplateNullTemplateName() {
+        emailTemplate.setEmailTemplateName(null);
+        emailTemplate.setEmailTemplateFromAddress(null);
+
+        doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
+        when(userRepository.findById(email)).thenReturn(Optional.of(user));
+        doReturn(emailTemplate).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId
+                (anyString(), anyString());
+        assertEquals(emailTemplate,emailTemplateServiceMock.updateEmailTemplate(emailTemplate, inputSystemId, emailTemplateId, email));
+    }
+
+    @Test(expected = EmailTemplateNameInvalidException.class)
+    public void updateEmailTemplateEmptyTemplateName() {
+        emailTemplate.setEmailTemplateName("");
+        emailTemplate.setEmailTemplateFromAddress(null);
+
+        doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
+        when(userRepository.findById(email)).thenReturn(Optional.of(user));
+        doReturn(emailTemplate).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId
+                (anyString(), anyString());
+        assertEquals(emailTemplate,emailTemplateServiceMock.updateEmailTemplate(emailTemplate, inputSystemId, emailTemplateId, email));
+    }
     @Test(expected = EmailTemplateNotFoundException.class)
     public void updateEmailTemplateCurrentNotEqual() {
         EmailTemplate emailTemplate1=null;
