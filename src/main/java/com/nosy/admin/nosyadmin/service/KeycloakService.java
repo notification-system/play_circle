@@ -109,6 +109,8 @@ public class KeycloakService {
             }
 
         } catch (ClientErrorException e) {
+            logger.error(e.getLocalizedMessage());
+
             throw new AuthorizationServerCannotPerformTheOperation();
 
         }
