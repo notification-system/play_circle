@@ -13,37 +13,103 @@ import javax.validation.ConstraintViolationException;
 
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
-  @ExceptionHandler(value = {GeneralException.class})
-  public ResponseEntity<Object> notEnoughParameterException(
-      RuntimeException ex, WebRequest request) {
-    String bodyOfResponse = ex.getMessage();
-    return handleExceptionInternal(
-        ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
-  }
+
 
   @ExceptionHandler(value = PasswordIsNotValidException.class)
   public ResponseEntity<Object> passwordIsNotValid(RuntimeException ex, WebRequest request) {
-
     return handleExceptionInternal(
             ex, MessageError.PASSWORD_IS_NOT_VALID.getMessageText(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-
   }
 
   @ExceptionHandler(value = AuthorizationServerCannotPerformTheOperation.class)
   public ResponseEntity<Object> authorizationServerCannotPerformTheOperation(RuntimeException ex, WebRequest request) {
-
     return handleExceptionInternal(
             ex, MessageError.ACCESS_FORBIDDEN_EXCEPTION.getMessageText(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
-
   }
 
   @ExceptionHandler(value = UserAlreadyExistException.class)
   public ResponseEntity<Object> userAlreadyExistsException(RuntimeException ex, WebRequest request) {
-
     return handleExceptionInternal(
             ex, MessageError.USER_ALREADY_EXISTS_EXCEPTION.getMessageText(), new HttpHeaders(), HttpStatus.CONFLICT, request);
-
   }
+
+  @ExceptionHandler(value = InputSystemAlreadyExistsException.class)
+  public ResponseEntity<Object> inputSystemExistAlreadyExistsException(RuntimeException ex, WebRequest request) {
+    return handleExceptionInternal(
+            ex, MessageError.INPUT_SYSTEM_EXIST.getMessageText(), new HttpHeaders(), HttpStatus.CONFLICT, request);
+  }
+
+  @ExceptionHandler(value = EmailTemplateNameInvalidException.class)
+  public ResponseEntity<Object> emailTemplateNameInvalidException(RuntimeException ex, WebRequest request) {
+    return handleExceptionInternal(
+            ex, MessageError.EMAIL_TEMPLATE_NAME_CANNOT_BE_NULL.getMessageText(), new HttpHeaders(),
+            HttpStatus.BAD_REQUEST, request);
+  }
+
+
+  @ExceptionHandler(value = InputSystemNameIsMandatoryException.class)
+  public ResponseEntity<Object> inputSystemNameIsMandatoryException(RuntimeException ex, WebRequest request) {
+    return handleExceptionInternal(
+            ex, MessageError.INPUT_SYSTEM_NAME_IS_MANDATORY.getMessageText(), new HttpHeaders(),
+            HttpStatus.BAD_REQUEST, request);
+  }
+
+  @ExceptionHandler(value = UsernameAndPasswordAreNotProvidedForNonDefaultException.class)
+  public ResponseEntity<Object> usernameAndPasswordAreNotProvidedForNonDefaultException(RuntimeException ex, WebRequest request) {
+    return handleExceptionInternal(
+            ex, MessageError.USERNAME_AND_PASSWORD_ARE_REQUIRED_FOR_NON_DEFAULT.getMessageText(), new HttpHeaders(),
+            HttpStatus.BAD_REQUEST, request);
+  }
+
+
+  @ExceptionHandler(value = InvalidUsernameAndPasswordException.class)
+  public ResponseEntity<Object> invalidUsernameAndPasswordException(RuntimeException ex, WebRequest request) {
+    return handleExceptionInternal(
+            ex, MessageError.INVALID_USERNAME_OR_PASSWORD.getMessageText(), new HttpHeaders(),
+            HttpStatus.BAD_REQUEST, request);
+  }
+
+  @ExceptionHandler(value = NotAuthenticatedException.class)
+  public ResponseEntity<Object> notAuthenticatedException(RuntimeException ex, WebRequest request) {
+    return handleExceptionInternal(
+            ex, MessageError.NOT_AUTHENTICATED.getMessageText(), new HttpHeaders(),
+            HttpStatus.UNAUTHORIZED, request);
+  }
+
+  @ExceptionHandler(value = EmailTemplateNotFoundException.class)
+  public ResponseEntity<Object> emailTemplateNotFoundException(RuntimeException ex, WebRequest request) {
+    return handleExceptionInternal(
+            ex, MessageError.NO_EMAIL_TEMPLATE_FOUND.getMessageText(), new HttpHeaders(),
+            HttpStatus.NOT_FOUND, request);
+  }
+  @ExceptionHandler(value = InputSystemNotFoundException.class)
+  public ResponseEntity<Object> inputSystemNotFoundException(RuntimeException ex, WebRequest request) {
+    return handleExceptionInternal(
+            ex, MessageError.NO_INPUT_SYSTEM_FOUND.getMessageText(), new HttpHeaders(),
+            HttpStatus.NOT_FOUND, request);
+  }
+
+  @ExceptionHandler(value = EmailTemplateExistException.class)
+  public ResponseEntity<Object> emailTemplateExistException(RuntimeException ex, WebRequest request) {
+    return handleExceptionInternal(
+            ex, MessageError.EMAIL_TEMPLATE_EXIST.getMessageText(), new HttpHeaders(), HttpStatus.CONFLICT, request);
+  }
+
+  @ExceptionHandler(value = NotEnoughParametersForPlaceholdersException.class)
+  public ResponseEntity<Object> notEnoughParametersForPlaceholdersException(RuntimeException ex, WebRequest request) {
+
+    return handleExceptionInternal(
+            ex,  MessageError.NOT_ENOUGH_PARAMETERS_FOR_PLACEHOLDERS.getMessageText(), new HttpHeaders(),
+            HttpStatus.BAD_REQUEST, request);
+  }
+
+  @ExceptionHandler(value = InputSystemHasChildrenException.class)
+  public ResponseEntity<Object> inputSystemHasChildrenException(RuntimeException ex, WebRequest request) {
+    return handleExceptionInternal(
+            ex,  MessageError.INPUT_SYSTEM_HAS_CHILDREN.getMessageText(), new HttpHeaders(),
+            HttpStatus.BAD_REQUEST, request);
+  }
+
 
   @ExceptionHandler(value = {ConstraintViolationException.class, RollbackException.class})
   public ResponseEntity<Object> constraintViolation(RollbackException ex, WebRequest request) {

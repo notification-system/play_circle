@@ -3,7 +3,7 @@ package com.nosy.admin.nosyadmin.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nosy.admin.nosyadmin.config.security.ClientToken;
 import com.nosy.admin.nosyadmin.config.security.TokenCollection;
-import com.nosy.admin.nosyadmin.exceptions.GeneralException;
+import com.nosy.admin.nosyadmin.exceptions.InvalidUsernameAndPasswordException;
 import com.nosy.admin.nosyadmin.model.User;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -101,7 +101,7 @@ public class KeycloakConfigBean {
         HttpPost post=getPost(user);
         ClientToken clientTokenCollection = getTokenCollection(post);
         if (clientTokenCollection == null || clientTokenCollection.getAccessToken() == null) {
-            throw new GeneralException("Invalid Username or Password");
+            throw new InvalidUsernameAndPasswordException();
         }
         return getTokenCollection(post);
     }

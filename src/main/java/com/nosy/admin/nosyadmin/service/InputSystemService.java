@@ -1,7 +1,6 @@
 package com.nosy.admin.nosyadmin.service;
 
-import com.nosy.admin.nosyadmin.exceptions.GeneralException;
-import com.nosy.admin.nosyadmin.exceptions.MessageError;
+import com.nosy.admin.nosyadmin.exceptions.*;
 import com.nosy.admin.nosyadmin.model.InputSystem;
 import com.nosy.admin.nosyadmin.model.User;
 import com.nosy.admin.nosyadmin.repository.InputSystemRepository;
@@ -29,7 +28,7 @@ public class InputSystemService {
 
     Optional<User> optionalUserRepository = userRepository.findById(username);
     if (!optionalUserRepository.isPresent()) {
-      throw new GeneralException(MessageError.NOT_AUTHENTICATED.getMessageText());
+      throw new NotAuthenticatedException();
     }
     return optionalUserRepository.get().getInputSystem();
   }
@@ -37,10 +36,10 @@ public class InputSystemService {
   public void deleteInputSystem(String inputSystemId, String email) {
     InputSystem checkInputSystem = inputSystemRepository.findByIdAndEmail(email, inputSystemId);
     if (checkInputSystem == null) {
-      throw new GeneralException(MessageError.NO_INPUT_SYSTEM_FOUND.getMessageText());
+      throw new InputSystemNotFoundException();
     }
     if (checkInputSystem.getEmailTemplate()!=null && !checkInputSystem.getEmailTemplate().isEmpty()) {
-      throw new GeneralException(MessageError.INPUT_SYSTEM_HAS_CHILDREN.getMessageText());
+      throw new InputSystemHasChildrenException();
     }
     inputSystemRepository.deleteById(inputSystemId);
   }
@@ -48,17 +47,17 @@ public class InputSystemService {
   public InputSystem saveInputSystem(InputSystem inputSystem, String email) {
     if (inputSystem.getInputSystemName() == null
         || inputSystem.getInputSystemName().trim().equals("")) {
-      throw new GeneralException(MessageError.INPUT_SYSTEM_NAME_IS_MANDATORY.getMessageText());
+      throw new InputSystemNameIsMandatoryException();
     }
     InputSystem inputSystem1 =
         inputSystemRepository.findByInputSystemNameAndEmail(
             email, inputSystem.getInputSystemName());
     if ((inputSystem1 != null)) {
-      throw new GeneralException(MessageError.INPUT_SYSTEM_EXIST.getMessageText());
+      throw new InputSystemAlreadyExistsException();
     }
     Optional<User> user = userRepository.findById(email);
     if (!user.isPresent()) {
-      throw new GeneralException(MessageError.USER_DOES_NOT_EXIST.getMessageText());
+      throw new UserNotExistsException();
     }
 
     inputSystem.setUser(user.get());
@@ -71,13 +70,13 @@ public class InputSystemService {
     InputSystem checkInputSystem = inputSystemRepository.findByIdAndEmail(email, inputSystemId);
 
     if (checkInputSystem == null) {
-      throw new GeneralException(MessageError.NO_INPUT_SYSTEM_FOUND.getMessageText());
+      throw new InputSystemNotFoundException();
     }
     InputSystem checkDuplicate =
         inputSystemRepository.findByInputSystemNameAndEmail(
             email, inputSystem.getInputSystemName());
     if (checkDuplicate != null) {
-      throw new GeneralException(MessageError.INPUT_SYSTEM_EXIST.getMessageText());
+      throw new InputSystemAlreadyExistsException();
     }
     checkInputSystem.setInputSystemName(inputSystem.getInputSystemName());
 
