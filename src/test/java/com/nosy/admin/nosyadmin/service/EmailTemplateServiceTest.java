@@ -406,6 +406,36 @@ public class EmailTemplateServiceTest {
         assertEquals("Test Email Template Name", readyEmail.getEmailTemplate().getEmailTemplateName());
     }
 
+
+    @Test(expected = NotEnoughParametersForPlaceholdersException.class)
+    public void postEmailTemplateNonDefaultWithParameterProviderButNotEnoughReplacementsClosingTag() {
+        EmailTemplate emailTemplateForYandex=new EmailTemplate();
+        emailTemplateForYandex.setEmailTemplateName("Test");
+        emailTemplateForYandex.setEmailTemplateFromProvider(EmailFromProvider.YANDEX);
+        EmailProviderProperties emailProviderPropertiesTest=new EmailProviderProperties();
+        emailProviderPropertiesTest.setPassword("dafsaf");
+        emailProviderPropertiesTest.setUsername("fasdfad");
+        PlaceHolder placeHolder=new PlaceHolder();
+
+        emailTemplateForYandex.setEmailTemplateText("Hi #{name}# }#, #{body}#");
+        placeHolder.setName("name");
+        placeHolder.setValue("Testoktay");
+        PlaceHolder placeHolder1=new PlaceHolder();
+        placeHolder1.setName("body");
+        placeHolder1.setValue("Hi");
+        List<PlaceHolder> placeholdersList=new ArrayList<>();
+        placeholdersList.add(placeHolder);
+        placeholdersList.add(placeHolder1);
+        emailProviderPropertiesTest.setPlaceholders(placeholdersList);
+        doReturn(inputSystem).when(inputSystemRepository).findByIdAndEmail(anyString(), anyString());
+        when(userRepository.findById(email)).thenReturn(Optional.of(user));
+        doReturn(emailTemplateForYandex).when(emailTemplateRepositoryMock).findEmailTemplatesByInputSystemIdAndEmailTemplateId
+                (anyString(), anyString());
+        emailTemplateServiceMock.postEmailTemplate(inputSystemId, emailTemplateId, emailProviderPropertiesTest, email);
+
+        assertEquals("Test", readyEmail.getEmailProviderProperties().getUsername());
+        assertEquals("Test Email Template Name", readyEmail.getEmailTemplate().getEmailTemplateName());
+    }
     @Test(expected = UsernameAndPasswordAreNotProvidedForNonDefaultException.class)
     public void postEmailTemplateNonDefaultWithUsernameNull() {
 
