@@ -17,7 +17,10 @@ public enum MessageError {
   INPUT_SYSTEM_EXIST(
       "InputSystem with current name already exists in the system please. Please try another name"),
   USER_DOES_NOT_EXIST("User does not exists please register first"),
-  INPUT_SYSTEM_NAME_IS_MANDATORY("Input System Name is mandatory field");
+  INPUT_SYSTEM_NAME_IS_MANDATORY("Input System Name is mandatory field"),
+  PASSWORD_IS_NOT_VALID("Password is not valid"),
+  ACCESS_FORBIDDEN_EXCEPTION("Authorization server is not responding, please try again later"),
+  USER_ALREADY_EXISTS_EXCEPTION("User already exists in database please try another email");
 
   private String messageText;
 

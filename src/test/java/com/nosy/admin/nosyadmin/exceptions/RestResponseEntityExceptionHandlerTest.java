@@ -24,15 +24,19 @@ public class RestResponseEntityExceptionHandlerTest {
     RollbackException rollbackException;
 
     @Test
-    public void notEnoughParameterException() {
+    public void notEnoughParameterExceptionTest() {
         WebRequest request=mock(WebRequest.class);
         assertEquals(HttpStatus.CONFLICT,restResponseEntityExceptionHandler.notEnoughParameterException(new RuntimeException(), request).getStatusCode());
     }
-
+    @Test
+    public void userAlreadyExistsException() {
+        WebRequest request=mock(WebRequest.class);
+        assertEquals(HttpStatus.CONFLICT,restResponseEntityExceptionHandler.userAlreadyExistsException(new RuntimeException(), request).getStatusCode());
+    }
 
 
     @Test
-    public void constraintViolationMusrtBeWellFormed() {
+    public void constraintViolationMusrtBeWellFormedTest() {
         WebRequest request=mock(WebRequest.class);
         //RollbackException rollbackException=new RollbackException();
         Throwable throwable=mock(Throwable.class);
@@ -45,7 +49,7 @@ public class RestResponseEntityExceptionHandlerTest {
 
 
     @Test
-    public void constraintViolationMustNotBeNull() {
+    public void constraintViolationMustNotBeNullTest() {
         WebRequest request=mock(WebRequest.class);
         //RollbackException rollbackException=new RollbackException();
         Throwable throwable=mock(Throwable.class);
@@ -68,7 +72,7 @@ public class RestResponseEntityExceptionHandlerTest {
     }
 
     @Test
-    public void constraintViolationRest() {
+    public void constraintViolationTest() {
         WebRequest request=mock(WebRequest.class);
         //RollbackException rollbackException=new RollbackException();
         Throwable throwable=mock(Throwable.class);
@@ -78,25 +82,19 @@ public class RestResponseEntityExceptionHandlerTest {
         assertEquals("Some fields cannot be determined. Please use appropriate format for all fields.",restResponseEntityExceptionHandler.constraintViolation(rollbackException, request).getBody() );
 
     }
+
+
+    @Test
+    public void passwordIsNotValidExceptionTest() {
+        WebRequest request=mock(WebRequest.class);
+        assertEquals(HttpStatus.BAD_REQUEST,restResponseEntityExceptionHandler.passwordIsNotValid(new RuntimeException(), request).getStatusCode());
+    }
+    @Test
+    public void authorizationServerCannotPerformTheOperationTest() {
+        WebRequest request=mock(WebRequest.class);
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR,restResponseEntityExceptionHandler.authorizationServerCannotPerformTheOperation(new RuntimeException(), request).getStatusCode());
+    }
 }
 
 
-//    @ExceptionHandler(value = {ConstraintViolationException.class, RollbackException.class})
-//  protected ResponseEntity<Object> constraintViolation(RollbackException ex, WebRequest request) {
-//    String bodyOfError;
-//    if (ex.getCause().getLocalizedMessage().contains("must be a well-formed")) {
-//      bodyOfError = "Email fields(Email To, Email From and Email CC) should be well-formed";
-//    } else if (ex.getCause().getLocalizedMessage().contains("must not be null")) {
-//      bodyOfError = "Please specify all Mandatory fields.";
-//    } else if (ex.getCause().getLocalizedMessage().contains("must not be empty")) {
-//      bodyOfError =
-//          "Some fields cannot be empty: EmailTemplateName, EmailTo, EmailCc. However, EmailCc can be null but not empty ";
-//
-//    } else {
-//      bodyOfError =
-//          "some fields cannot be determined. Please use appropriate format for all fields";
-//    }
-//
-//    return handleExceptionInternal(
-//        ex, bodyOfError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-//  }
+

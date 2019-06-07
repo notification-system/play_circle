@@ -1,6 +1,7 @@
 package com.nosy.admin.nosyadmin.service;
 
-import com.nosy.admin.nosyadmin.exceptions.GeneralException;
+import com.nosy.admin.nosyadmin.exceptions.PasswordIsNotValidException;
+import com.nosy.admin.nosyadmin.exceptions.UserAlreadyExistException;
 import com.nosy.admin.nosyadmin.model.User;
 import com.nosy.admin.nosyadmin.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +41,11 @@ public class UserService {
 
   public User addUser(User user) {
     if (!isValidPassword(user.getPassword())) {
-      throw new GeneralException("Password is not valid");
+      throw new PasswordIsNotValidException();
     }
 
     if (!keycloakService.registerNewUser(user)) {
-      throw new GeneralException("User already exists in database please try another email");
+      throw new UserAlreadyExistException();
     }
 
     return userRepository.saveAndFlush(user);

@@ -1,6 +1,7 @@
 package com.nosy.admin.nosyadmin.service;
 
-import com.nosy.admin.nosyadmin.exceptions.GeneralException;
+import com.nosy.admin.nosyadmin.exceptions.PasswordIsNotValidException;
+import com.nosy.admin.nosyadmin.exceptions.UserAlreadyExistException;
 import com.nosy.admin.nosyadmin.model.User;
 import com.nosy.admin.nosyadmin.repository.UserRepository;
 import org.junit.Before;
@@ -88,20 +89,20 @@ public class UserServiceTest {
         assertEquals(user.getEmail(),userService.addUser(user).getEmail());
     }
 
-    @Test(expected = GeneralException.class)
-    public void addUserWithFalse() {
+    @Test(expected = UserAlreadyExistException.class)
+    public void addUserWithFalseTest() {
         when(keycloakService.registerNewUser(user)).thenReturn(false);
         assertEquals(user.getEmail(),userService.addUser(user).getEmail());
     }
 
-    @Test(expected = GeneralException.class)
+    @Test(expected = PasswordIsNotValidException.class)
     public void addUserWithInvalidPassword() {
         User userWithInvalidPassword=new User();
         user.setEmail("test@nosy.tech");
         user.setPassword("");
         assertEquals(user.getEmail(),userService.addUser(userWithInvalidPassword).getEmail());
     }
-    @Test(expected = GeneralException.class)
+    @Test(expected = PasswordIsNotValidException.class)
     public void addUserWithInvalidNullPassword() {
         User userWithInvalidPassword=new User();
         user.setEmail("test@nosy.tech");
