@@ -3,6 +3,7 @@ package com.nosy.admin.nosyadmin.service;
 
 import com.nosy.admin.nosyadmin.config.KeycloakConfigBean;
 import com.nosy.admin.nosyadmin.config.security.ClientToken;
+import com.nosy.admin.nosyadmin.exceptions.AuthorizationServerCannotPerformTheOperation;
 import com.nosy.admin.nosyadmin.model.User;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UsersResource;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.Arrays;
@@ -106,9 +108,9 @@ public class KeycloakService {
                 return false;
             }
 
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            return false;
+        } catch (ClientErrorException e) {
+            throw new AuthorizationServerCannotPerformTheOperation();
+
         }
 
         return true;

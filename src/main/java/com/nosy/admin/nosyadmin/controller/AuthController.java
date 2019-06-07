@@ -29,6 +29,18 @@ public class AuthController {
     this.keycloakService = keycloakService;
   }
 
+
+  @GetMapping(path = "/test")
+  public ResponseEntity<UserDto> test() {
+    UserDto userDto=new UserDto();
+    userDto.setInfo("info");
+    userDto.setEmail("email");
+    userDto.setPassword("password");
+    userDto.setFirstName("dasdsa");
+    userDto.setLastName("dadas");
+    return new ResponseEntity<>(userDto,HttpStatus.OK);
+  }
+
   @GetMapping(path = "/auth/logout")
   public ResponseEntity<String> logout(HttpServletRequest request) {
     userService.logoutUser(request);
