@@ -1,7 +1,7 @@
 package com.nosy.admin.nosyadmin.controller;
 
+import com.nosy.admin.nosyadmin.dto.EmailTemplateDto;
 import com.nosy.admin.nosyadmin.dto.InputSystemDto;
-import com.nosy.admin.nosyadmin.model.EmailTemplate;
 import com.nosy.admin.nosyadmin.service.EmailTemplateService;
 import com.nosy.admin.nosyadmin.service.InputSystemService;
 import org.junit.Test;
@@ -30,11 +30,13 @@ public class EmailAdminControllerTest {
     InputSystemService inputSystemService;
     @Test
     public void emailTemplatePost() {
-        EmailTemplate emailTemplate=mock(EmailTemplate.class);
+        EmailTemplateDto emailTemplateDto=new EmailTemplateDto();
+        emailTemplateDto.setSubject("TestSubject");
         Principal principal=mock(Principal.class);
         assertEquals(HttpStatus.OK, emailAdminController.
                 emailTemplatePost("dasda", "dasdas", null,
                         principal).getStatusCode());
+        assertEquals("TestSubject",emailTemplateDto.getSubject());
     }
 
     @Test
