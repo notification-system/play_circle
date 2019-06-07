@@ -2,6 +2,7 @@ package com.nosy.admin.nosyadmin.service;
 
 import com.nosy.admin.nosyadmin.config.KeycloakConfigBean;
 import com.nosy.admin.nosyadmin.config.security.ClientToken;
+import com.nosy.admin.nosyadmin.exceptions.AuthorizationServerCannotPerformTheOperation;
 import com.nosy.admin.nosyadmin.model.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.net.URI;
@@ -161,6 +163,17 @@ public class KeycloakServiceTest {
         assertTrue(keycloakService.registerNewUser(user));
     }
 
+    @Test(expected = AuthorizationServerCannotPerformTheOperation.class)
+    public void registerNewUserClientErrorExceptionTest(){
+        User user=new User();
+        RealmResource realmResource=mock(RealmResource.class);
+        UsersResource usersResource=mock(UsersResource.class);
+        when(keycloakConfigBean.getKeycloakUserResource()).thenReturn(realmResource);
+        when(realmResource.users()).thenReturn(usersResource);
+
+        when(usersResource.create(any())).thenThrow(ClientErrorException.class);
+        assertTrue(keycloakService.registerNewUser(user));
+    }
     @Test
     public void getTokens() throws IOException {
         ClientToken clientToken=mock(ClientToken.class);

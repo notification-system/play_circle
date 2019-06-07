@@ -89,6 +89,8 @@ public class UserServiceTest {
         assertEquals(user.getEmail(),userService.addUser(user).getEmail());
     }
 
+
+
     @Test(expected = UserAlreadyExistException.class)
     public void addUserWithFalseTest() {
         when(keycloakService.registerNewUser(user)).thenReturn(false);
