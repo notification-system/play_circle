@@ -1,7 +1,6 @@
 package com.nosy.admin.nosyadmin.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nosy.admin.nosyadmin.config.security.ClientToken;
 import com.nosy.admin.nosyadmin.config.security.TokenCollection;
 import com.nosy.admin.nosyadmin.exceptions.InvalidUsernameAndPasswordException;
 import com.nosy.admin.nosyadmin.model.User;
@@ -57,11 +56,9 @@ public class KeycloakConfigBean {
     private String nosyClientRole;
 
 
-    private ClientToken clientToken;
     private TokenCollection tokenCollection;
     @Autowired
-    public KeycloakConfigBean(ClientToken clientToken, TokenCollection tokenCollection){
-        this.clientToken=clientToken;
+    public KeycloakConfigBean(TokenCollection tokenCollection){
         this.tokenCollection=tokenCollection;
     }
 
@@ -97,15 +94,15 @@ public class KeycloakConfigBean {
             return false;
         }
     }
-    public ClientToken getTokens(User user) throws IOException {
+    public TokenCollection getTokens(User user) throws IOException {
         HttpPost post=getPost(user);
-        ClientToken clientTokenCollection = getTokenCollection(post);
-        if (clientTokenCollection == null || clientTokenCollection.getAccessToken() == null) {
+        TokenCollection tokenCollection= getTokenCollection(post);
+        if (tokenCollection == null || tokenCollection.getAccessToken() == null) {
             throw new InvalidUsernameAndPasswordException();
         }
         return getTokenCollection(post);
     }
-    public ClientToken getTokenCollection(HttpPost post) throws IOException {
+    public TokenCollection getTokenCollection(HttpPost post) throws IOException {
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
             return httpclient.execute(
                     post,
@@ -116,10 +113,8 @@ public class KeycloakConfigBean {
                         if (status >= 200 && status < 300) {
                             tokenCollection =
                                     mapper.readValue(response.getEntity().getContent(), TokenCollection.class);
-                            clientToken.setAccessToken(tokenCollection.getAccessToken());
-                            clientToken.setRefreshToken(tokenCollection.getRefreshToken());
-                            clientToken.setExpiresIn(tokenCollection.getExpiresIn());
-                            return clientToken;
+
+                            return tokenCollection;
 
                         } else {
                             return null;

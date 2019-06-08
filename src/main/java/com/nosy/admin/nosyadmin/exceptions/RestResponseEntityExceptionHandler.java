@@ -12,12 +12,6 @@ import javax.validation.ConstraintViolationException;
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-
-  @ExceptionHandler(value = PasswordIsNotValidException.class)
-  public ResponseEntity<MessageError> passwordIsNotValid() {
-    return new ResponseEntity<>(MessageError.PASSWORD_IS_NOT_VALID, HttpStatus.BAD_REQUEST);
-  }
-
   @ExceptionHandler(value = AuthorizationServerCannotPerformTheOperation.class)
   public ResponseEntity<MessageError> authorizationServerCannotPerformTheOperation() {
     return new ResponseEntity<>(MessageError.ACCESS_FORBIDDEN_EXCEPTION, HttpStatus.INTERNAL_SERVER_ERROR);

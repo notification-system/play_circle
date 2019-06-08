@@ -1,7 +1,7 @@
 package com.nosy.admin.nosyadmin.service;
 
 import com.nosy.admin.nosyadmin.config.KeycloakConfigBean;
-import com.nosy.admin.nosyadmin.config.security.ClientToken;
+import com.nosy.admin.nosyadmin.config.security.TokenCollection;
 import com.nosy.admin.nosyadmin.exceptions.AuthorizationServerCannotPerformTheOperation;
 import com.nosy.admin.nosyadmin.exceptions.UserAlreadyExistException;
 import com.nosy.admin.nosyadmin.model.User;
@@ -177,8 +177,8 @@ public class KeycloakServiceTest {
     }
     @Test
     public void getTokens() throws IOException {
-        ClientToken clientToken=mock(ClientToken.class);
-        when(keycloakConfigBean.getTokens(user)).thenReturn(clientToken);
+        TokenCollection tokenCollection=mock(TokenCollection.class);
+        when(keycloakConfigBean.getTokens(user)).thenReturn(tokenCollection);
         assertNotNull(keycloakService.getTokens(user));
     }
 }
