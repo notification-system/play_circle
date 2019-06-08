@@ -15,8 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 
@@ -84,18 +83,15 @@ public class UserServiceTest {
 
     @Test
     public void addUser() {
-        when(keycloakService.registerNewUser(user)).thenReturn(true);
+        doNothing().when(keycloakService).registerNewUser(user);
         when(userRepository.saveAndFlush(user)).thenReturn(user);
         assertEquals(user.getEmail(),userService.addUser(user).getEmail());
     }
 
 
 
-    @Test(expected = UserAlreadyExistException.class)
-    public void addUserWithFalseTest() {
-        when(keycloakService.registerNewUser(user)).thenReturn(false);
-        assertEquals(user.getEmail(),userService.addUser(user).getEmail());
-    }
+
+
 
     @Test(expected = PasswordIsNotValidException.class)
     public void addUserWithInvalidPassword() {

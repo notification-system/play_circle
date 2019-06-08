@@ -3,6 +3,7 @@ package com.nosy.admin.nosyadmin.service;
 import com.nosy.admin.nosyadmin.config.KeycloakConfigBean;
 import com.nosy.admin.nosyadmin.config.security.ClientToken;
 import com.nosy.admin.nosyadmin.exceptions.AuthorizationServerCannotPerformTheOperation;
+import com.nosy.admin.nosyadmin.exceptions.UserAlreadyExistException;
 import com.nosy.admin.nosyadmin.model.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -111,7 +112,7 @@ public class KeycloakServiceTest {
 
 
 
-    @Test
+    @Test(expected = UserAlreadyExistException.class)
     public void registerNewUserFail() throws URISyntaxException {
         User user=new User();
         RealmResource realmResource=mock(RealmResource.class);
@@ -122,7 +123,7 @@ public class KeycloakServiceTest {
         Response response=Response.status(Response.Status.CONFLICT).
                 location(uri).build();
         when(usersResource.create(any())).thenReturn(response);
-        assertFalse(keycloakService.registerNewUser(user));
+        keycloakService.registerNewUser(user);
     }
 
 
@@ -160,7 +161,7 @@ public class KeycloakServiceTest {
         when(roleMappingResource.clientLevel(any())).thenReturn(roleScopeResource);
         doNothing().when(roleScopeResource).add(any());
         when(keycloakConfigBean.getNosyClientRole()).thenReturn("nosy-role");
-        assertTrue(keycloakService.registerNewUser(user));
+        keycloakService.registerNewUser(user);
     }
 
     @Test(expected = AuthorizationServerCannotPerformTheOperation.class)
@@ -172,7 +173,7 @@ public class KeycloakServiceTest {
         when(realmResource.users()).thenReturn(usersResource);
 
         when(usersResource.create(any())).thenThrow(ClientErrorException.class);
-        assertTrue(keycloakService.registerNewUser(user));
+        keycloakService.registerNewUser(user);
     }
     @Test
     public void getTokens() throws IOException {

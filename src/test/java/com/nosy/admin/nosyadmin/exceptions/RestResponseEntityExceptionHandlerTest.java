@@ -46,7 +46,6 @@ public class RestResponseEntityExceptionHandlerTest {
         when(rollbackException.getCause()).thenReturn(throwable);
         when(throwable.getLocalizedMessage()).thenReturn("must be a well-formed");
         assertEquals(HttpStatus.BAD_REQUEST,restResponseEntityExceptionHandler.constraintViolation(rollbackException, request).getStatusCode());
-        assertEquals("Email fields(Email To, Email From and Email CC) should be well-formed.",restResponseEntityExceptionHandler.constraintViolation(rollbackException, request).getBody() );
 
     }
 
@@ -59,7 +58,6 @@ public class RestResponseEntityExceptionHandlerTest {
         when(rollbackException.getCause()).thenReturn(throwable);
         when(throwable.getLocalizedMessage()).thenReturn("must not be null");
         assertEquals(HttpStatus.BAD_REQUEST,restResponseEntityExceptionHandler.constraintViolation(rollbackException, request).getStatusCode());
-        assertEquals("Please specify all Mandatory fields.",restResponseEntityExceptionHandler.constraintViolation(rollbackException, request).getBody() );
     }
 
     @Test
@@ -70,8 +68,6 @@ public class RestResponseEntityExceptionHandlerTest {
         when(rollbackException.getCause()).thenReturn(throwable);
         when(throwable.getLocalizedMessage()).thenReturn("must not be empty");
         assertEquals(HttpStatus.BAD_REQUEST,restResponseEntityExceptionHandler.constraintViolation(rollbackException, request).getStatusCode());
-        assertEquals("Some fields cannot be empty: EmailTemplateName, EmailTo, EmailCc. However, EmailCc can be null but not empty.",restResponseEntityExceptionHandler.constraintViolation(rollbackException, request).getBody() );
-
     }
 
     @Test
@@ -82,8 +78,6 @@ public class RestResponseEntityExceptionHandlerTest {
         when(rollbackException.getCause()).thenReturn(throwable);
         when(throwable.getLocalizedMessage()).thenReturn("some fields cannot be determined");
         assertEquals(HttpStatus.BAD_REQUEST,restResponseEntityExceptionHandler.constraintViolation(rollbackException, request).getStatusCode());
-        assertEquals("Some fields cannot be determined. Please use appropriate format for all fields.",restResponseEntityExceptionHandler.constraintViolation(rollbackException, request).getBody() );
-
     }
 
 

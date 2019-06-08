@@ -44,10 +44,7 @@ public class UserService {
       throw new PasswordIsNotValidException();
     }
 
-    if (!keycloakService.registerNewUser(user)) {
-      throw new UserAlreadyExistException();
-    }
-
+    keycloakService.registerNewUser(user);
     return userRepository.saveAndFlush(user);
   }
 

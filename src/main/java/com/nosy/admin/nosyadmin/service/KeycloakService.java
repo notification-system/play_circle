@@ -4,6 +4,7 @@ package com.nosy.admin.nosyadmin.service;
 import com.nosy.admin.nosyadmin.config.KeycloakConfigBean;
 import com.nosy.admin.nosyadmin.config.security.ClientToken;
 import com.nosy.admin.nosyadmin.exceptions.AuthorizationServerCannotPerformTheOperation;
+import com.nosy.admin.nosyadmin.exceptions.UserAlreadyExistException;
 import com.nosy.admin.nosyadmin.model.User;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UsersResource;
@@ -61,7 +62,7 @@ public class KeycloakService {
         return userId;
     }
 
-    public boolean registerNewUser(User user) {
+    public void registerNewUser(User user) {
 
         int statusId;
         try {
@@ -105,17 +106,13 @@ public class KeycloakService {
                         .add(Arrays.asList(clientRoleRep));
 
             } else {
-                return false;
+                throw new UserAlreadyExistException();
             }
 
         } catch (ClientErrorException e) {
             logger.error(e.getLocalizedMessage());
-
             throw new AuthorizationServerCannotPerformTheOperation();
-
         }
-
-        return true;
     }
 
     public User getUserInfo(String username) {

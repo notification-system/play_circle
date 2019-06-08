@@ -1,5 +1,8 @@
 package com.nosy.admin.nosyadmin.exceptions;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum MessageError {
   NOT_AUTHENTICATED("You are not authenticated. Please login first"),
   NO_INPUT_SYSTEM_FOUND(
@@ -20,16 +23,21 @@ public enum MessageError {
   INPUT_SYSTEM_NAME_IS_MANDATORY("Input System Name is mandatory field"),
   PASSWORD_IS_NOT_VALID("Password is not valid"),
   ACCESS_FORBIDDEN_EXCEPTION("Authorization server is not responding, please try again later"),
-  USER_ALREADY_EXISTS_EXCEPTION("User already exists in database please try another email"),
-  INVALID_USERNAME_OR_PASSWORD("Invalid username or password");
+  USER_ALREADY_EXISTS_EXCEPTION("User already exists. Please try another email"),
+  INVALID_USERNAME_OR_PASSWORD("Invalid username or password"),
+  EMAIL_FIELDS_SHOULD_BE_WELL_FORMED("Email fields(Email To, Email From and Email CC) should be well-formed."),
+  NOT_ALL_MANDATORY_FIELDS_SPECIFIED("Please specify all Mandatory fields."),
+  FIELDS_CANNOT_BE_DETERMINED("Some fields cannot be determined. Please use appropriate format for all fields.");
 
-  private String messageText;
+
+  private String message;
 
   MessageError(String message) {
-    this.messageText = message;
+    this.message = message;
   }
 
-  public String getMessageText() {
-    return messageText;
+  public String getMessage() {
+    return message;
   }
+
 }
