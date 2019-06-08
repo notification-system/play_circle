@@ -1,6 +1,7 @@
 package com.nosy.admin.nosyadmin.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.Transient;
 
 
