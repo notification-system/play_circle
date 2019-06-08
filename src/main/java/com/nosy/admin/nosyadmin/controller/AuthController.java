@@ -1,9 +1,10 @@
 package com.nosy.admin.nosyadmin.controller;
 
-import com.nosy.admin.nosyadmin.config.security.ClientToken;
+import com.nosy.admin.nosyadmin.dto.TokenCollectionDto;
 import com.nosy.admin.nosyadmin.dto.UserDto;
 import com.nosy.admin.nosyadmin.service.KeycloakService;
 import com.nosy.admin.nosyadmin.service.UserService;
+import com.nosy.admin.nosyadmin.utils.TokenCollectionMapper;
 import com.nosy.admin.nosyadmin.utils.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,10 +42,11 @@ public class AuthController {
   }
 
   @PostMapping(value = "/auth/token")
-  public ResponseEntity<ClientToken> getToken(@RequestBody @Valid UserDto userdto)
+  public ResponseEntity<TokenCollectionDto> getToken(@RequestBody @Valid UserDto userdto)
       throws IOException {
     return new ResponseEntity<>(
-            keycloakService.getTokens(UserMapper.INSTANCE.toUser(userdto)), HttpStatus.OK);
+            TokenCollectionMapper.INSTANCE.
+                    toTokenCollectionDto(keycloakService.getTokens(UserMapper.INSTANCE.toUser(userdto))), HttpStatus.OK);
   }
 
   @PostMapping(value = "/users")

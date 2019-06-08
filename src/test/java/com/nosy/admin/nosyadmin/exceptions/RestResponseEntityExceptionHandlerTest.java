@@ -6,6 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.persistence.RollbackException;
@@ -47,8 +48,6 @@ public class RestResponseEntityExceptionHandlerTest {
 
     @Test
     public void constraintViolationMustNotBeNull() {
-        WebRequest request=mock(WebRequest.class);
-        //RollbackException rollbackException=new RollbackException();
         Throwable throwable=mock(Throwable.class);
         when(rollbackException.getCause()).thenReturn(throwable);
         when(throwable.getLocalizedMessage()).thenReturn("must not be null");
@@ -57,8 +56,6 @@ public class RestResponseEntityExceptionHandlerTest {
 
     @Test
     public void constraintViolationMustNotBeEmpty() {
-        WebRequest request=mock(WebRequest.class);
-        //RollbackException rollbackException=new RollbackException();
         Throwable throwable=mock(Throwable.class);
         when(rollbackException.getCause()).thenReturn(throwable);
         when(throwable.getLocalizedMessage()).thenReturn("must not be empty");
@@ -67,19 +64,12 @@ public class RestResponseEntityExceptionHandlerTest {
 
     @Test
     public void constraintViolation() {
-        WebRequest request=mock(WebRequest.class);
-        //RollbackException rollbackException=new RollbackException();
         Throwable throwable=mock(Throwable.class);
         when(rollbackException.getCause()).thenReturn(throwable);
         when(throwable.getLocalizedMessage()).thenReturn("some fields cannot be determined");
         assertEquals(HttpStatus.BAD_REQUEST,restResponseEntityExceptionHandler.constraintViolation(rollbackException).getStatusCode());
     }
 
-
-    @Test
-    public void passwordIsNotValidException() {
-        assertEquals(HttpStatus.BAD_REQUEST,restResponseEntityExceptionHandler.passwordIsNotValid().getStatusCode());
-    }
     @Test
     public void authorizationServerCannotPerformTheOperation() {
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR,restResponseEntityExceptionHandler.authorizationServerCannotPerformTheOperation().getStatusCode());
@@ -87,7 +77,9 @@ public class RestResponseEntityExceptionHandlerTest {
 
     @Test
     public void inputSystemExistAlreadyExistsException() {
-        assertEquals(HttpStatus.CONFLICT,restResponseEntityExceptionHandler.inputSystemExistAlreadyExistsException().getStatusCode());
+        ResponseEntity<MessageError> messageErrorResponseEntity=restResponseEntityExceptionHandler.inputSystemExistAlreadyExistsException();
+        assertEquals(MessageError.INPUT_SYSTEM_EXIST.getMessage(),messageErrorResponseEntity.getBody().getMessage());
+        assertEquals(HttpStatus.CONFLICT,messageErrorResponseEntity.getStatusCode());
     }
 
 

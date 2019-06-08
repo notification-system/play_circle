@@ -2,10 +2,11 @@ package com.nosy.admin.nosyadmin.service;
 
 
 import com.nosy.admin.nosyadmin.config.KeycloakConfigBean;
-import com.nosy.admin.nosyadmin.config.security.ClientToken;
+import com.nosy.admin.nosyadmin.config.security.TokenCollection;
 import com.nosy.admin.nosyadmin.exceptions.AuthorizationServerCannotPerformTheOperation;
 import com.nosy.admin.nosyadmin.exceptions.UserAlreadyExistException;
 import com.nosy.admin.nosyadmin.model.User;
+import org.keycloak.Token;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.ClientRepresentation;
@@ -131,7 +132,7 @@ public class KeycloakService {
         return user;
     }
 
-    public ClientToken getTokens(User user) throws IOException {
+    public TokenCollection getTokens(User user) throws IOException {
         return keycloakConfigBean.getTokens(user);
     }
 
