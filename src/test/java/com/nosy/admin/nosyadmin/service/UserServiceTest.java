@@ -1,7 +1,6 @@
 package com.nosy.admin.nosyadmin.service;
 
 import com.nosy.admin.nosyadmin.exceptions.PasswordIsNotValidException;
-import com.nosy.admin.nosyadmin.exceptions.UserAlreadyExistException;
 import com.nosy.admin.nosyadmin.model.User;
 import com.nosy.admin.nosyadmin.repository.UserRepository;
 import org.junit.Before;
