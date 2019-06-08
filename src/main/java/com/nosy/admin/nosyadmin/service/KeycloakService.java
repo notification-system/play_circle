@@ -6,7 +6,6 @@ import com.nosy.admin.nosyadmin.config.security.TokenCollection;
 import com.nosy.admin.nosyadmin.exceptions.AuthorizationServerCannotPerformTheOperation;
 import com.nosy.admin.nosyadmin.exceptions.UserAlreadyExistException;
 import com.nosy.admin.nosyadmin.model.User;
-import org.keycloak.Token;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.ClientRepresentation;

@@ -4,7 +4,7 @@ import com.nosy.admin.nosyadmin.config.security.TokenCollection;
 import com.nosy.admin.nosyadmin.dto.TokenCollectionDto;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class TokenCollectionMapperTest {
 
