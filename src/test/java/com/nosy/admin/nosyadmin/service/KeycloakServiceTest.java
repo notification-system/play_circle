@@ -128,7 +128,7 @@ public class KeycloakServiceTest {
 
 
 
-    @Test
+    @Test(expected = Test.None.class)
     public void registerNewUserSuccessWithClient() throws URISyntaxException {
         User user=new User();
         RealmResource realmResource=mock(RealmResource.class);
