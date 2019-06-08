@@ -96,8 +96,8 @@ public class KeycloakConfigBean {
     }
     public TokenCollection getTokens(User user) throws IOException {
         HttpPost post=getPost(user);
-        TokenCollection tokenCollection= getTokenCollection(post);
-        if (tokenCollection == null || tokenCollection.getAccessToken() == null) {
+        TokenCollection tokenCollectionCurrent= getTokenCollection(post);
+        if (tokenCollectionCurrent == null || tokenCollectionCurrent.getAccessToken() == null) {
             throw new InvalidUsernameAndPasswordException();
         }
         return getTokenCollection(post);
