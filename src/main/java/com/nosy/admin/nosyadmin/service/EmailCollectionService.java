@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -27,14 +28,14 @@ public class EmailCollectionService {
         emailCollection.setInputSystemId(inputSystemId);
         emailCollection.setEmailCollectionName(name);
 
-        BufferedReader br;
         try {
-            String line;
-            InputStream is = file.getInputStream();
-            br = new BufferedReader(new InputStreamReader(is));
-            while ((line = br.readLine()) != null) {
-                emailCollection.getEmailCollectionEmails().add(line);
+            byte[] bytes = file.getBytes();
+            String completeData = new String(bytes);
+            String[] emails = completeData.split(",");
+            for (int i = 0; i < emails.length; i++) {
+                emails[i] = emails[i].trim();
             }
+            emailCollection.getEmailCollectionEmails().addAll(Arrays.asList(emails));
         } catch (IOException e) {
             e.printStackTrace();
         }
