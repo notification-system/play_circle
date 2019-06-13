@@ -1,5 +1,6 @@
 package com.nosy.admin.nosyadmin.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -15,13 +16,16 @@ public class EmailCollection {
     @NotNull
     private String emailCollectionId;
 
-    @NotNull private String emailCollectionName;
+    @Column(unique = true) @NotNull private String emailCollectionName;
+
+    @ManyToOne
+    @JsonBackReference
+    @JoinColumn(name = "email")
+    private User user;
 
     @ElementCollection
     @JoinTable(name = "email_collection_emails", joinColumns = @JoinColumn(name = "email_collection_id"))
     @NotNull private List<String> emailCollectionEmails = new ArrayList<>();
-
-    @NotNull private String inputSystemId;
 
     public EmailCollection() {}
 
@@ -49,11 +53,11 @@ public class EmailCollection {
         this.emailCollectionEmails = emailCollectionEmails;
     }
 
-    public String getInputSystemId() {
-        return inputSystemId;
+    public User getUser() {
+        return user;
     }
 
-    public void setInputSystemId(String inputSystemId) {
-        this.inputSystemId = inputSystemId;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

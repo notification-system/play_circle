@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -22,34 +22,37 @@ public class EmailCollectionController {
         this.emailCollectionService = emailCollectionService;
     }
 
-    @PostMapping(value = "/inputsystems/upload/{inputSystemId}/{name}", consumes = "multipart/form-data")
+    @PostMapping(value = "/{name}")
     public ResponseEntity<EmailCollectionDto> uploadMultipart(
-            @RequestParam("file") MultipartFile file,
-            @PathVariable String inputSystemId,
-            @PathVariable String name) {
-        return new ResponseEntity<>(EmailCollectionMapper.INSTANCE.toEmailCollectionDto(emailCollectionService.parseEmailCollection(file, inputSystemId, name)), HttpStatus.CREATED);
+            @RequestParam("file") String file,
+            @PathVariable String name,
+            Principal principal) {
+        return new ResponseEntity<>(EmailCollectionMapper.INSTANCE.toEmailCollectionDto(emailCollectionService
+                .parseEmailCollection(file, name, principal.getName())), HttpStatus.CREATED);
     }
 
-    @PostMapping(value = "/inputsystems/{inputSystemId}/{name}")
+    @PostMapping(value = "/list/{name}")
     public ResponseEntity<EmailCollectionDto> createGroup(
             @RequestBody List<String> emails,
-            @PathVariable String inputSystemId,
-            @PathVariable String name) {
-        return new ResponseEntity<>(EmailCollectionMapper.INSTANCE.toEmailCollectionDto(emailCollectionService.createEmailCollection(emails, inputSystemId, name)), HttpStatus.CREATED);
+            @PathVariable String name,
+            Principal principal) {
+        return new ResponseEntity<>(EmailCollectionMapper.INSTANCE.toEmailCollectionDto(emailCollectionService
+                .createEmailCollection(emails, name, principal.getName())), HttpStatus.CREATED);    }
+
+    @GetMapping(value = "/{emailCollectionId}")
+    public ResponseEntity<EmailCollectionDto> getEmailCollectionById(
+            @PathVariable String emailCollectionId) {
+        return new ResponseEntity<>(EmailCollectionMapper.INSTANCE.toEmailCollectionDto(emailCollectionService
+                .getEmailCollectionById(emailCollectionId)), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/inputsystems/{inputSystemId}")
-    public ResponseEntity<List<EmailCollectionDto>> getAllEmailCollectionsByInputSystemId(
-            @PathVariable String inputSystemId) {
-        return new ResponseEntity<>(EmailCollectionMapper.INSTANCE.toEmailCollectionDtoList(emailCollectionService.getAllEmailCollectionsByInputSystemId(inputSystemId)), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/inputsystems/")
+    @GetMapping
     public ResponseEntity<List<EmailCollectionDto>> getAllEmailCollections() {
-        return new ResponseEntity<>(EmailCollectionMapper.INSTANCE.toEmailCollectionDtoList(emailCollectionService.getAllEmailCollections()), HttpStatus.OK);
+        return new ResponseEntity<>(EmailCollectionMapper.INSTANCE.toEmailCollectionDtoList(emailCollectionService
+                .getAllEmailCollections()), HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/inputsystems/{emailCollectionId}")
+    @DeleteMapping(value = "/{emailCollectionId}")
     public ResponseEntity<String> deleteEmailCollectionById(
             @PathVariable String emailCollectionId) {
         emailCollectionService.deleteEmailCollectionById(emailCollectionId);

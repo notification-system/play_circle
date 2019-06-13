@@ -7,12 +7,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
-import org.springframework.mock.web.MockMultipartFile;
 
+import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EmailCollectionControllerTest {
@@ -25,16 +26,18 @@ public class EmailCollectionControllerTest {
 
     @Test
     public void emailCollectionParse() {
-        MockMultipartFile file = new MockMultipartFile("data", "filename.csv", "text/csv", "some csv".getBytes());
+        String file = "hey";
+        Principal principal=mock(Principal.class);
         assertEquals(HttpStatus.CREATED, emailCollectionController.
-                uploadMultipart(file, "dasda", "dasda").getStatusCode());
+                uploadMultipart(file, "dasda", principal).getStatusCode());
     }
 
     @Test
     public void emailCollectionCreate() {
         List<String> emails = Collections.singletonList("dasda");
+        Principal principal=mock(Principal.class);
         assertEquals(HttpStatus.CREATED, emailCollectionController.
-                createGroup(emails, "dasda", "dasda").getStatusCode());
+                createGroup(emails, "dasda", principal).getStatusCode());
     }
 
     @Test
@@ -46,7 +49,7 @@ public class EmailCollectionControllerTest {
     @Test
     public void getAllEmailCollectionsBySystemId() {
         assertEquals(HttpStatus.OK, emailCollectionController.
-                getAllEmailCollectionsByInputSystemId("dasda").getStatusCode());
+                getEmailCollectionById("emailCollectionId").getStatusCode());
     }
 
     @Test

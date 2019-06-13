@@ -1,23 +1,27 @@
 package com.nosy.admin.nosyadmin.service;
 
 import com.nosy.admin.nosyadmin.model.EmailCollection;
+import com.nosy.admin.nosyadmin.model.User;
 import com.nosy.admin.nosyadmin.repository.EmailCollectionRepository;
+import com.nosy.admin.nosyadmin.repository.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.mock.web.MockMultipartFile;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNotEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EmailCollectionServiceTest {
@@ -26,25 +30,33 @@ public class EmailCollectionServiceTest {
     private EmailCollectionService emailCollectionService;
     @Mock
     private EmailCollectionRepository emailCollectionRepository;
+    @Mock
+    private UserRepository userRepository;
     private EmailCollection emailCollection;
     private String emailCollectionId;
     private String name;
     private List<String> emails = new ArrayList<>();
-    private String inputSystemId;
     private List<EmailCollection> result = new ArrayList<>();
+    private User user;
+    private String email;
 
     private void setVariables() {
         emailCollectionId = "emailCollectionId";
         name = "NoSyGroup";
+        email = "test@nosy.tech";
         emailCollection = new EmailCollection();
-        inputSystemId = "inputSystemId";
         emails.addAll(Arrays.asList("darth.vader@deathstar.com", "luke.skywalker@tatooine.com"));
         emailCollection.setEmailCollectionName(name);
-        emailCollection.setInputSystemId(inputSystemId);
         emailCollection.setEmailCollectionEmails(emails);
         emailCollection.setEmailCollectionId(emailCollectionId);
         result.clear();
         result.add(emailCollection);
+        user=new User();
+        user.setEmail(email);
+        user.setFirstName("Test");
+        user.setLastName("Nosy");
+        user.setInfo("TestNosy");
+        user.setPassword("dajsndjasn");
     }
 
     @Before
@@ -54,15 +66,17 @@ public class EmailCollectionServiceTest {
 
     @Test
     public void parseEmailCollection() {
-        MockMultipartFile file = new MockMultipartFile("data", "filename.csv", "text/csv", "some csv".getBytes());
+        String file = "hey";
+        when(userRepository.findById(email)).thenReturn(Optional.of(user));
         doReturn(emailCollection).when(emailCollectionRepository).save(any());
-        assertEquals(emailCollectionId, emailCollectionService.parseEmailCollection(file, inputSystemId, name).getEmailCollectionId());
+        assertEquals(emailCollectionId, emailCollectionService.parseEmailCollection(file, name, user.getEmail()).getEmailCollectionId());
     }
 
     @Test
     public void createEmailCollection() {
+        when(userRepository.findById(email)).thenReturn(Optional.of(user));
         doReturn(emailCollection).when(emailCollectionRepository).save(any());
-        assertEquals(name, emailCollectionService.createEmailCollection(emails, inputSystemId, name).getEmailCollectionName());
+        assertEquals(name, emailCollectionService.createEmailCollection(emails, name, user.getEmail()).getEmailCollectionName());
     }
 
     @Test
@@ -72,15 +86,15 @@ public class EmailCollectionServiceTest {
     }
 
     @Test
-    public void getAllEmailCollectionsByInputSystemId() {
-        doReturn(result).when(emailCollectionRepository).getAllByInputSystemId(any());
-        assertEquals(result, emailCollectionService.getAllEmailCollectionsByInputSystemId(inputSystemId));
+    public void getEmailCollectionById() {
+        doReturn(Optional.of(emailCollection)).when(emailCollectionRepository).findById(anyString());
+        assertEquals(emailCollection, emailCollectionService.getEmailCollectionById(emailCollectionId));
     }
 
     @Test
     public void deleteEmailCollectionById() {
-        doReturn(null).when(emailCollectionRepository).getAllByInputSystemId(inputSystemId);
+        doReturn(null).when(emailCollectionRepository).findById(anyString());
         emailCollectionService.deleteEmailCollectionById(emailCollectionId);
-        assertNull(emailCollectionRepository.getAllByInputSystemId(inputSystemId));
+        assertNotEquals(emailCollection, emailCollectionRepository.findById(emailCollectionId));
     }
 }

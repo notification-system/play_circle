@@ -6,12 +6,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Transactional
 @Repository
 @CrossOrigin
 public interface EmailCollectionRepository extends JpaRepository<EmailCollection, String> {
-    List<EmailCollection> getAllByInputSystemId(String inputSystemId);
 
 }
