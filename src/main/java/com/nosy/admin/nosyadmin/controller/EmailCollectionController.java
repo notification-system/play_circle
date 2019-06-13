@@ -1,6 +1,7 @@
 package com.nosy.admin.nosyadmin.controller;
 
 import com.nosy.admin.nosyadmin.dto.EmailCollectionDto;
+import com.nosy.admin.nosyadmin.dto.EmailCollectionEncoded;
 import com.nosy.admin.nosyadmin.service.EmailCollectionService;
 import com.nosy.admin.nosyadmin.utils.EmailCollectionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +23,12 @@ public class EmailCollectionController {
         this.emailCollectionService = emailCollectionService;
     }
 
-    @PostMapping(value = "/{name}")
+    @PostMapping
     public ResponseEntity<EmailCollectionDto> uploadMultipart(
-            @RequestParam("file") String file,
-            @PathVariable String name,
+            @RequestBody EmailCollectionEncoded emailCollectionEncoded,
             Principal principal) {
         return new ResponseEntity<>(EmailCollectionMapper.INSTANCE.toEmailCollectionDto(emailCollectionService
-                .parseEmailCollection(file, name, principal.getName())), HttpStatus.CREATED);
+                .parseEmailCollection(emailCollectionEncoded, principal.getName())), HttpStatus.CREATED);
     }
 
     @PostMapping(value = "/list/{name}")

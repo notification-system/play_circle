@@ -1,5 +1,6 @@
 package com.nosy.admin.nosyadmin.service;
 
+import com.nosy.admin.nosyadmin.dto.EmailCollectionEncoded;
 import com.nosy.admin.nosyadmin.model.EmailCollection;
 import com.nosy.admin.nosyadmin.model.User;
 import com.nosy.admin.nosyadmin.repository.EmailCollectionRepository;
@@ -39,6 +40,7 @@ public class EmailCollectionServiceTest {
     private List<EmailCollection> result = new ArrayList<>();
     private User user;
     private String email;
+    private EmailCollectionEncoded emailCollectionEncoded = new EmailCollectionEncoded();
 
     private void setVariables() {
         emailCollectionId = "emailCollectionId";
@@ -57,6 +59,8 @@ public class EmailCollectionServiceTest {
         user.setLastName("Nosy");
         user.setInfo("TestNosy");
         user.setPassword("dajsndjasn");
+        emailCollectionEncoded.setData("mockedData");
+        emailCollectionEncoded.setName("email collection");
     }
 
     @Before
@@ -66,10 +70,9 @@ public class EmailCollectionServiceTest {
 
     @Test
     public void parseEmailCollection() {
-        String file = "hey";
         when(userRepository.findById(email)).thenReturn(Optional.of(user));
         doReturn(emailCollection).when(emailCollectionRepository).save(any());
-        assertEquals(emailCollectionId, emailCollectionService.parseEmailCollection(file, name, user.getEmail()).getEmailCollectionId());
+        assertEquals(emailCollectionId, emailCollectionService.parseEmailCollection(emailCollectionEncoded, user.getEmail()).getEmailCollectionId());
     }
 
     @Test

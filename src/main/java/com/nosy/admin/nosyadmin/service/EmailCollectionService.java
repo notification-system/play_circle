@@ -1,5 +1,6 @@
 package com.nosy.admin.nosyadmin.service;
 
+import com.nosy.admin.nosyadmin.dto.EmailCollectionEncoded;
 import com.nosy.admin.nosyadmin.exceptions.UserNotExistsException;
 import com.nosy.admin.nosyadmin.model.EmailCollection;
 import com.nosy.admin.nosyadmin.model.User;
@@ -26,9 +27,9 @@ public class EmailCollectionService {
         this.userRepository = userRepository;
     }
 
-    public EmailCollection parseEmailCollection(String file, String name, String email) {
+    public EmailCollection parseEmailCollection(EmailCollectionEncoded emailCollectionEncoded, String email) {
         EmailCollection emailCollection = new EmailCollection();
-        emailCollection.setEmailCollectionName(name);
+        emailCollection.setEmailCollectionName(emailCollectionEncoded.getName());
 
         Optional<User> user = userRepository.findById(email);
         if (!user.isPresent()) {
@@ -36,7 +37,7 @@ public class EmailCollectionService {
         }
         emailCollection.setUser(user.get());
 
-        byte[] bytes = Base64.decodeBase64(file);
+        byte[] bytes = Base64.decodeBase64(emailCollectionEncoded.getData());
         String completeData = new String(bytes);
         String[] emails = completeData.split(",");
         for (int i = 0; i < emails.length; i++) {

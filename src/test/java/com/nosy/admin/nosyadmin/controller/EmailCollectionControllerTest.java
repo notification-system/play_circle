@@ -1,5 +1,6 @@
 package com.nosy.admin.nosyadmin.controller;
 
+import com.nosy.admin.nosyadmin.dto.EmailCollectionEncoded;
 import com.nosy.admin.nosyadmin.service.EmailCollectionService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,10 +27,12 @@ public class EmailCollectionControllerTest {
 
     @Test
     public void emailCollectionParse() {
-        String file = "hey";
         Principal principal=mock(Principal.class);
+        EmailCollectionEncoded emailCollectionEncoded = new EmailCollectionEncoded();
+        emailCollectionEncoded.setName("test");
+        emailCollectionEncoded.setData("mock");
         assertEquals(HttpStatus.CREATED, emailCollectionController.
-                uploadMultipart(file, "dasda", principal).getStatusCode());
+                uploadMultipart(emailCollectionEncoded , principal).getStatusCode());
     }
 
     @Test
