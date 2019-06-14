@@ -11,5 +11,5 @@ import javax.transaction.Transactional;
 @Repository
 @CrossOrigin
 public interface EmailCollectionRepository extends JpaRepository<EmailCollection, String> {
-
+    EmailCollection findByEmailCollectionName(String name);
 }

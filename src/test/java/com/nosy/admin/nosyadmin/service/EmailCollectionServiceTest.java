@@ -12,10 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -40,7 +37,9 @@ public class EmailCollectionServiceTest {
     private List<EmailCollection> result = new ArrayList<>();
     private User user;
     private String email;
-    private EmailCollectionEncoded emailCollectionEncoded = new EmailCollectionEncoded();
+    private EmailCollectionEncoded emailCollectionEncoded;
+    private String base64;
+    private List<String> parsedList = new ArrayList<>();
 
     private void setVariables() {
         emailCollectionId = "emailCollectionId";
@@ -59,8 +58,12 @@ public class EmailCollectionServiceTest {
         user.setLastName("Nosy");
         user.setInfo("TestNosy");
         user.setPassword("dajsndjasn");
-        emailCollectionEncoded.setData("mockedData");
+        emailCollectionEncoded = new EmailCollectionEncoded();
+        emailCollectionEncoded.setData("mocked data");
         emailCollectionEncoded.setName("email collection");
+        base64 = "dGVzdDFAbWFpbC5jb20sdGVzdDJAbWFpbC5jb20=";
+        parsedList.add("test1@mail.com");
+        parsedList.add("test2@mail.com");
     }
 
     @Before
@@ -73,6 +76,18 @@ public class EmailCollectionServiceTest {
         when(userRepository.findById(email)).thenReturn(Optional.of(user));
         doReturn(emailCollection).when(emailCollectionRepository).save(any());
         assertEquals(emailCollectionId, emailCollectionService.parseEmailCollection(emailCollectionEncoded, user.getEmail()).getEmailCollectionId());
+    }
+
+    @Test
+    public void updateEmailCollection() {
+        when(emailCollectionRepository.findByEmailCollectionName(anyString())).thenReturn(emailCollection);
+        doReturn(emailCollection).when(emailCollectionRepository).save(any());
+        assertEquals(emailCollectionId, emailCollectionService.updateEmailCollection(emailCollectionEncoded).getEmailCollectionId());
+    }
+
+    @Test
+    public void parseBase64Data() {
+        assertEquals(parsedList, emailCollectionService.parseBase64Data(base64));
     }
 
     @Test

@@ -24,15 +24,22 @@ public class EmailCollectionController {
     }
 
     @PostMapping
-    public ResponseEntity<EmailCollectionDto> uploadMultipart(
+    public ResponseEntity<EmailCollectionDto> uploadEmailCollection(
             @RequestBody EmailCollectionEncoded emailCollectionEncoded,
             Principal principal) {
         return new ResponseEntity<>(EmailCollectionMapper.INSTANCE.toEmailCollectionDto(emailCollectionService
                 .parseEmailCollection(emailCollectionEncoded, principal.getName())), HttpStatus.CREATED);
     }
 
+    @PutMapping
+    public ResponseEntity<EmailCollectionDto> updateEmailCollection(
+            @RequestBody EmailCollectionEncoded emailCollectionEncoded) {
+        return new ResponseEntity<>(EmailCollectionMapper.INSTANCE.toEmailCollectionDto(emailCollectionService
+        .updateEmailCollection(emailCollectionEncoded)), HttpStatus.OK);
+    }
+
     @PostMapping(value = "/list/{name}")
-    public ResponseEntity<EmailCollectionDto> createGroup(
+    public ResponseEntity<EmailCollectionDto> createEmailCollection(
             @RequestBody List<String> emails,
             @PathVariable String name,
             Principal principal) {

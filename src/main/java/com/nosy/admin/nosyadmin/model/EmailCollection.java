@@ -60,4 +60,14 @@ public class EmailCollection {
     public void setUser(User user) {
         this.user = user;
     }
+
+    @Override
+    public String toString() {
+        return "EmailCollection{" +
+                "emailCollectionId='" + emailCollectionId + '\'' +
+                ", emailCollectionName='" + emailCollectionName + '\'' +
+                ", user=" + user +
+                ", emailCollectionEmails=" + emailCollectionEmails +
+                '}';
+    }
 }

@@ -2,6 +2,7 @@ package com.nosy.admin.nosyadmin.controller;
 
 import com.nosy.admin.nosyadmin.dto.EmailCollectionEncoded;
 import com.nosy.admin.nosyadmin.service.EmailCollectionService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -21,18 +22,25 @@ public class EmailCollectionControllerTest {
 
     @InjectMocks
     EmailCollectionController emailCollectionController;
-
     @Mock
     EmailCollectionService emailCollectionService;
+    private EmailCollectionEncoded emailCollectionEncoded = new EmailCollectionEncoded();
 
-    @Test
-    public void emailCollectionParse() {
-        Principal principal=mock(Principal.class);
-        EmailCollectionEncoded emailCollectionEncoded = new EmailCollectionEncoded();
+    private void setVariables() {
         emailCollectionEncoded.setName("test");
         emailCollectionEncoded.setData("mock");
+    }
+
+    @Before
+    public void beforeEmailCollectionController() {
+        setVariables();
+    }
+
+    @Test
+    public void emailCollectionUpload() {
+        Principal principal=mock(Principal.class);
         assertEquals(HttpStatus.CREATED, emailCollectionController.
-                uploadMultipart(emailCollectionEncoded , principal).getStatusCode());
+                uploadEmailCollection(emailCollectionEncoded , principal).getStatusCode());
     }
 
     @Test
@@ -40,7 +48,13 @@ public class EmailCollectionControllerTest {
         List<String> emails = Collections.singletonList("dasda");
         Principal principal=mock(Principal.class);
         assertEquals(HttpStatus.CREATED, emailCollectionController.
-                createGroup(emails, "dasda", principal).getStatusCode());
+                createEmailCollection(emails, "dasda", principal).getStatusCode());
+    }
+
+    @Test
+    public void emailCollectionUpdate() {
+        assertEquals(HttpStatus.OK, emailCollectionController.
+                updateEmailCollection(emailCollectionEncoded).getStatusCode());
     }
 
     @Test

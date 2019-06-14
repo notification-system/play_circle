@@ -37,13 +37,8 @@ public class EmailCollectionService {
         }
         emailCollection.setUser(user.get());
 
-        byte[] bytes = Base64.decodeBase64(emailCollectionEncoded.getData());
-        String completeData = new String(bytes);
-        String[] emails = completeData.split(",");
-        for (int i = 0; i < emails.length; i++) {
-            emails[i] = emails[i].trim();
-        }
-        emailCollection.getEmailCollectionEmails().addAll(Arrays.asList(emails));
+        List<String> emails = parseBase64Data(emailCollectionEncoded.getData());
+        emailCollection.getEmailCollectionEmails().addAll(emails);
 
         return emailCollectionRepository.save(emailCollection);
     }
@@ -60,6 +55,24 @@ public class EmailCollectionService {
         emailCollection.setUser(user.get());
 
         return emailCollectionRepository.save(emailCollection);
+    }
+
+    public EmailCollection updateEmailCollection(EmailCollectionEncoded emailCollectionEncoded) {
+        EmailCollection emailCollection = emailCollectionRepository.findByEmailCollectionName(emailCollectionEncoded.getName());
+        List<String> emails = parseBase64Data(emailCollectionEncoded.getData());
+        emails.forEach(e -> emailCollection.getEmailCollectionEmails().add(e));
+
+        return emailCollectionRepository.save(emailCollection);
+    }
+
+    List<String> parseBase64Data(String data) {
+        byte[] bytes = Base64.decodeBase64(data);
+        String completeData = new String(bytes);
+        String[] emails = completeData.split(",");
+        for (int i = 0; i < emails.length; i++) {
+            emails[i] = emails[i].trim();
+        }
+        return Arrays.asList(emails);
     }
 
     public EmailCollection getEmailCollectionById(String emailCollectionId) {
