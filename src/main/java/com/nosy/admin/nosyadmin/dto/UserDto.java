@@ -11,19 +11,10 @@ public class UserDto {
 
   private String firstName;
   private String lastName;
-  private String info;
 
 
   public String getEmail() {
     return email;
-  }
-
-  public String getInfo() {
-    return info;
-  }
-
-  public void setInfo(String info) {
-    this.info = info;
   }
 
   public void setEmail(String email) {

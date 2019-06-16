@@ -36,7 +36,6 @@ public class UserServiceTest {
         user.setEmail(email);
         user.setFirstName("Test");
         user.setLastName("Nosy");
-        user.setInfo("TestNosy");
         user.setPassword("dajsndjasn");
     }
 
@@ -45,8 +44,7 @@ public class UserServiceTest {
     public void testUser(){
         assertEquals("Nosy", user.getLastName());
         assertEquals("Test", user.getFirstName());
-        assertEquals("TestNosy", user.getInfo());
-        String userString="User{email='test@nosy.tech', inputSystem=null', firstName='Test', lastName='Nosy', info='TestNosy'}";
+        String userString="User{email='test@nosy.tech', inputSystem=null, firstName='Test', lastName='Nosy'}";
         assertEquals(userString, user.toString());
     }
 

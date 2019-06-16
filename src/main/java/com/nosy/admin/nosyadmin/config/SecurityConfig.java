@@ -65,7 +65,7 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     http.csrf()
         .disable()
         .authorizeRequests()
-        .antMatchers("/nosy/inputsystems**", "/nosy/auth/logout**", "/nosy/users/profile**")
+        .antMatchers("/api/v1/nosy/inputsystems**", "/api/v1/nosy/auth/logout**", "/api/v1/nosy/users/profile**")
         .hasRole("NOSY-ROLE")
         .anyRequest()
         .permitAll();
