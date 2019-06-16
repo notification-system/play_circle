@@ -1,10 +1,9 @@
 package com.nosy.admin.nosyadmin.model;
 
-import org.springframework.stereotype.Service;
-
+import org.springframework.stereotype.Component;
 import java.util.List;
 
-@Service
+@Component
 public class EmailProviderProperties {
   private String username;
   private String password;
