@@ -46,7 +46,6 @@ public class KeycloakServiceTest {
         user.setEmail(email);
         user.setFirstName("Test");
         user.setLastName("Nosy");
-        user.setInfo("TestNosy");
         user.setPassword("dajsndjasn");
     }
 

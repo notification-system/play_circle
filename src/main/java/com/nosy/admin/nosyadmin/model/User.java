@@ -20,7 +20,6 @@ public class User {
 
   private String firstName;
   private String lastName;
-  private String info;
 
   public String getFirstName() {
     return firstName;
@@ -38,13 +37,6 @@ public class User {
     this.lastName = lastName;
   }
 
-  public String getInfo() {
-    return info;
-  }
-
-  public void setInfo(String info) {
-    this.info = info;
-  }
 
   public String getPassword() {
     return password;
@@ -72,22 +64,11 @@ public class User {
 
   @Override
   public String toString() {
-    return "User{"
-        + "email='"
-        + email
-        + '\''
-        + ", inputSystem="
-        + inputSystem
-        + '\''
-        + ", firstName='"
-        + firstName
-        + '\''
-        + ", lastName='"
-        + lastName
-        + '\''
-        + ", info='"
-        + info
-        + '\''
-        + '}';
+    return "User{" +
+            "email='" + email + '\'' +
+            ", inputSystem=" + inputSystem +
+            ", firstName='" + firstName + '\'' +
+            ", lastName='" + lastName + '\'' +
+            '}';
   }
 }

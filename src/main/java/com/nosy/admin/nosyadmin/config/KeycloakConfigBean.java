@@ -80,12 +80,12 @@ public class KeycloakConfigBean {
 
     public boolean requestInterceptor(HttpPost post) {
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
-            return httpclient.execute(
+                return httpclient.execute(
                     post,
                     response -> {
                         ObjectMapper mapper = new ObjectMapper();
 
-                        Map<String, Object> stringObjectMap =
+                        Map stringObjectMap =
                                 mapper.readValue(response.getEntity().getContent(), Map.class);
 
                         return (boolean) stringObjectMap.get("active");
@@ -144,11 +144,9 @@ public class KeycloakConfigBean {
         String tokenString = "token";
         List<NameValuePair> params =
                 asList(
-                        new BasicNameValuePair(GRANT_TYPE_STRING, grantType),
                         new BasicNameValuePair(CLIENT_ID_STRING, clientId),
                         new BasicNameValuePair(tokenString, token),
                         new BasicNameValuePair(CLIENT_SECRET_STRING, clientSecret));
-
         try {
             post.setEntity(new UrlEncodedFormEntity(params));
         } catch (UnsupportedEncodingException e) {
