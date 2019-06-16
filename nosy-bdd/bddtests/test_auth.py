@@ -101,4 +101,3 @@ def test_email_admin_get_emailproviders():
     assert r.status_code == 200
     assert r.text == '["DEFAULT","YANDEX","GMAIL"]'
 
-def 
