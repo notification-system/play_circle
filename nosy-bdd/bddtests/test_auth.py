@@ -1,17 +1,21 @@
 import requests
 import json
 
-create_user_url = "http://localhost:8081/api/v1/nosy/users"
+host = "http://localhost:8081"
 
-get_token_url = "http://localhost:8081/api/v1/nosy/auth/token"
+api_version = "/api/v1"
 
-status_token_url = "http://localhost:8081/api/v1/nosy/auth/status"
+create_user_url = f"{host}{api_version}/nosy/users"
 
-logout_token_url = "http://localhost:8081/api/v1/nosy/auth/logout"
+get_token_url = f"{host}{api_version}/nosy/auth/token"
 
-create_inputsystemdto_url = "http://localhost:8081/api/v1/nosy/inputsystems"
+status_token_url = f"{host}{api_version}/nosy/auth/status"
 
-get_emailproviders_url = "http://localhost:8081/api/v1/nosy/inputsystems/emailproviders"
+logout_token_url = f"{host}{api_version}/nosy/auth/logout"
+
+create_inputsystemdto_url = f"{host}{api_version}/nosy/inputsystems"
+
+get_emailproviders_url = f"{host}{api_version}/nosy/inputsystems/emailproviders"
 
 api_user_create = {
     "firstName": "testFirstName",
@@ -46,7 +50,6 @@ def test_auth_conflict_user_creation():
         url=create_user_url, data=json.dumps(api_user_create), headers=headers
     )
     assert r.status_code == 409
-
 
 def test_auth_get_token():
     r = requests.post(
