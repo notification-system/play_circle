@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,6 +21,10 @@ public class User {
 
   private String firstName;
   private String lastName;
+
+  @JsonManagedReference
+  @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+  private List<EmailCollection> emailCollections;
 
   public String getFirstName() {
     return firstName;
@@ -60,6 +65,14 @@ public class User {
 
   public void setInputSystem(Set<InputSystem> inputSystem) {
     this.inputSystem = inputSystem;
+  }
+
+  public List<EmailCollection> getEmailCollections() {
+    return emailCollections;
+  }
+
+  public void setEmailCollections(List<EmailCollection> emailCollections) {
+    this.emailCollections = emailCollections;
   }
 
   @Override
