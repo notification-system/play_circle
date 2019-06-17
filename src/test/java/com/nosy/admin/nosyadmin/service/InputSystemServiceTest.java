@@ -44,7 +44,6 @@ public class InputSystemServiceTest {
         user.setEmail(email);
         user.setFirstName("Test");
         user.setLastName("Nosy");
-        user.setInfo("TestNosy");
         user.setPassword("dajsndjasn");
         inputSystem=new InputSystem();
         inputSystem.setInputSystemId("inputSystemId");
@@ -72,7 +71,6 @@ public class InputSystemServiceTest {
         user.setEmail(email);
         user.setFirstName("Test");
         user.setLastName("Nosy");
-        user.setInfo("TestNosy");
         user.setPassword("dajsndjasn");
         InputSystem inputSystem=new InputSystem();
         inputSystem.setInputSystemId("inputSystemId");

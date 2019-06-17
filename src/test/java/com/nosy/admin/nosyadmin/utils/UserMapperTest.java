@@ -26,14 +26,12 @@ public class UserMapperTest {
         user.setPassword("TestUserPassword");
         user.setLastName("TestUserLastName");
         user.setFirstName("TestUserFirstName");
-        user.setInfo("TestUserInfo");
         user.setInputSystem(inputSystemSet);
 
         userDto.setEmail("TestUserDto");
         userDto.setPassword("TestUserDtoPassword");
         userDto.setLastName("TestUserDtoLastName");
         userDto.setFirstName("TestUserDtoFirstName");
-        userDto.setInfo("TestUserDtoInfo");
     }
     @Test
     public void toUserDto(){
@@ -41,7 +39,6 @@ public class UserMapperTest {
         assertEquals(user.getPassword(), UserMapper.INSTANCE.toUserDto(user).getPassword());
         assertEquals(user.getFirstName(), UserMapper.INSTANCE.toUserDto(user).getFirstName());
         assertEquals(user.getLastName(), UserMapper.INSTANCE.toUserDto(user).getLastName());
-        assertEquals(user.getInfo(), UserMapper.INSTANCE.toUserDto(user).getInfo());
 
     }
 
@@ -52,7 +49,6 @@ public class UserMapperTest {
         assertEquals(userDto.getPassword(), UserMapper.INSTANCE.toUser(userDto).getPassword());
         assertEquals(userDto.getFirstName(), UserMapper.INSTANCE.toUser(userDto).getFirstName());
         assertEquals(userDto.getLastName(), UserMapper.INSTANCE.toUser(userDto).getLastName());
-        assertEquals(userDto.getInfo(), UserMapper.INSTANCE.toUser(userDto).getInfo());
 
     }
 

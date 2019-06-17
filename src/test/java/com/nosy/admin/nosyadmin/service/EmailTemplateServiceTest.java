@@ -66,7 +66,6 @@ public class EmailTemplateServiceTest {
         user.setEmail(email);
         user.setFirstName("Test");
         user.setLastName("Nosy");
-        user.setInfo("TestNosy");
         user.setPassword("dajsndjasn");
         inputSystem.setInputSystemName("testInputSystem");
         inputSystem.setInputSystemId(inputSystemId);

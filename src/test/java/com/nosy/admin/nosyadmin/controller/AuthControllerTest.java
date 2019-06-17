@@ -1,5 +1,6 @@
 package com.nosy.admin.nosyadmin.controller;
 
+import com.nosy.admin.nosyadmin.dto.TokenCollectionDto;
 import com.nosy.admin.nosyadmin.dto.UserDto;
 import com.nosy.admin.nosyadmin.model.User;
 import com.nosy.admin.nosyadmin.service.KeycloakService;
@@ -40,7 +41,6 @@ public class AuthControllerTest {
         userDto.setLastName("testLastName");
         userDto.setPassword("testPassword");
         userDto.setEmail("test@nosy.tech");
-        userDto.setInfo("testInfo");
     }
 
     @Test
@@ -51,10 +51,11 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void isAuthenticated() throws IOException {
-        String token="testToken";
-        doReturn(true).when(keycloakService).isAuthenticated(token);
-        assertEquals(HttpStatus.OK, authController.isAuthenticated(token).getStatusCode());
+    public void isAuthenticated()  {
+        TokenCollectionDto tokenCollectionDto=new TokenCollectionDto();
+        tokenCollectionDto.setAccessToken("testToken");
+        doReturn(true).when(keycloakService).isAuthenticated(tokenCollectionDto.getAccessToken());
+        assertEquals(HttpStatus.OK, authController.isAuthenticated(tokenCollectionDto).getStatusCode());
 
 
     }
@@ -81,7 +82,6 @@ public class AuthControllerTest {
     @Test
     public void getUserProfile() {
         User user=UserMapper.INSTANCE.toUser(userDto);
-
         HttpServletRequest httpServletRequest=Mockito.mock(HttpServletRequest.class);
         doReturn(user).when(userService).getUserInfo(httpServletRequest);
         assertEquals(HttpStatus.OK, authController.getUserProfile(httpServletRequest).getStatusCode());

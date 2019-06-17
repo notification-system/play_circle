@@ -37,8 +37,8 @@ public class AuthController {
   }
 
   @PostMapping(path = "/auth/status")
-  public ResponseEntity<Boolean> isAuthenticated(@RequestBody String token)  {
-    return new ResponseEntity<>(keycloakService.isAuthenticated(token), HttpStatus.OK);
+  public ResponseEntity<Boolean> isAuthenticated(@RequestBody TokenCollectionDto token)  {
+    return new ResponseEntity<>(keycloakService.isAuthenticated(token.getAccessToken()), HttpStatus.OK);
   }
 
   @PostMapping(value = "/auth/token")
