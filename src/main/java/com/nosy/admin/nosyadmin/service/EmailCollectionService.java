@@ -1,6 +1,7 @@
 package com.nosy.admin.nosyadmin.service;
 
-import com.nosy.admin.nosyadmin.dto.EmailCollectionEncoded;
+import com.nosy.admin.nosyadmin.dto.EmailCollectionFileEncodedDto;
+import com.nosy.admin.nosyadmin.exceptions.EmailCollectionDoesNotExistException;
 import com.nosy.admin.nosyadmin.exceptions.UserNotExistsException;
 import com.nosy.admin.nosyadmin.model.EmailCollection;
 import com.nosy.admin.nosyadmin.model.User;
@@ -27,26 +28,10 @@ public class EmailCollectionService {
         this.userRepository = userRepository;
     }
 
-    public EmailCollection parseEmailCollection(EmailCollectionEncoded emailCollectionEncoded, String email) {
+    public EmailCollection createEmailCollection(EmailCollectionFileEncodedDto emailCollectionFileEncodedDto, String email) {
         EmailCollection emailCollection = new EmailCollection();
-        emailCollection.setEmailCollectionName(emailCollectionEncoded.getName());
-
-        Optional<User> user = userRepository.findById(email);
-        if (!user.isPresent()) {
-            throw new UserNotExistsException();
-        }
-        emailCollection.setUser(user.get());
-
-        List<String> emails = parseBase64Data(emailCollectionEncoded.getData());
-        emailCollection.getEmailCollectionEmails().addAll(emails);
-
-        return emailCollectionRepository.save(emailCollection);
-    }
-
-    public EmailCollection createEmailCollection(List<String> emails, String name, String email) {
-        EmailCollection emailCollection = new EmailCollection();
-        emailCollection.setEmailCollectionName(name);
-        emailCollection.setEmailCollectionEmails(emails);
+        emailCollection.setEmailCollectionName(emailCollectionFileEncodedDto.getName());
+        emailCollection.setEmailCollectionEmails(emailCollectionFileEncodedDto.getEmails());
 
         Optional<User> user = userRepository.findById(email);
         if (!user.isPresent()) {
@@ -57,15 +42,24 @@ public class EmailCollectionService {
         return emailCollectionRepository.save(emailCollection);
     }
 
-    public EmailCollection updateEmailCollection(EmailCollectionEncoded emailCollectionEncoded) {
-        EmailCollection emailCollection = emailCollectionRepository.findByEmailCollectionName(emailCollectionEncoded.getName());
-        List<String> emails = parseBase64Data(emailCollectionEncoded.getData());
+    public EmailCollection replaceEmailCollection(EmailCollectionFileEncodedDto emailCollectionFileEncodedDto) {
+        EmailCollection emailCollection = emailCollectionRepository.findByEmailCollectionName(emailCollectionFileEncodedDto.getName());
+        emailCollection.getEmailCollectionEmails().clear();
+        List<String> emails = parseBase64Data(emailCollectionFileEncodedDto.getData());
         emails.forEach(e -> emailCollection.getEmailCollectionEmails().add(e));
 
         return emailCollectionRepository.save(emailCollection);
     }
 
-    List<String> parseBase64Data(String data) {
+    public EmailCollection addToEmailCollection(EmailCollectionFileEncodedDto emailCollectionFileEncodedDto) {
+        EmailCollection emailCollection = emailCollectionRepository.findByEmailCollectionName(emailCollectionFileEncodedDto.getName());
+        List<String> emails = parseBase64Data(emailCollectionFileEncodedDto.getData());
+        emails.forEach(e -> emailCollection.getEmailCollectionEmails().add(e));
+
+        return emailCollectionRepository.save(emailCollection);
+    }
+
+    public List<String> parseBase64Data(String data) {
         byte[] bytes = Base64.decodeBase64(data);
         String completeData = new String(bytes);
         String[] emails = completeData.split(",");
@@ -79,7 +73,7 @@ public class EmailCollectionService {
         if(emailCollectionRepository.findById(emailCollectionId).isPresent()) {
             return emailCollectionRepository.findById(emailCollectionId).get();
         } else {
-            return null;
+            throw new EmailCollectionDoesNotExistException();
         }
     }
 

@@ -1,6 +1,6 @@
 package com.nosy.admin.nosyadmin.service;
 
-import com.nosy.admin.nosyadmin.dto.EmailCollectionEncoded;
+import com.nosy.admin.nosyadmin.dto.EmailCollectionFileEncodedDto;
 import com.nosy.admin.nosyadmin.model.EmailCollection;
 import com.nosy.admin.nosyadmin.model.User;
 import com.nosy.admin.nosyadmin.repository.EmailCollectionRepository;
@@ -37,7 +37,7 @@ public class EmailCollectionServiceTest {
     private List<EmailCollection> result = new ArrayList<>();
     private User user;
     private String email;
-    private EmailCollectionEncoded emailCollectionEncoded;
+    private EmailCollectionFileEncodedDto emailCollectionFileEncodedDto;
     private String base64;
     private List<String> parsedList = new ArrayList<>();
 
@@ -56,11 +56,10 @@ public class EmailCollectionServiceTest {
         user.setEmail(email);
         user.setFirstName("Test");
         user.setLastName("Nosy");
-        user.setInfo("TestNosy");
         user.setPassword("dajsndjasn");
-        emailCollectionEncoded = new EmailCollectionEncoded();
-        emailCollectionEncoded.setData("mocked data");
-        emailCollectionEncoded.setName("email collection");
+        emailCollectionFileEncodedDto = new EmailCollectionFileEncodedDto();
+        emailCollectionFileEncodedDto.setData("mocked data");
+        emailCollectionFileEncodedDto.setName("email collection");
         base64 = "dGVzdDFAbWFpbC5jb20sdGVzdDJAbWFpbC5jb20=";
         parsedList.add("test1@mail.com");
         parsedList.add("test2@mail.com");
@@ -72,17 +71,10 @@ public class EmailCollectionServiceTest {
     }
 
     @Test
-    public void parseEmailCollection() {
-        when(userRepository.findById(email)).thenReturn(Optional.of(user));
-        doReturn(emailCollection).when(emailCollectionRepository).save(any());
-        assertEquals(emailCollectionId, emailCollectionService.parseEmailCollection(emailCollectionEncoded, user.getEmail()).getEmailCollectionId());
-    }
-
-    @Test
-    public void updateEmailCollection() {
+    public void addToEmailCollection() {
         when(emailCollectionRepository.findByEmailCollectionName(anyString())).thenReturn(emailCollection);
         doReturn(emailCollection).when(emailCollectionRepository).save(any());
-        assertEquals(emailCollectionId, emailCollectionService.updateEmailCollection(emailCollectionEncoded).getEmailCollectionId());
+        assertEquals(emailCollectionId, emailCollectionService.addToEmailCollection(emailCollectionFileEncodedDto).getEmailCollectionId());
     }
 
     @Test
@@ -94,7 +86,7 @@ public class EmailCollectionServiceTest {
     public void createEmailCollection() {
         when(userRepository.findById(email)).thenReturn(Optional.of(user));
         doReturn(emailCollection).when(emailCollectionRepository).save(any());
-        assertEquals(name, emailCollectionService.createEmailCollection(emails, name, user.getEmail()).getEmailCollectionName());
+        assertEquals(name, emailCollectionService.createEmailCollection(emailCollectionFileEncodedDto, user.getEmail()).getEmailCollectionName());
     }
 
     @Test

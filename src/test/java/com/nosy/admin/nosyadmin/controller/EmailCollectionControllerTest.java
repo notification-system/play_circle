@@ -1,6 +1,6 @@
 package com.nosy.admin.nosyadmin.controller;
 
-import com.nosy.admin.nosyadmin.dto.EmailCollectionEncoded;
+import com.nosy.admin.nosyadmin.dto.EmailCollectionFileEncodedDto;
 import com.nosy.admin.nosyadmin.service.EmailCollectionService;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,8 +11,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 
 import java.security.Principal;
-import java.util.Collections;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -24,11 +22,11 @@ public class EmailCollectionControllerTest {
     EmailCollectionController emailCollectionController;
     @Mock
     EmailCollectionService emailCollectionService;
-    private EmailCollectionEncoded emailCollectionEncoded = new EmailCollectionEncoded();
+    private EmailCollectionFileEncodedDto emailCollectionFileEncodedDto = new EmailCollectionFileEncodedDto();
 
     private void setVariables() {
-        emailCollectionEncoded.setName("test");
-        emailCollectionEncoded.setData("mock");
+        emailCollectionFileEncodedDto.setName("test");
+        emailCollectionFileEncodedDto.setData("mock");
     }
 
     @Before
@@ -40,21 +38,26 @@ public class EmailCollectionControllerTest {
     public void emailCollectionUpload() {
         Principal principal=mock(Principal.class);
         assertEquals(HttpStatus.CREATED, emailCollectionController.
-                uploadEmailCollection(emailCollectionEncoded , principal).getStatusCode());
+                uploadEmailCollection(emailCollectionFileEncodedDto, principal).getStatusCode());
     }
 
     @Test
     public void emailCollectionCreate() {
-        List<String> emails = Collections.singletonList("dasda");
         Principal principal=mock(Principal.class);
         assertEquals(HttpStatus.CREATED, emailCollectionController.
-                createEmailCollection(emails, "dasda", principal).getStatusCode());
+                createEmailCollection(emailCollectionFileEncodedDto, principal).getStatusCode());
     }
 
     @Test
-    public void emailCollectionUpdate() {
+    public void emailCollectionAddTo() {
         assertEquals(HttpStatus.OK, emailCollectionController.
-                updateEmailCollection(emailCollectionEncoded).getStatusCode());
+                addToEmailCollection(emailCollectionFileEncodedDto).getStatusCode());
+    }
+
+    @Test
+    public void emailCollectionReplace() {
+        assertEquals(HttpStatus.OK, emailCollectionController.
+                replaceEmailCollection(emailCollectionFileEncodedDto).getStatusCode());
     }
 
     @Test

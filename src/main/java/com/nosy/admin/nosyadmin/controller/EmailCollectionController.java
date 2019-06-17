@@ -1,7 +1,8 @@
 package com.nosy.admin.nosyadmin.controller;
 
 import com.nosy.admin.nosyadmin.dto.EmailCollectionDto;
-import com.nosy.admin.nosyadmin.dto.EmailCollectionEncoded;
+import com.nosy.admin.nosyadmin.dto.EmailCollectionFileEncodedDto;
+import com.nosy.admin.nosyadmin.exceptions.EmailCollectionDoesNotExistException;
 import com.nosy.admin.nosyadmin.service.EmailCollectionService;
 import com.nosy.admin.nosyadmin.utils.EmailCollectionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,32 +26,43 @@ public class EmailCollectionController {
 
     @PostMapping
     public ResponseEntity<EmailCollectionDto> uploadEmailCollection(
-            @RequestBody EmailCollectionEncoded emailCollectionEncoded,
+            @RequestBody EmailCollectionFileEncodedDto emailCollectionFileEncodedDto,
             Principal principal) {
+        emailCollectionFileEncodedDto.setEmails(emailCollectionService.parseBase64Data(emailCollectionFileEncodedDto.getData()));
         return new ResponseEntity<>(EmailCollectionMapper.INSTANCE.toEmailCollectionDto(emailCollectionService
-                .parseEmailCollection(emailCollectionEncoded, principal.getName())), HttpStatus.CREATED);
+                .createEmailCollection(emailCollectionFileEncodedDto, principal.getName())), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<EmailCollectionDto> updateEmailCollection(
-            @RequestBody EmailCollectionEncoded emailCollectionEncoded) {
+    public ResponseEntity<EmailCollectionDto> replaceEmailCollection(
+            @RequestBody EmailCollectionFileEncodedDto emailCollectionFileEncodedDto) {
         return new ResponseEntity<>(EmailCollectionMapper.INSTANCE.toEmailCollectionDto(emailCollectionService
-        .updateEmailCollection(emailCollectionEncoded)), HttpStatus.OK);
+        .replaceEmailCollection(emailCollectionFileEncodedDto)), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/list/{name}")
+    @PatchMapping
+    public ResponseEntity<EmailCollectionDto> addToEmailCollection(
+            @RequestBody EmailCollectionFileEncodedDto emailCollectionFileEncodedDto) {
+        return new ResponseEntity<>(EmailCollectionMapper.INSTANCE.toEmailCollectionDto(emailCollectionService
+                .addToEmailCollection(emailCollectionFileEncodedDto)), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/list")
     public ResponseEntity<EmailCollectionDto> createEmailCollection(
-            @RequestBody List<String> emails,
-            @PathVariable String name,
+            @RequestBody EmailCollectionFileEncodedDto emailCollectionFileEncodedDto,
             Principal principal) {
         return new ResponseEntity<>(EmailCollectionMapper.INSTANCE.toEmailCollectionDto(emailCollectionService
-                .createEmailCollection(emails, name, principal.getName())), HttpStatus.CREATED);    }
+                .createEmailCollection(emailCollectionFileEncodedDto, principal.getName())), HttpStatus.CREATED);    }
 
     @GetMapping(value = "/{emailCollectionId}")
     public ResponseEntity<EmailCollectionDto> getEmailCollectionById(
             @PathVariable String emailCollectionId) {
-        return new ResponseEntity<>(EmailCollectionMapper.INSTANCE.toEmailCollectionDto(emailCollectionService
-                .getEmailCollectionById(emailCollectionId)), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(EmailCollectionMapper.INSTANCE.toEmailCollectionDto(emailCollectionService
+                    .getEmailCollectionById(emailCollectionId)), HttpStatus.OK);
+        } catch (EmailCollectionDoesNotExistException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping
