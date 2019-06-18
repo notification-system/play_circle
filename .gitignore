@@ -29,6 +29,7 @@ nbdist/
 # Removing jar file
 *google-java-format-1.7-all-deps.jar
 
+
 # Python
 __pycache__
 .pytest_cache/
@@ -39,3 +40,5 @@ __pycache__
 env/
 venv/
 ENV/
+/bin/
+
