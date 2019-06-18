@@ -27,8 +27,6 @@ public class EmailCollection {
     @JoinTable(name = "email_collection_emails", joinColumns = @JoinColumn(name = "email_collection_id"))
     @NotNull private List<String> emailCollectionEmails = new ArrayList<>();
 
-    public EmailCollection() {}
-
     public String getEmailCollectionId() {
         return emailCollectionId;
     }
@@ -59,15 +57,5 @@ public class EmailCollection {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    @Override
-    public String toString() {
-        return "EmailCollection{" +
-                "emailCollectionId='" + emailCollectionId + '\'' +
-                ", emailCollectionName='" + emailCollectionName + '\'' +
-                ", user=" + user +
-                ", emailCollectionEmails=" + emailCollectionEmails +
-                '}';
     }
 }

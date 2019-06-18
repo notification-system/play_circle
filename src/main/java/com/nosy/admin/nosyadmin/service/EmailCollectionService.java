@@ -70,8 +70,9 @@ public class EmailCollectionService {
     }
 
     public EmailCollection getEmailCollectionById(String emailCollectionId) {
-        if(emailCollectionRepository.findById(emailCollectionId).isPresent()) {
-            return emailCollectionRepository.findById(emailCollectionId).get();
+        Optional<EmailCollection> optionalEmailCollection = emailCollectionRepository.findById(emailCollectionId);
+        if(optionalEmailCollection.isPresent()) {
+            return optionalEmailCollection.get();
         } else {
             throw new EmailCollectionDoesNotExistException();
         }

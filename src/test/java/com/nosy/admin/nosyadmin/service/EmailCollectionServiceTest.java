@@ -1,6 +1,8 @@
 package com.nosy.admin.nosyadmin.service;
 
 import com.nosy.admin.nosyadmin.dto.EmailCollectionFileEncodedDto;
+import com.nosy.admin.nosyadmin.exceptions.EmailCollectionDoesNotExistException;
+import com.nosy.admin.nosyadmin.exceptions.UserNotExistsException;
 import com.nosy.admin.nosyadmin.model.EmailCollection;
 import com.nosy.admin.nosyadmin.model.User;
 import com.nosy.admin.nosyadmin.repository.EmailCollectionRepository;
@@ -12,7 +14,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -57,6 +62,7 @@ public class EmailCollectionServiceTest {
         user.setFirstName("Test");
         user.setLastName("Nosy");
         user.setPassword("dajsndjasn");
+        emailCollection.setUser(user);
         emailCollectionFileEncodedDto = new EmailCollectionFileEncodedDto();
         emailCollectionFileEncodedDto.setData("mocked data");
         emailCollectionFileEncodedDto.setName("email collection");
@@ -94,6 +100,7 @@ public class EmailCollectionServiceTest {
         when(userRepository.findById(email)).thenReturn(Optional.of(user));
         doReturn(emailCollection).when(emailCollectionRepository).save(any());
         assertEquals(name, emailCollectionService.createEmailCollection(emailCollectionFileEncodedDto, user.getEmail()).getEmailCollectionName());
+        assertEquals(user, emailCollectionService.createEmailCollection(emailCollectionFileEncodedDto, user.getEmail()).getUser());
     }
 
     @Test
@@ -113,5 +120,17 @@ public class EmailCollectionServiceTest {
         doReturn(null).when(emailCollectionRepository).findById(anyString());
         emailCollectionService.deleteEmailCollectionById(emailCollectionId);
         assertNotEquals(emailCollection, emailCollectionRepository.findById(emailCollectionId));
+    }
+
+    @Test(expected = EmailCollectionDoesNotExistException.class)
+    public void getEmailCollectionByIdDoesNotExist() {
+        doReturn(Optional.empty()).when(emailCollectionRepository).findById(anyString());
+        emailCollectionService.getEmailCollectionById(emailCollectionId);
+    }
+
+    @Test(expected = UserNotExistsException.class)
+    public void createEmailCollectionUserNotFound() {
+        when(userRepository.findById(email)).thenReturn(Optional.empty());
+        emailCollectionService.createEmailCollection(emailCollectionFileEncodedDto, user.getEmail());
     }
 }

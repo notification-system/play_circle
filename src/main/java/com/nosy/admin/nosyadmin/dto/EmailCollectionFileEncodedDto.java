@@ -8,9 +8,6 @@ public class EmailCollectionFileEncodedDto {
     private String data;
     private List<String> emails;
 
-    public EmailCollectionFileEncodedDto() {
-    }
-
     public String getName() {
         return name;
     }
