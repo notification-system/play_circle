@@ -15,6 +15,9 @@ input.txt
 *.iml
 *.ipr
 
+# vscode
+.history
+.vscode
 
 ### NetBeans ###
 nbproject/private/
@@ -26,4 +29,16 @@ nbdist/
 # Removing jar file
 *google-java-format-1.7-all-deps.jar
 
+
+# Python
+__pycache__
+.pytest_cache/
+
+#python virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
 /bin/
+
