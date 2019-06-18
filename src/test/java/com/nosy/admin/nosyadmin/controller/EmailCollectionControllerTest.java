@@ -67,7 +67,7 @@ public class EmailCollectionControllerTest {
     }
 
     @Test
-    public void getAllEmailCollectionsBySystemId() {
+    public void getEmailCollectionById() {
         assertEquals(HttpStatus.OK, emailCollectionController.
                 getEmailCollectionById("emailCollectionId").getStatusCode());
     }

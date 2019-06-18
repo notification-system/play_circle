@@ -78,6 +78,13 @@ public class EmailCollectionServiceTest {
     }
 
     @Test
+    public void replaceEmailCollection() {
+        when(emailCollectionRepository.findByEmailCollectionName(anyString())).thenReturn(emailCollection);
+        doReturn(emailCollection).when(emailCollectionRepository).save(any());
+        assertEquals(emailCollectionId, emailCollectionService.replaceEmailCollection(emailCollectionFileEncodedDto).getEmailCollectionId());
+    }
+
+    @Test
     public void parseBase64Data() {
         assertEquals(parsedList, emailCollectionService.parseBase64Data(base64));
     }
