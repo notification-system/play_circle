@@ -17,8 +17,9 @@ services:
   - docker
 
 after_success:
-
-  - docker login -u $DOCKER_USER -p $DOCKER_PASS
-  - docker build -t $IMAGE_TAG .
-  - docker push $IMAGE_TAG
+- if tag IS present; then
+   docker login -u $DOCKER_USER -p $DOCKER_PASS
+   docker build -t $IMAGE_TAG .
+   docker push $IMAGE_TAG
+  fi
 
