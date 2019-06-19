@@ -6,7 +6,7 @@ addons:
   sonarcloud:
     organization: "notification-system"
     token:
-      secure: $SONAR_TOKEN
+      secure: "leXk5AbVVoAHuxqD7k0kMbYdpZegiooA2D2VFUeqW4OxPaSzMHxb+2WUQ0LNRAaFQBnDx9q71JJfeFuV2PiNSMr6qKeG8ZxUO7WE7E6VD2QkDH0AUvOBe7LVZECOKSx+nezbWHqc7IsYnUS+YHoj802R6lTN13aX8nLmZXmr/AZMYfpnILnqdpax0pJLU57A35Om6qVNL3fLo17fssdccXLA66WeHoWPLyYHpORNXrF5XpjsndOhwn0y7QNYR863tFx1NM0MUqt5/W0kJiXWAaJSlJdc33HlumLysRMnyM/t8b8YVkRLDhaf249g/dJjgSj/eISV9DPWkDoKnAp/KrGO6UDVJN2pTw/HAz9oT+3SRjFQQ4UyOk+alKuBKcN2LsOLVGsq2elmmU8KRcuOHqkygNGID4QCnXKCy8oBz8VV6m+vAOMsp6kXvPvvkPfgz35/asiiweXf8+swQbfsxYIeBs3r22gdz1zVSOcHiJrnbXwkXWFcZ/d0uzSB8bRG2cH0Uy78mO7c011NSjcX2KvyEBhqnv5N+VlgnNdz0iTK4BZkNqp2GihvHbNFbAD+jBaAspzf3RsbZ7ARpIj/366XQlmkCwiq/BgE0ZrrKv1I98OaGz8r9p96rpB4qrFXE2w2cJwYKusaUfgK+rE/2xPe2XrBIK5nm3Fc/8MUyYM="
 
 script:
   # - ./scripts/verify_code_format.sh
